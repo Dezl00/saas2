@@ -1,0 +1,96 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import toast from "react-hot-toast";
+
+export function urlBase64ToUint8Array(base64String: string) {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding)
+    .replace(/\-/g, "+")
+    .replace(/_/g, "/");
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
+export function usePushSubscription(storeId: string, enablePushPopup: boolean) {
+  const [isSubscribed, setIsSubscribed] = useState(true);
+  const [isDismissed, setIsDismissed] = useState(true);
+  const [isSupported, setIsSupported] = useState(false);
+
+  useEffect(() => {
+    if (!enablePushPopup) return;
+
+    if (!("Notification" in window) || !("serviceWorker" in navigator)) {
+      return;
+    }
+    setIsSupported(true);
+
+    const hasDismissed = localStorage.getItem(`push_dismissed_${storeId}`);
+    if (!hasDismissed) {
+      setIsDismissed(false);
+    }
+
+    navigator.serviceWorker.register("/sw.js").catch(console.error);
+
+    if (Notification.permission === "granted") {
+      navigator.serviceWorker.ready.then((registration) => {
+        registration.pushManager.getSubscription().then((subscription) => {
+          if (!subscription) {
+            setIsSubscribed(false);
+          }
+        });
+      });
+    } else if (Notification.permission !== "denied") {
+      setIsSubscribed(false);
+    }
+  }, [enablePushPopup, storeId]);
+
+  const handleSubscribe = useCallback(async () => {
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission === "granted") {
+        const registration = await navigator.serviceWorker.ready;
+        const response = await fetch("/api/push/vapid-public-key");
+        const { publicKey } = await response.json();
+
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(publicKey),
+        });
+
+        await fetch("/api/push/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            subscription,
+            storeId,
+          }),
+        });
+
+        setIsSubscribed(true);
+        setIsDismissed(true);
+        toast.success("تم تفعيل الإشعارات بنجاح");
+      } else {
+        toast.error("تم رفض الإذن بالإشعارات");
+        setIsDismissed(true);
+        localStorage.setItem(`push_dismissed_${storeId}`, "true");
+      }
+    } catch (error) {
+      console.error("Error subscribing to push notifications", error);
+      toast.error("حدث خطأ أثناء تفعيل الإشعارات");
+    }
+  }, [storeId]);
+
+  const handleDismiss = useCallback(() => {
+    setIsDismissed(true);
+    localStorage.setItem(`push_dismissed_${storeId}`, "true");
+  }, [storeId]);
+
+  return { isSubscribed, isDismissed, isSupported, handleSubscribe, handleDismiss };
+}

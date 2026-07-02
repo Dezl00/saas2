@@ -12,6 +12,7 @@ import { formatWhatsappNumber } from "@/lib/utils";
 import Image from "next/image";
 import { getStoreInfo, getStoreBanners } from "./data";
 import { PushNotificationPopup } from "@/components/store/PushNotificationPopup";
+import { PushNotificationHeroBanner } from "@/components/store/PushNotificationHeroBanner";
 
 // SVG Icons for Brands
 const FacebookIcon = ({ className }: { className?: string }) => (
@@ -237,6 +238,15 @@ export default async function StoreLayout({
                 )}
               </div>
             )}
+
+            {/* Push Notification Banner */}
+            <div className="px-4 pb-2">
+              <PushNotificationHeroBanner 
+                storeId={store.id} 
+                enablePushPopup={(store as any).enablePushPopup ?? true} 
+                primaryColor={store.primaryColor || undefined} 
+              />
+            </div>
           </div>
         </section>
 
