@@ -11,6 +11,7 @@ import { StoreWorkingHoursBadge } from "@/components/store/StoreWorkingHoursBadg
 import { formatWhatsappNumber } from "@/lib/utils";
 import Image from "next/image";
 import { getStoreInfo, getStoreBanners } from "./data";
+import { PushNotificationPopup } from "@/components/store/PushNotificationPopup";
 
 // SVG Icons for Brands
 const FacebookIcon = ({ className }: { className?: string }) => (
@@ -365,6 +366,13 @@ export default async function StoreLayout({
             }}
             branches={store.branches}
             deliveryAreas={store.deliveryAreas.map(a => ({ id: a.id, name: a.name, fee: Number(a.deliveryFee) }))}
+          />
+
+          {/* Push Notification Popup */}
+          <PushNotificationPopup 
+            storeId={store.id} 
+            enablePushPopup={(store as any).enablePushPopup ?? true} 
+            primaryColor={store.primaryColor || undefined} 
           />
       </div>
     </CartProvider>

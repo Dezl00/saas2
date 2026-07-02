@@ -145,6 +145,7 @@ export async function updateContactSettings(formData: FormData) {
 
   const whatsappNumber = formData.get("whatsappNumber") as string;
   const enableWhatsappOrders = formData.get("enableWhatsappOrders") === "on";
+  const enablePushPopup = formData.get("enablePushPopup") === "on";
   const facebookUrl = formData.get("facebookUrl") as string;
   const showFacebook = formData.get("showFacebook") === "on";
   const instagramUrl = formData.get("instagramUrl") as string;
@@ -162,6 +163,7 @@ export async function updateContactSettings(formData: FormData) {
       data: {
         whatsappNumber,
         enableWhatsappOrders,
+        enablePushPopup,
         facebookUrl,
         showFacebook,
         instagramUrl,

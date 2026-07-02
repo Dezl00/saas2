@@ -1,0 +1,99 @@
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import webpush from "web-push";
+
+// Configure web-push with VAPID keys
+webpush.setVapidDetails(
+  process.env.VAPID_SUBJECT || "mailto:admin@example.com",
+  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "",
+  process.env.VAPID_PRIVATE_KEY || ""
+);
+
+export async function POST(request: Request) {
+  try {
+    const session = await auth();
+    if (!session || !session.user || !session.user.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Verify user owns the store
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      include: { store: true },
+    });
+
+    if (!user || !user.store) {
+      return NextResponse.json({ error: "Store not found" }, { status: 404 });
+    }
+
+    const storeId = user.store.id;
+    const { title, body, image, link } = await request.json();
+
+    if (!title || !body) {
+      return NextResponse.json({ error: "Title and body are required" }, { status: 400 });
+    }
+
+    // Fetch all subscribers for this store
+    const subscribers = await prisma.pushSubscriber.findMany({
+      where: { storeId },
+    });
+
+    if (subscribers.length === 0) {
+      return NextResponse.json({ error: "No subscribers found for this store" }, { status: 404 });
+    }
+
+    const payload = JSON.stringify({
+      title,
+      body,
+      image,
+      url: link || `https://${user.store.subdomain}.menura.site`,
+    });
+
+    let successCount = 0;
+    let failureCount = 0;
+
+    const sendPromises = subscribers.map(async (subscriber) => {
+      try {
+        const pushSubscription = {
+          endpoint: subscriber.endpoint,
+          keys: {
+            p256dh: subscriber.p256dh,
+            auth: subscriber.auth,
+          },
+        };
+        await webpush.sendNotification(pushSubscription, payload);
+        successCount++;
+      } catch (error: any) {
+        failureCount++;
+        // If the subscription is invalid/expired, remove it from DB
+        if (error.statusCode === 404 || error.statusCode === 410) {
+          await prisma.pushSubscriber.delete({
+            where: { id: subscriber.id },
+          });
+        }
+      }
+    });
+
+    await Promise.allSettled(sendPromises);
+
+    // Save the campaign
+    const campaign = await prisma.pushCampaign.create({
+      data: {
+        storeId,
+        title,
+        body,
+        image,
+        link,
+        targetCount: subscribers.length,
+        successCount,
+        failureCount,
+      },
+    });
+
+    return NextResponse.json({ success: true, campaign });
+  } catch (error) {
+    console.error("Error sending push notification:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}

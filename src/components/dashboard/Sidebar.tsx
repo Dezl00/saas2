@@ -18,6 +18,10 @@ import {
   CreditCard,
   FileUp,
   Palette,
+  ImageIcon,
+  Tags,
+  Percent,
+  Bell
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -40,6 +44,8 @@ export function Sidebar() {
     { href: "/dashboard/categories", icon: FolderTree, label: "الأقسام" },
     { href: "/dashboard/menu", icon: UtensilsCrossed, label: "المنيو" },
     { href: "/dashboard/banners", icon: Ticket, label: "العروض والبانرات" },
+    { href: "/dashboard/coupons", icon: Percent, label: "كوبونات الخصم" },
+    { href: "/dashboard/push-notifications", icon: Bell, label: "الإشعارات" },
     { href: "/dashboard/appearance", icon: Palette, label: "المظهر" },
     { href: "/dashboard/branches", icon: MapPin, label: "الفروع" },
     { href: "/dashboard/delivery-areas", icon: Map, label: "مناطق التوصيل" },

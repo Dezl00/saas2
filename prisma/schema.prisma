@@ -129,6 +129,7 @@ model Store {
   primaryColor         String?
   whatsappNumber       String?
   enableWhatsappOrders Boolean @default(true)
+  enablePushPopup      Boolean @default(true)
   facebookUrl          String?
   showFacebook         Boolean @default(true)
   instagramUrl         String?
@@ -163,6 +164,8 @@ model Store {
   paymentRequests PaymentRequest[]
   subscriptionHistory SubscriptionHistory[]
   notifications  Notification[]
+  pushSubscribers PushSubscriber[]
+  pushCampaigns   PushCampaign[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -535,6 +538,35 @@ model StoreBanner {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([storeId])
+}
+
+model PushSubscriber {
+  id        String   @id @default(cuid())
+  storeId   String
+  store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  endpoint  String
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+
+  @@unique([storeId, endpoint])
+  @@index([storeId])
+}
+
+model PushCampaign {
+  id           String   @id @default(cuid())
+  storeId      String
+  store        Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  title        String
+  body         String
+  image        String?
+  link         String?
+  targetCount  Int      @default(0)
+  successCount Int      @default(0)
+  failureCount Int      @default(0)
+  createdAt    DateTime @default(now())
 
   @@index([storeId])
 }

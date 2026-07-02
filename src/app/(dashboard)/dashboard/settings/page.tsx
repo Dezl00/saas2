@@ -354,7 +354,7 @@ export default async function SettingsPage() {
                   />
                 </div>
 
-                <div className="flex items-center gap-3 pt-6">
+                <div className="flex flex-col gap-4 pt-6">
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input 
                       type="checkbox" 
@@ -365,6 +365,18 @@ export default async function SettingsPage() {
                     />
                     <div className="w-11 h-6 bg-surface-200 peer-focus:outline-none rounded-full peer peer-checked:after:-translate-x-full rtl:peer-checked:after:-translate-x-5 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-surface-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-success-500"></div>
                     <span className="ms-3 text-sm font-medium text-surface-700">تفعيل توجيه الزبون للواتساب بعد إتمام الطلب</span>
+                  </label>
+
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input 
+                      type="checkbox" 
+                      name="enablePushPopup" 
+                      value="on"
+                      defaultChecked={(store as any).enablePushPopup ?? true}
+                      className="sr-only peer" 
+                    />
+                    <div className="w-11 h-6 bg-surface-200 peer-focus:outline-none rounded-full peer peer-checked:after:-translate-x-full rtl:peer-checked:after:-translate-x-5 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-surface-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-success-500"></div>
+                    <span className="ms-3 text-sm font-medium text-surface-700">تفعيل نافذة الاشتراك في الإشعارات بالموقع</span>
                   </label>
                 </div>
               </div>

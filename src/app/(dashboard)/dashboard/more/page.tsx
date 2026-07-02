@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { Breadcrumb } from "@/components/dashboard/Breadcrumb";
-import { MapPin, Map, Ticket, Settings, LogOut, ChevronLeft, FileUp, CreditCard, Palette } from "lucide-react";
+import { MapPin, Map, Ticket, Settings, LogOut, ChevronLeft, FileUp, CreditCard, Palette, Bell, Percent } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = {
@@ -16,10 +16,11 @@ export default async function MorePage() {
 
   const moreItems = [
     { href: "/dashboard/banners", icon: Ticket, label: "العروض والبانرات" },
+    { href: "/dashboard/coupons", icon: Percent, label: "كوبونات الخصم" },
+    { href: "/dashboard/push-notifications", icon: Bell, label: "الإشعارات" },
     { href: "/dashboard/appearance", icon: Palette, label: "المظهر" },
     { href: "/dashboard/branches", icon: MapPin, label: "الفروع" },
     { href: "/dashboard/delivery-areas", icon: Map, label: "مناطق التوصيل" },
-    { href: "/dashboard/coupons", icon: Ticket, label: "الكوبونات" },
     { href: "/dashboard/import-export", icon: FileUp, label: "استيراد وتصدير" },
     { href: "/dashboard/billing", icon: CreditCard, label: "الاشتراك والفوترة" },
     { href: "/dashboard/settings", icon: Settings, label: "الإعدادات" },
