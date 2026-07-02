@@ -3,15 +3,23 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import webpush from "web-push";
 
-// Configure web-push with VAPID keys
-webpush.setVapidDetails(
-  process.env.VAPID_SUBJECT || "mailto:admin@example.com",
-  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "",
-  process.env.VAPID_PRIVATE_KEY || ""
-);
-
 export async function POST(request: Request) {
   try {
+    const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+    const privateKey = process.env.VAPID_PRIVATE_KEY;
+
+    if (!publicKey || !privateKey) {
+      console.error("VAPID keys are not configured.");
+      return NextResponse.json({ error: "Push notifications are not configured" }, { status: 500 });
+    }
+
+    // Configure web-push with VAPID keys
+    webpush.setVapidDetails(
+      process.env.VAPID_SUBJECT || "mailto:admin@example.com",
+      publicKey,
+      privateKey
+    );
+
     const session = await auth();
     if (!session || !session.user || !session.user.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
