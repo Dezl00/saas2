@@ -97,11 +97,16 @@
 /* Base Styles */
 html {
   font-family: var(--font-cairo);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
   background-color: var(--color-surface-50);
   color: var(--color-surface-950);
+  font-weight: 400;
+  font-synthesis: none;
 }
 
 /* Scrollbar */

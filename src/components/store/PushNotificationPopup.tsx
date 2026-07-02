@@ -41,39 +41,46 @@ export function PushNotificationPopup({ storeId, enablePushPopup, primaryColor }
   if (!showPopup || isSubscribed || isDismissed) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 z-50 w-[340px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-2xl border border-surface-100 overflow-hidden animate-in slide-in-from-bottom-5 fade-in duration-500">
-      <div className="p-4 flex items-start gap-3">
-        <div 
-          className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-white"
-          style={{ backgroundColor: primaryColor || "var(--color-primary-500, #2563eb)" }}
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-300">
+      <div className="w-full max-w-sm bg-white rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-500 relative">
+        <button 
+          onClick={onDismiss}
+          className="absolute top-3 left-3 text-surface-400 hover:text-surface-600 transition-colors bg-surface-50 hover:bg-surface-100 rounded-full p-1"
         >
-          <Bell className="w-5 h-5 animate-bounce" />
-        </div>
-        <div className="flex-1 pt-1">
-          <h4 className="font-bold text-surface-900 text-sm mb-1">فعّل الاشعارات ومتفوتش العروض الجديدة!</h4>
-          <p className="text-xs text-surface-500 mb-3">كن أول من يعرف بجديدنا من منتجات وعروض حصرية.</p>
-          <div className="flex items-center gap-2">
+          <X className="w-5 h-5" />
+        </button>
+        
+        <div className="p-6 flex flex-col items-center text-center">
+          <div 
+            className="w-16 h-16 rounded-full flex items-center justify-center text-white mb-4 shadow-lg shadow-primary-500/20"
+            style={{ backgroundColor: primaryColor || "var(--color-primary-500, #2563eb)" }}
+          >
+            <Bell className="w-8 h-8 animate-bounce" />
+          </div>
+          
+          <h4 className="font-bold text-surface-950 text-lg mb-2">
+            فعّل الاشعارات ومتفوتش العروض الجديدة!
+          </h4>
+          <p className="text-sm text-surface-500 mb-6">
+            كن أول من يعرف بجديدنا من منتجات وعروض وخصومات حصرية.
+          </p>
+          
+          <div className="w-full flex flex-col gap-2">
             <button
               onClick={onSubscribe}
-              className="flex-1 text-white text-xs font-bold py-2 px-3 rounded-lg hover:opacity-90 transition-opacity"
+              className="w-full text-white text-sm font-bold py-3 px-4 rounded-xl hover:opacity-90 transition-opacity"
               style={{ backgroundColor: primaryColor || "var(--color-primary-500, #2563eb)" }}
             >
               تفعيل الاشعارات
             </button>
             <button
               onClick={onDismiss}
-              className="px-3 py-2 text-xs font-medium text-surface-500 bg-surface-100 hover:bg-surface-200 rounded-lg transition-colors"
+              className="w-full px-4 py-3 text-sm font-medium text-surface-500 bg-surface-100 hover:bg-surface-200 rounded-xl transition-colors"
             >
               لاحقاً
             </button>
           </div>
         </div>
-        <button 
-          onClick={onDismiss}
-          className="text-surface-400 hover:text-surface-600 transition-colors absolute top-3 left-3"
-        >
-          <X className="w-4 h-4" />
-        </button>
       </div>
     </div>
   );
