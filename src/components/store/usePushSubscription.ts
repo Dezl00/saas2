@@ -26,14 +26,17 @@ export function usePushSubscription(storeId: string, enablePushPopup: boolean) {
   useEffect(() => {
     if (!enablePushPopup) return;
 
-    if (!("Notification" in window) || !("serviceWorker" in navigator)) {
-      return;
-    }
-    setIsSupported(true);
+    const isPushSupported = "Notification" in window && "serviceWorker" in navigator;
+    setIsSupported(true); // Always show the UI, handle unsupported in click handler
 
     const hasDismissed = localStorage.getItem(`push_dismissed_${storeId}`);
     if (!hasDismissed) {
       setIsDismissed(false);
+    }
+
+    if (!isPushSupported) {
+      setIsSubscribed(false);
+      return;
     }
 
     navigator.serviceWorker.register("/sw.js").catch(console.error);
@@ -53,6 +56,16 @@ export function usePushSubscription(storeId: string, enablePushPopup: boolean) {
 
   const handleSubscribe = useCallback(async () => {
     try {
+      if (!("Notification" in window) || !("serviceWorker" in navigator)) {
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+        if (isIOS) {
+          toast("لتفعيل الإشعارات على الآيفون، يرجى إضافة الموقع للشاشة الرئيسية (Add to Home Screen) من خيارات المشاركة", { icon: "📱", duration: 6000 });
+        } else {
+          toast.error("متصفحك لا يدعم الإشعارات");
+        }
+        return;
+      }
+
       const permission = await Notification.requestPermission();
       if (permission === "granted") {
         const registration = await navigator.serviceWorker.ready;
