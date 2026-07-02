@@ -59,6 +59,10 @@ export function usePushSubscription(storeId: string, enablePushPopup: boolean) {
         const response = await fetch("/api/push/vapid-public-key");
         const { publicKey } = await response.json();
 
+        if (!publicKey) {
+          throw new Error("VAPID public key is not configured. Please add NEXT_PUBLIC_VAPID_PUBLIC_KEY to your environment variables.");
+        }
+
         const subscription = await registration.pushManager.subscribe({
           userVisibleOnly: true,
           applicationServerKey: urlBase64ToUint8Array(publicKey),
