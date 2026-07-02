@@ -21,21 +21,18 @@ export async function POST(request: Request) {
     );
 
     const session = await auth();
-    if (!session || !session.user || !session.user.email) {
+    if (!session || !session.user || !session.user.storeId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Verify user owns the store
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-      include: { store: true },
+    const storeId = session.user.storeId;
+    const store = await prisma.store.findUnique({
+      where: { id: storeId },
     });
 
-    if (!user || !user.store) {
+    if (!store) {
       return NextResponse.json({ error: "Store not found" }, { status: 404 });
     }
-
-    const storeId = user.store.id;
     const { title, body, image, link } = await request.json();
 
     if (!title || !body) {
@@ -55,7 +52,7 @@ export async function POST(request: Request) {
       title,
       body,
       image,
-      url: link || `https://${user.store.subdomain}.menura.site`,
+      url: link || `https://${store.subdomain}.menura.site`,
     });
 
     let successCount = 0;
