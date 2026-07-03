@@ -5,23 +5,12 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import {
   LayoutDashboard,
-  FolderTree,
   UtensilsCrossed,
   ShoppingBag,
-  Ticket,
   Settings,
   LogOut,
   Store,
-  MapPin,
-  Map,
-  MoreHorizontal,
-  CreditCard,
-  FileUp,
-  Palette,
-  ImageIcon,
-  Tags,
-  Percent,
-  Bell
+  Menu as MenuIcon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -40,122 +29,110 @@ export function Sidebar() {
   }, [pathname]);
 
   const navItems = [
-    { href: "/dashboard", icon: LayoutDashboard, label: "الرئيسية" },
-    { href: "/dashboard/categories", icon: FolderTree, label: "الأقسام" },
+    { href: "/dashboard", icon: LayoutDashboard, label: "الرئيسية", exact: true },
+    { href: "/dashboard/orders", icon: ShoppingBag, label: "العمليات" },
     { href: "/dashboard/menu", icon: UtensilsCrossed, label: "المنيو" },
-    { href: "/dashboard/banners", icon: Ticket, label: "العروض والبانرات" },
-    { href: "/dashboard/coupons", icon: Percent, label: "كوبونات الخصم" },
-    { href: "/dashboard/push-notifications", icon: Bell, label: "الإشعارات" },
-    { href: "/dashboard/appearance", icon: Palette, label: "المظهر" },
-    { href: "/dashboard/branches", icon: MapPin, label: "الفروع" },
-    { href: "/dashboard/delivery-areas", icon: Map, label: "مناطق التوصيل" },
-    { href: "/dashboard/orders", icon: ShoppingBag, label: "الطلبات" },
-    { href: "/dashboard/coupons", icon: Ticket, label: "الكوبونات" },
-    { href: "/dashboard/import-export", icon: FileUp, label: "استيراد وتصدير" },
-    { href: "/dashboard/billing", icon: CreditCard, label: "الاشتراك والفوترة" },
     { href: "/dashboard/settings", icon: Settings, label: "الإعدادات" },
   ];
 
   return (
     <>
       {/* Sidebar (Desktop) */}
-      <aside className="hidden md:flex md:flex-col w-64 bg-white border-e border-surface-200 z-10">
-      <div className="p-6 border-b border-surface-100">
-        <Link href="/dashboard" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 bg-primary-100 flex items-center justify-center transition-transform">
-            <Store className="w-5 h-5 text-primary-600" />
-          </div>
-          <div>
-            <h2 className="font-bold text-surface-950">لوحة التحكم</h2>
-            <p className="text-xs text-surface-800/50">إدارة المتجر</p>
-          </div>
-        </Link>
-      </div>
+      <aside className={cn(
+        "fixed inset-y-0 right-0 z-40 w-72 bg-surface-50 border-l border-surface-200 transform transition-transform duration-200 ease-in-out md:relative md:translate-x-0 flex flex-col",
+        isOpen ? "translate-x-0" : "translate-x-full"
+      )}>
+        <div className="p-8 pb-4">
+          <Link href="/dashboard" className="flex items-center gap-3 group">
+            <div className="w-12 h-12 bg-primary-100 rounded-2xl flex items-center justify-center transition-transform">
+              <Store className="w-6 h-6 text-primary-600" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-surface-950 tracking-tight">لوحة التحكم</h2>
+              <p className="text-sm font-medium text-surface-500">إدارة المتجر</p>
+            </div>
+          </Link>
+        </div>
 
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+        <nav className="flex-1 p-6 space-y-2 overflow-y-auto">
+          <div className="text-xs font-bold text-surface-400 mb-4 px-2 uppercase tracking-wider">
+            القائمة الرئيسية
+          </div>
+          {navItems.map((item) => {
+            const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href);
+            
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                prefetch={true}
+                className={cn(
+                  "flex items-center gap-3 px-4 py-3.5 transition-colors rounded-2xl",
+                  isActive
+                    ? "bg-primary-100/50 text-primary-700 font-bold"
+                    : "text-surface-600 hover:bg-surface-200/50 hover:text-surface-950 font-medium"
+                )}
+              >
+                <item.icon
+                  className={cn(
+                    "w-5 h-5",
+                    isActive ? "text-primary-600" : "text-surface-500"
+                  )}
+                />
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="p-6">
+          <Link
+            href="/api/auth/signout"
+            className="flex items-center justify-center gap-3 w-full px-4 py-3.5 text-error-600 font-bold hover:bg-error-50 rounded-2xl transition-colors"
+          >
+            <LogOut className="w-5 h-5" />
+            <span>تسجيل الخروج</span>
+          </Link>
+        </div>
+      </aside>
+
+      {/* Overlay for mobile sidebar */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-surface-950/20 z-30 md:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* Bottom Navigation (Mobile) */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-surface-200 flex items-center justify-around p-2 pb-safe z-50">
         {navItems.map((item) => {
-          const isActive = pathname === item.href;
-          const shouldPrefetch = ["/dashboard", "/dashboard/orders", "/dashboard/menu"].includes(item.href);
+          const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href);
           
           return (
             <Link
               key={item.href}
               href={item.href}
-              prefetch={shouldPrefetch ? true : null}
+              prefetch={true}
               className={cn(
-                "flex items-center gap-3 px-4 py-3 transition-colors",
-                isActive
-                  ? "bg-primary-50 text-primary-700 border-r-4 border-primary-600"
-                  : "text-surface-600 hover:bg-surface-50 hover:text-surface-950 border-r-4 border-transparent"
+                "flex flex-col items-center gap-1.5 p-2 transition-colors relative w-full",
+                isActive ? "text-primary-600" : "text-surface-400 hover:text-surface-600"
               )}
             >
-              <item.icon
-                className={cn(
-                  "w-5 h-5 transition-colors",
-                  isActive
-                    ? "text-primary-600"
-                    : "group-hover:text-primary-500"
-                )}
-              />
-              <span className="font-medium">{item.label}</span>
+              <div className={cn(
+                "p-1.5 rounded-xl transition-colors",
+                isActive && "bg-primary-50"
+              )}>
+                <item.icon className="w-6 h-6" strokeWidth={isActive ? 2.5 : 2} />
+              </div>
+              <span className={cn(
+                "text-[10px]",
+                isActive ? "font-bold" : "font-medium"
+              )}>{item.label}</span>
             </Link>
           );
         })}
       </nav>
-
-      <div className="p-4 border-t border-surface-100">
-        <form
-          action={async () => {
-            // Using a server action via a form for logout is handled in the layout or client
-            // Since this is a client component, we should handle this via next-auth/react
-          }}
-        >
-            <Link
-                href="/api/auth/signout"
-                className="flex items-center gap-3 w-full px-4 py-3 text-error-600 hover:bg-error-50 transition-colors border-r-4 border-transparent"
-            >
-              <LogOut className="w-5 h-5" />
-              <span className="font-medium">تسجيل الخروج</span>
-            </Link>
-        </form>
-      </div>
-    </aside>
-
-    {/* Bottom Navigation (Mobile) */}
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-surface-200 flex items-center justify-around p-2 pb-safe z-50">
-      {navItems.filter(item => ["/dashboard", "/dashboard/menu", "/dashboard/categories", "/dashboard/orders"].includes(item.href)).sort((a, b) => {
-        const order = ["/dashboard", "/dashboard/categories", "/dashboard/menu", "/dashboard/orders"];
-        return order.indexOf(a.href) - order.indexOf(b.href);
-      }).map((item) => {
-        const isActive = pathname === item.href;
-        const shouldPrefetch = ["/dashboard", "/dashboard/orders", "/dashboard/menu"].includes(item.href);
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            prefetch={shouldPrefetch ? true : null}
-            className={cn(
-              "flex flex-col items-center gap-1 p-2 transition-colors",
-              isActive ? "text-primary-600" : "text-surface-500 hover:text-primary-600"
-            )}
-          >
-            <item.icon className="w-6 h-6 flex-shrink-0" />
-            <span className="text-[10px] font-bold whitespace-nowrap">{item.label}</span>
-          </Link>
-        );
-      })}
-      
-      <Link
-        href="/dashboard/more"
-        className={cn(
-          "flex flex-col items-center gap-1 p-2 transition-colors",
-          pathname === "/dashboard/more" ? "text-primary-600" : "text-surface-500 hover:text-primary-600"
-        )}
-      >
-        <MoreHorizontal className="w-6 h-6 flex-shrink-0" />
-        <span className="text-[10px] font-bold whitespace-nowrap">المزيد</span>
-      </Link>
-    </nav>
     </>
   );
 }

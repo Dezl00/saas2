@@ -15,31 +15,28 @@ interface StatsCardProps {
 
 export function StatsCard({ title, value, icon: Icon, trend, cardClasses, iconClasses, labelClasses }: StatsCardProps) {
   return (
-    <div className={`rounded-2xl p-6 border relative overflow-hidden ${cardClasses}`}>
-        {/* Subtle decorative color */}
-        <div className={`absolute top-0 end-0 w-32 h-32 ${iconClasses} opacity-50 rounded-full blur-2xl -mt-10 -me-10`} />
-
-      <div className="flex items-center justify-between mb-4 relative z-10">
+    <div className={`rounded-[32px] p-6 lg:p-8 border-2 transition-colors ${cardClasses}`}>
+      <div className="flex items-start justify-between mb-6">
         <div
-          className={`w-12 h-12 rounded-xl flex items-center justify-center relative z-10 ${iconClasses}`}
+          className={`w-14 h-14 rounded-2xl flex items-center justify-center border-2 ${iconClasses}`}
         >
-          <Icon className="w-6 h-6" />
+          <Icon className="w-7 h-7" />
         </div>
         {trend && (
           <span
-            className={`inline-flex px-2 py-1 rounded-lg text-xs font-bold ${
+            className={`inline-flex px-3 py-1.5 rounded-xl text-sm font-bold border-2 ${
               trend.isPositive
-                ? "bg-green-50 text-green-600"
-                : "bg-red-50 text-red-600"
+                ? "bg-success-50 text-success-700 border-success-200"
+                : "bg-error-50 text-error-700 border-error-200"
             }`}
           >
             {trend.isPositive ? "+" : "-"}{Math.abs(trend.value)}%
           </span>
         )}
       </div>
-      <div className="relative z-10">
-        <p className="text-3xl font-black mb-1">{value}</p>
-        <p className={`text-sm font-bold ${labelClasses}`}>{title}</p>
+      <div>
+        <p className={`text-sm font-bold mb-2 ${labelClasses}`}>{title}</p>
+        <p className="text-3xl lg:text-4xl font-black tracking-tight">{value}</p>
       </div>
     </div>
   );

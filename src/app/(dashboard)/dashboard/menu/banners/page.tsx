@@ -1,6 +1,5 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { Breadcrumb } from "@/components/dashboard/Breadcrumb";
 import { BannersClient } from "./BannersClient";
 import { notFound } from "next/navigation";
 
@@ -21,11 +20,8 @@ export default async function BannersPage() {
   });
 
   return (
-    <div className="animate-fade-in pb-20">
-      <Breadcrumb title="العروض والبانرات" />
-      <div className="mt-6">
-        <BannersClient initialBanners={banners} />
-      </div>
+    <div className="space-y-6">
+      <BannersClient initialBanners={banners} />
     </div>
   );
 }

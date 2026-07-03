@@ -69,21 +69,21 @@ export function ImportExportClient({ storeId }: { storeId: string }) {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
       {/* Export Section */}
-      <div className="bg-white border border-surface-200 rounded-2xl p-6 shadow-sm">
-        <div className="w-12 h-12 bg-primary-50 rounded-full flex items-center justify-center mb-4">
-          <Download className="w-6 h-6 text-primary-600" />
+      <div className="bg-surface-50 border-2 border-surface-100 rounded-[32px] p-6 lg:p-8 hover:border-surface-200 transition-colors">
+        <div className="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center mb-6">
+          <Download className="w-8 h-8 text-primary-600" />
         </div>
-        <h2 className="text-xl font-bold text-surface-900 mb-2">تصدير الأصناف</h2>
-        <p className="text-surface-500 text-sm mb-6">
+        <h2 className="text-2xl font-black text-surface-950 mb-3">تصدير الأصناف</h2>
+        <p className="text-surface-500 font-medium mb-8 leading-relaxed">
           قم بتنزيل كافة منتجاتك، التصنيفات، والإضافات في ملف إكسل واحد مرتب ومنظم. يمكنك التعديل عليه ورفعه مجدداً.
         </p>
         
         <button
           onClick={handleExport}
           disabled={isExporting}
-          className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-white border-2 border-primary-600 text-primary-600 font-bold rounded-xl hover:bg-primary-50 transition-colors disabled:opacity-50"
+          className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-white border-2 border-primary-200 text-primary-600 font-bold rounded-2xl hover:border-primary-600 transition-colors disabled:opacity-50"
         >
           {isExporting ? <Loader2 className="w-5 h-5 animate-spin" /> : <FileSpreadsheet className="w-5 h-5" />}
           تنزيل ملف الإكسل (Excel)
@@ -91,12 +91,12 @@ export function ImportExportClient({ storeId }: { storeId: string }) {
       </div>
 
       {/* Import Section */}
-      <div className="bg-white border border-surface-200 rounded-2xl p-6 shadow-sm">
-        <div className="w-12 h-12 bg-success-50 rounded-full flex items-center justify-center mb-4">
-          <Upload className="w-6 h-6 text-success-600" />
+      <div className="bg-surface-50 border-2 border-surface-100 rounded-[32px] p-6 lg:p-8 hover:border-surface-200 transition-colors">
+        <div className="w-16 h-16 bg-success-100 rounded-2xl flex items-center justify-center mb-6">
+          <Upload className="w-8 h-8 text-success-600" />
         </div>
-        <h2 className="text-xl font-bold text-surface-900 mb-2">استيراد الأصناف</h2>
-        <p className="text-surface-500 text-sm mb-6">
+        <h2 className="text-2xl font-black text-surface-950 mb-3">استيراد الأصناف</h2>
+        <p className="text-surface-500 font-medium mb-8 leading-relaxed">
           ارفع ملف الإكسل الذي قمت بتعديله أو الذي يحتوي على منتجاتك الجديدة لإضافتها دفعة واحدة.
         </p>
         
@@ -108,13 +108,13 @@ export function ImportExportClient({ storeId }: { storeId: string }) {
             disabled={isImporting}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
           />
-          <div className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700 transition-colors pointer-events-none opacity-100">
+          <div className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-success-600 text-white font-bold rounded-2xl hover:bg-success-700 transition-colors pointer-events-none opacity-100">
             {isImporting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
             {isImporting ? "جاري رفع البيانات..." : "اختر ملف Excel لرفعه"}
           </div>
         </div>
 
-        <div className="mt-4 p-3 bg-warning-50 rounded-lg flex gap-3 text-warning-800 text-xs">
+        <div className="mt-6 p-4 bg-warning-50 rounded-2xl flex gap-3 text-warning-800 font-medium text-sm leading-relaxed border-2 border-warning-100">
           <AlertTriangle className="w-5 h-5 flex-shrink-0" />
           <p>
             تأكد من أن الأعمدة مطابقة للملف المصدر. سيتم تحديث المنتجات الموجودة مسبقاً إذا كان معرف المنتج (ID) موجوداً، وإلا سيتم إضافة منتجات جديدة.

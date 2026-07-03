@@ -1,6 +1,5 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { Breadcrumb } from "@/components/dashboard/Breadcrumb";
 import { AppearanceClient } from "./AppearanceClient";
 import { notFound } from "next/navigation";
 
@@ -24,14 +23,7 @@ export default async function AppearancePage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-black text-surface-900 mb-1">المظهر</h1>
-          <Breadcrumb title="المظهر" />
-        </div>
-      </div>
-
+    <div className="space-y-6">
       <AppearanceClient currentFont={store.fontFamily} />
     </div>
   );

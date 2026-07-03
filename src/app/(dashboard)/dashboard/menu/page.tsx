@@ -1,14 +1,11 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { Breadcrumb } from "@/components/dashboard/Breadcrumb";
-import { Plus, Trash2, ImageIcon } from "lucide-react";
-import { toggleMenuItemStatus, deleteMenuItem } from "./actions";
+import { Plus } from "lucide-react";
 import { MenuItemForm } from "@/components/dashboard/MenuItemForm";
-import { DeleteConfirmButton } from "@/components/dashboard/DeleteConfirmButton";
-import { MenuItemEditButton } from "@/components/dashboard/MenuItemEditButton";
 import { AIMenuScanner } from "@/components/dashboard/AIMenuScanner";
-import { MenuItemsTable } from "@/components/dashboard/MenuItemsTable";
+import { MenuItemsGrid } from "@/components/dashboard/MenuItemsGrid";
 import { Pagination } from "@/components/ui/Pagination";
+import { notFound } from "next/navigation";
 
 export const metadata = {
   title: "إدارة المنيو | لوحة التحكم",
@@ -19,12 +16,12 @@ export const maxDuration = 60;
 export default async function MenuPage(props: { searchParams: Promise<{ page?: string }> }) {
   const searchParams = await props.searchParams;
   const page = Number(searchParams.page) || 1;
-  const pageSize = 10;
+  const pageSize = 12;
   
   const session = await auth();
   
   if (!session?.user?.storeId) {
-    return null;
+    notFound();
   }
 
   const [totalItems, categories] = await Promise.all([
@@ -51,24 +48,22 @@ export default async function MenuPage(props: { searchParams: Promise<{ page?: s
   });
 
   return (
-    <div className="animate-fade-in pb-10">
-      <Breadcrumb title="إدارة المنيو" />
-      
-      <div className="flex justify-end mt-4 px-1">
+    <div className="space-y-6">
+      <div className="flex justify-end">
         <AIMenuScanner />
       </div>
       
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-6">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         {/* نموذج إضافة صنف */}
         <div className="xl:col-span-1">
-          <div className="bg-white rounded-2xl border border-surface-200 p-6 sticky top-6 max-h-[calc(100vh-2rem)] overflow-y-auto scrollbar-hide">
-            <h3 className="text-lg font-bold text-surface-950 mb-4 flex items-center gap-2">
-              <Plus className="w-5 h-5 text-primary-500" />
+          <div className="bg-surface-50 border-2 border-surface-100 rounded-[32px] p-6 lg:p-8 sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto scrollbar-hide">
+            <h3 className="text-xl font-bold text-surface-950 mb-6 flex items-center gap-2">
+              <Plus className="w-5 h-5 text-primary-600" />
               إضافة صنف جديد
             </h3>
             
             {categories.length === 0 ? (
-              <div className="p-4 bg-primary-50 text-primary-800 rounded-xl text-sm font-medium border border-primary-100">
+              <div className="p-4 bg-warning-50 text-warning-800 rounded-2xl text-sm font-bold border-2 border-warning-100 leading-relaxed">
                 يجب إضافة "قسم" واحد على الأقل قبل إضافة الأصناف. يرجى الذهاب لصفحة الأقسام أولاً.
               </div>
             ) : (
@@ -79,9 +74,9 @@ export default async function MenuPage(props: { searchParams: Promise<{ page?: s
 
         {/* قائمة الأصناف */}
         <div className="xl:col-span-2">
-          <MenuItemsTable menuItems={menuItems} categories={categories.map(c => ({ id: c.id, name: c.name }))} />
+          <MenuItemsGrid menuItems={menuItems} categories={categories.map(c => ({ id: c.id, name: c.name }))} />
           {totalPages > 1 && (
-            <div className="mt-4">
+            <div className="mt-8">
               <Pagination totalPages={totalPages} />
             </div>
           )}

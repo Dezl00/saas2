@@ -1,23 +1,12 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { Breadcrumb } from "@/components/dashboard/Breadcrumb";
-import { ShoppingBag, Truck, Store as StoreIcon, Clock } from "lucide-react";
-import { updateOrderStatus } from "./actions";
+import { ShoppingBag } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 import { Pagination } from "@/components/ui/Pagination";
 import { OrderCard } from "@/components/dashboard/OrderCard";
 
 export const metadata = {
   title: "الطلبات | لوحة التحكم",
-};
-
-const statusMap: Record<string, { label: string, color: string }> = {
-  PENDING: { label: "قيد الانتظار", color: "bg-yellow-100 text-yellow-800" },
-  CONFIRMED: { label: "مؤكد", color: "bg-blue-100 text-blue-800" },
-  PREPARING: { label: "جاري التجهيز", color: "bg-purple-100 text-purple-800" },
-  READY: { label: "جاهز", color: "bg-indigo-100 text-indigo-800" },
-  DELIVERED: { label: "مكتمل", color: "bg-success-100 text-success-800" },
-  CANCELLED: { label: "ملغي", color: "bg-error-100 text-error-800" },
 };
 
 export default async function OrdersPage(props: { searchParams: Promise<{ page?: string }> }) {
@@ -51,14 +40,19 @@ export default async function OrdersPage(props: { searchParams: Promise<{ page?:
   });
 
   return (
-    <div className="animate-fade-in pb-10">
-      <Breadcrumb title="الطلبات الواردة" />
+    <div className="space-y-6">
+      <div className="flex items-center justify-between bg-white p-4 rounded-3xl border-2 border-surface-100">
+        <h2 className="text-xl font-bold text-surface-950 px-2">الطلبات الواردة</h2>
+      </div>
       
-      <div className="mt-6 space-y-6">
+      <div className="space-y-6">
         {orders.length === 0 ? (
-          <div className="text-center py-20 bg-white border border-surface-200">
-            <ShoppingBag className="w-16 h-16 text-surface-300 mx-auto mb-4" />
-            <p className="text-lg text-surface-500 font-medium">لا توجد طلبات حتى الآن.</p>
+          <div className="text-center py-20 bg-surface-50 border-2 border-surface-100 rounded-[32px]">
+            <div className="w-20 h-20 bg-white border-2 border-surface-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <ShoppingBag className="w-10 h-10 text-surface-400" />
+            </div>
+            <p className="text-xl text-surface-950 font-bold mb-2">لا توجد طلبات حتى الآن.</p>
+            <p className="text-surface-500 font-medium">الطلبات الجديدة ستظهر هنا فور استلامها.</p>
           </div>
         ) : (
           orders.map(order => (
@@ -68,7 +62,7 @@ export default async function OrdersPage(props: { searchParams: Promise<{ page?:
       </div>
       
       {totalPages > 1 && (
-        <div className="mt-8">
+        <div className="mt-8 flex justify-center">
           <Pagination totalPages={totalPages} />
         </div>
       )}

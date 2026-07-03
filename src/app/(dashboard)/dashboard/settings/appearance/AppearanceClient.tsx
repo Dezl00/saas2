@@ -39,46 +39,47 @@ export function AppearanceClient({ currentFont }: { currentFont: string }) {
   return (
     <div className="space-y-6">
       <link href={fontsUrl} rel="stylesheet" />
-      <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-surface-100">
-        <h2 className="text-xl font-bold text-surface-900 mb-6">اختر خط المتجر</h2>
+      <div className="bg-surface-50 rounded-[32px] p-6 lg:p-8">
+        <h3 className="text-xl font-bold text-surface-950 mb-6 flex items-center gap-2">
+          <Check className="w-6 h-6 text-primary-500" />
+          اختر خط المتجر
+        </h3>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {FONTS.map((font) => (
             <div
               key={font.id}
               onClick={() => setSelectedFont(font.id)}
-              className={`relative cursor-pointer rounded-2xl p-4 transition-all border-2 ${
+              className={`relative cursor-pointer rounded-2xl p-5 transition-colors border-2 ${
                 selectedFont === font.id 
-                  ? "border-primary-500 bg-primary-50 shadow-md" 
-                  : "border-surface-100 hover:border-primary-200 bg-surface-50 hover:bg-white"
+                  ? "border-primary-500 bg-primary-50" 
+                  : "border-surface-200 hover:border-primary-200 bg-white"
               }`}
             >
-              <div className="flex justify-between items-center mb-3">
-                <h3 className="font-bold text-surface-900 text-lg">{font.name}</h3>
-                {selectedFont === font.id && (
-                  <div className="w-6 h-6 rounded-full bg-primary-500 flex items-center justify-center">
-                    <Check className="w-4 h-4 text-white" />
-                  </div>
-                )}
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="font-bold text-surface-950 text-lg">{font.name}</h3>
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${selectedFont === font.id ? "bg-primary-500" : "bg-surface-100"}`}>
+                  {selectedFont === font.id && <Check className="w-4 h-4 text-white" />}
+                </div>
               </div>
               <p className={`text-surface-600 text-xl mt-2 ${font.cssClass}`} style={{ fontFamily: `"${font.id}", sans-serif` }}>
                 أهلاً بك في متجرنا
               </p>
-              <p className={`text-surface-400 text-sm mt-1 ${font.cssClass}`} style={{ fontFamily: `"${font.id}", sans-serif` }}>
+              <p className={`text-surface-400 text-sm mt-2 ${font.cssClass}`} style={{ fontFamily: `"${font.id}", sans-serif` }}>
                 وجبات لذيذة وتوصيل سريع!
               </p>
             </div>
           ))}
         </div>
 
-        <div className="mt-8 pt-6 border-t border-surface-100 flex justify-end">
+        <div className="mt-8 flex justify-end">
           <button
             onClick={handleSave}
             disabled={isSaving || selectedFont === currentFont}
-            className="bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-8 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full sm:w-auto py-4 px-10 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-bold transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Check className="w-5 h-5" />}
-            حفظ التغييرات
+            حفظ إعدادات المظهر
           </button>
         </div>
       </div>
