@@ -4,7 +4,7 @@ import { Breadcrumb } from "@/components/dashboard/Breadcrumb";
 import { Plus, PackageSearch, Store } from "lucide-react";
 import { MenuItemForm } from "@/components/dashboard/MenuItemForm";
 import { AIMenuScanner } from "@/components/dashboard/AIMenuScanner";
-import { MenuItemsTable } from "@/components/dashboard/MenuItemsTable";
+import { MenuItemsGrid } from "@/components/dashboard/MenuItemsGrid";
 import { SubmitButton } from "@/components/dashboard/SubmitButton";
 import { DeleteConfirmButton } from "@/components/dashboard/DeleteConfirmButton";
 import { createDefaultCategory, toggleDefaultCategoryStatus, deleteDefaultCategory } from "./actions";
@@ -106,14 +106,14 @@ export default async function DefaultProductsPage(props: {
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             {/* نموذج إضافة صنف */}
             <div className="xl:col-span-1">
-              <div className="bg-white rounded-2xl border border-surface-200 p-6 sticky top-6 max-h-[calc(100vh-2rem)] overflow-y-auto scrollbar-hide">
-                <h3 className="text-lg font-bold text-surface-950 mb-4 flex items-center gap-2">
-                  <Plus className="w-5 h-5 text-primary-500" />
+              <div className="bg-surface-50 rounded-[32px] border-2 border-surface-100 p-6 sticky top-6 max-h-[calc(100vh-2rem)] overflow-y-auto scrollbar-hide">
+                <h3 className="text-xl font-black text-surface-950 mb-6 flex items-center gap-2">
+                  <Plus className="w-6 h-6 text-primary-500" />
                   إضافة صنف افتراضي
                 </h3>
                 
                 {categories.length === 0 ? (
-                  <div className="p-4 bg-primary-50 text-primary-800 rounded-xl text-sm font-medium border border-primary-100 mb-4">
+                  <div className="p-5 bg-primary-50 text-primary-800 rounded-2xl font-bold border-2 border-primary-100 mb-6">
                     يجب إضافة قسم واحد على الأقل للمتجر الافتراضي لكي تتمكن من إضافة أصناف.
                   </div>
                 ) : null}
@@ -127,7 +127,7 @@ export default async function DefaultProductsPage(props: {
 
             {/* قائمة الأصناف */}
             <div className="xl:col-span-2">
-              <MenuItemsTable 
+              <MenuItemsGrid 
                 storeId="DEFAULT_STORE"
                 menuItems={menuItems} 
                 categories={categories.map(c => ({ id: c.id, name: c.name }))} 
