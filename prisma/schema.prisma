@@ -398,6 +398,10 @@ model PlatformSetting {
   enableEmailOtp  Boolean  @default(false)
   enablePhoneOtp  Boolean  @default(true)
   
+  // Dashboard Appearance
+  dashboardTheme  String   @default("blue")
+  dashboardFont   String   @default("cairo")
+  
   // Subscription Settings
   trialDays       Int      @default(7)
   graceDays       Int      @default(3)

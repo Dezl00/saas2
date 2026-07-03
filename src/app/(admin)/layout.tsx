@@ -13,11 +13,14 @@ import {
   Crown,
   CreditCard,
   Receipt,
+  Palette,
 } from "lucide-react";
 import { GlobalSearch } from "@/components/admin/GlobalSearch";
 import { AdminHeaderNotifications } from "@/components/admin/AdminHeaderNotifications";
 import { PageTransitionLoader } from "@/components/ui/PageTransitionLoader";
 import { connection } from "next/server";
+
+import prisma from "@/lib/prisma";
 
 export default async function AdminLayout({
   children,
@@ -31,6 +34,11 @@ export default async function AdminLayout({
     redirect("/login");
   }
 
+  const platformSetting = await prisma.platformSetting.findFirst() || {
+    dashboardTheme: "blue",
+    dashboardFont: "cairo",
+  };
+
   const navItems = [
     { href: "/admin", icon: LayoutDashboard, label: "الرئيسية" },
     { href: "/admin/users", icon: Users, label: "المستخدمين" },
@@ -39,11 +47,12 @@ export default async function AdminLayout({
     { href: "/admin/payment-methods", icon: CreditCard, label: "طرق الدفع" },
     { href: "/admin/payment-requests", icon: Receipt, label: "طلبات الدفع" },
     { href: "/admin/default-products", icon: PackageSearch, label: "المنتجات الافتراضية" },
+    { href: "/admin/appearance", icon: Palette, label: "المظهر العام" },
     { href: "/admin/settings", icon: Settings, label: "إعدادات المنصة" },
   ];
 
   return (
-    <div className="min-h-screen bg-surface-50 flex flex-col md:flex-row w-full overflow-x-hidden">
+    <div className={`min-h-screen bg-surface-50 flex flex-col md:flex-row w-full overflow-x-hidden theme-${platformSetting.dashboardTheme} font-${platformSetting.dashboardFont} dashboard-layout`}>
       {/* Sidebar (Desktop) */}
       <aside className="hidden md:flex md:flex-col fixed inset-y-0 right-0 w-64 bg-white border-l border-surface-200 z-30">
         <div className="p-6 border-b border-surface-100 flex-shrink-0">

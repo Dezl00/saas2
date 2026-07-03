@@ -33,8 +33,19 @@ export default async function DashboardLayout({
     }
   }
 
+  let platformSetting = { dashboardTheme: "blue", dashboardFont: "cairo" };
+  try {
+    const { prisma } = await import("@/lib/prisma");
+    const settings = await prisma.platformSetting.findFirst();
+    if (settings) {
+      platformSetting = settings;
+    }
+  } catch (error) {
+    console.error("Error fetching platform settings:", error);
+  }
+
   return (
-    <div className="flex h-screen bg-surface-50 overflow-hidden" dir="rtl">
+    <div className={`flex h-screen bg-surface-50 overflow-hidden theme-${platformSetting.dashboardTheme} font-${platformSetting.dashboardFont} dashboard-layout`} dir="rtl">
       <Sidebar />
       <main className="flex-1 overflow-auto flex flex-col pb-20 md:pb-0">
         {children}

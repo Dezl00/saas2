@@ -173,6 +173,90 @@ body {
   scrollbar-width: none;
 }
 
+/* ===== Dashboard Appearance Overrides ===== */
+/* Prevent overly thick fonts in dashboards */
+.dashboard-layout .font-black {
+  font-weight: 700 !important;
+}
+.dashboard-layout .font-bold {
+  font-weight: 600 !important;
+}
+
+/* Theme Presets */
+.theme-blue {
+  /* Default primary variables already Blue-ish */
+}
+
+.theme-emerald {
+  --color-primary-50: oklch(0.97 0.04 150);
+  --color-primary-100: oklch(0.93 0.08 150);
+  --color-primary-200: oklch(0.88 0.12 150);
+  --color-primary-300: oklch(0.82 0.16 150);
+  --color-primary-400: oklch(0.72 0.2 150);
+  --color-primary-500: oklch(0.62 0.22 150);
+  --color-primary-600: oklch(0.52 0.18 150);
+  --color-primary-700: oklch(0.42 0.16 150);
+  --color-primary-800: oklch(0.35 0.14 150);
+  --color-primary-900: oklch(0.3 0.12 150);
+  --color-primary-950: oklch(0.22 0.1 150);
+}
+
+.theme-violet {
+  --color-primary-50: oklch(0.97 0.02 290);
+  --color-primary-100: oklch(0.94 0.04 290);
+  --color-primary-200: oklch(0.88 0.08 290);
+  --color-primary-300: oklch(0.8 0.12 290);
+  --color-primary-400: oklch(0.7 0.16 290);
+  --color-primary-500: oklch(0.6 0.2 290);
+  --color-primary-600: oklch(0.5 0.18 290);
+  --color-primary-700: oklch(0.4 0.16 290);
+  --color-primary-800: oklch(0.32 0.12 290);
+  --color-primary-900: oklch(0.28 0.1 290);
+  --color-primary-950: oklch(0.2 0.08 290);
+}
+
+.theme-rose {
+  --color-primary-50: oklch(0.97 0.02 10);
+  --color-primary-100: oklch(0.94 0.04 10);
+  --color-primary-200: oklch(0.88 0.08 10);
+  --color-primary-300: oklch(0.8 0.14 10);
+  --color-primary-400: oklch(0.7 0.18 10);
+  --color-primary-500: oklch(0.6 0.22 10);
+  --color-primary-600: oklch(0.5 0.18 10);
+  --color-primary-700: oklch(0.4 0.16 10);
+  --color-primary-800: oklch(0.32 0.14 10);
+  --color-primary-900: oklch(0.28 0.12 10);
+  --color-primary-950: oklch(0.2 0.08 10);
+}
+
+.theme-amber {
+  --color-primary-50: oklch(0.98 0.02 70);
+  --color-primary-100: oklch(0.95 0.04 70);
+  --color-primary-200: oklch(0.9 0.08 70);
+  --color-primary-300: oklch(0.84 0.13 70);
+  --color-primary-400: oklch(0.76 0.16 70);
+  --color-primary-500: oklch(0.68 0.2 70);
+  --color-primary-600: oklch(0.58 0.18 70);
+  --color-primary-700: oklch(0.48 0.16 70);
+  --color-primary-800: oklch(0.4 0.14 70);
+  --color-primary-900: oklch(0.34 0.12 70);
+  --color-primary-950: oklch(0.24 0.08 70);
+}
+
+/* Font Families for Dashboard */
+.font-cairo {
+  font-family: var(--font-cairo), sans-serif;
+}
+.font-tajawal {
+  font-family: var(--font-tajawal), sans-serif;
+}
+.font-inter {
+  font-family: var(--font-inter), sans-serif;
+}
+.font-ibm {
+  font-family: var(--font-ibm), sans-serif;
+}
+
 /* ===== Splash Screen Animations ===== */
 @keyframes splash-pulse-slow {
   0%, 100% {

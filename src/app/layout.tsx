@@ -1,10 +1,30 @@
 import type { Metadata } from "next";
-import { Cairo } from "next/font/google";
+import { Cairo, Tajawal, Inter, IBM_Plex_Sans_Arabic } from "next/font/google";
 import "./globals.css";
 
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
   variable: "--font-cairo",
+  display: "swap",
+});
+
+const tajawal = Tajawal({
+  weight: ["200", "300", "400", "500", "700", "800", "900"],
+  subsets: ["arabic", "latin"],
+  variable: "--font-tajawal",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const ibm = IBM_Plex_Sans_Arabic({
+  weight: ["100", "200", "300", "400", "500", "600", "700"],
+  subsets: ["arabic", "latin"],
+  variable: "--font-ibm",
   display: "swap",
 });
 
@@ -24,7 +44,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl" className={`${cairo.variable} h-full antialiased`}>
+    <html lang="ar" dir="rtl" className={`${cairo.variable} ${tajawal.variable} ${inter.variable} ${ibm.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-[family-name:var(--font-cairo)]">
         <NextTopLoader color="#2563eb" showSpinner={false} />
         {children}
