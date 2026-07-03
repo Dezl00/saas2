@@ -45,18 +45,18 @@ export function GenerateImageButton({ itemId, hasImage }: { itemId: string, hasI
       onClick={handleGenerate}
       disabled={isGenerating}
       title={hasImage ? "توليد صورة أخرى" : "توليد صورة بالذكاء الاصطناعي"}
-      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+      className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold border-2 transition-colors shrink-0 ${
         hasImage 
-          ? "bg-surface-100 text-surface-600 hover:bg-surface-200" 
-          : "bg-primary-100 text-primary-700 hover:bg-primary-200"
+          ? "bg-surface-50 border-surface-200 text-surface-700 hover:bg-surface-100" 
+          : "bg-primary-50 border-primary-200 text-primary-700 hover:bg-primary-100"
       } disabled:opacity-50`}
     >
       {isGenerating ? (
-        <Loader2 className="w-4 h-4 animate-spin" />
+        <Loader2 className="w-5 h-5 animate-spin" />
       ) : hasImage ? (
-        <Dices className="w-4 h-4 text-purple-600" />
+        <Dices className="w-5 h-5 text-purple-600" />
       ) : (
-        <Sparkles className="w-4 h-4 text-yellow-500" />
+        <Sparkles className="w-5 h-5 text-yellow-500" />
       )}
       <span className="hidden sm:inline">{hasImage ? "صورة أخرى" : "توليد صورة"}</span>
     </button>

@@ -219,24 +219,24 @@ export function AIMenuScanner({ storeId }: { storeId?: string }) {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-purple-500/25 transition-all"
+        className="flex items-center gap-2 px-5 py-3 bg-primary-600 text-white font-bold rounded-2xl hover:bg-primary-700 transition-all"
       >
         <Sparkles className="w-5 h-5" />
         مسح منيو بالذكاء الاصطناعي
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-surface-950/40 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white w-full max-w-2xl max-h-[90vh] flex flex-col rounded-3xl shadow-2xl overflow-hidden animate-zoom-in">
-            <div className="px-6 py-4 border-b border-surface-100 flex items-center justify-between bg-surface-50/50 shrink-0">
-              <h3 className="text-xl font-bold text-surface-950 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-purple-600" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white w-full max-w-2xl max-h-[90vh] flex flex-col rounded-[32px] border-2 border-surface-200 overflow-hidden animate-zoom-in">
+            <div className="px-6 py-5 border-b-2 border-surface-100 flex items-center justify-between bg-surface-50 shrink-0">
+              <h3 className="text-xl font-black text-surface-950 flex items-center gap-2">
+                <Sparkles className="w-6 h-6 text-primary-600" />
                 المساعد الذكي للمنيو
               </h3>
               <button
                 onClick={handleClose}
                 disabled={isScanning || isImporting}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-surface-100 text-surface-500 hover:bg-surface-200 hover:text-surface-950 transition-colors disabled:opacity-50"
+                className="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-50 border-2 border-surface-200 text-surface-500 hover:bg-surface-100 hover:text-surface-950 transition-colors disabled:opacity-50 shrink-0"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -247,26 +247,26 @@ export function AIMenuScanner({ storeId }: { storeId?: string }) {
                 <div className="flex flex-col sm:flex-row gap-4 mt-2">
                   <button 
                     onClick={() => cameraInputRef.current?.click()}
-                    className="flex-1 h-32 border-2 border-dashed border-purple-200 rounded-2xl flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-purple-500 hover:bg-purple-50 transition-colors"
+                    className="flex-1 h-32 border-2 border-dashed border-primary-200 rounded-2xl flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-primary-500 hover:bg-primary-50 transition-colors"
                   >
-                    <Camera className="w-8 h-8 text-purple-600" />
-                    <span className="font-bold text-purple-900">تصوير المنيو</span>
+                    <Camera className="w-8 h-8 text-primary-600" />
+                    <span className="font-bold text-primary-900">تصوير المنيو</span>
                   </button>
                   <button 
                     onClick={() => fileInputRef.current?.click()}
-                    className="flex-1 h-32 border-2 border-dashed border-indigo-200 rounded-2xl flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-indigo-500 hover:bg-indigo-50 transition-colors"
+                    className="flex-1 h-32 border-2 border-dashed border-primary-200 rounded-2xl flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-primary-500 hover:bg-primary-50 transition-colors"
                   >
-                    <Upload className="w-8 h-8 text-indigo-600" />
-                    <span className="font-bold text-indigo-900">اختيار صورة أو ملف PDF</span>
+                    <Upload className="w-8 h-8 text-primary-600" />
+                    <span className="font-bold text-primary-900">اختيار صورة أو ملف PDF</span>
                   </button>
                 </div>
               ) : !parsedData ? (
                 <div className="space-y-4">
-                  <div className="relative w-full h-48 rounded-2xl overflow-hidden border border-surface-200 shadow-inner bg-surface-50 flex flex-col items-center justify-center">
+                  <div className="relative w-full h-48 rounded-[24px] overflow-hidden border-2 border-surface-200 bg-surface-50 flex flex-col items-center justify-center">
                     {fileType === "image" && image ? (
                       <Image src={image} alt="Menu preview" fill className="object-cover" unoptimized />
                     ) : (
-                      <div className="flex flex-col items-center justify-center gap-2 text-indigo-600">
+                      <div className="flex flex-col items-center justify-center gap-2 text-primary-600">
                         <FileText className="w-12 h-12" />
                         <span className="font-bold">تم إرفاق ملف PDF</span>
                       </div>
@@ -275,25 +275,25 @@ export function AIMenuScanner({ storeId }: { storeId?: string }) {
                     {!isScanning && !successResult && (
                       <button 
                         onClick={() => { setImage(null); setFile(null); setFileType(null); }}
-                        className="absolute top-2 end-2 w-8 h-8 bg-black/50 backdrop-blur-md rounded-full text-white flex items-center justify-center hover:bg-black/70 transition-colors"
+                        className="absolute top-3 end-3 w-10 h-10 bg-error-600 hover:bg-error-700 rounded-xl text-white flex items-center justify-center transition-colors"
                       >
-                        <X className="w-4 h-4" />
+                        <X className="w-5 h-5" />
                       </button>
                     )}
                     
                     {isScanning && (
-                      <div className="absolute inset-0 bg-purple-900/60 backdrop-blur-sm flex flex-col items-center justify-center text-white p-6 text-center">
+                      <div className="absolute inset-0 bg-primary-900/60 backdrop-blur-sm flex flex-col items-center justify-center text-white p-6 text-center">
                         <div className="relative">
-                          <div className="w-16 h-16 rounded-full border-4 border-purple-300/30 border-t-purple-400 animate-spin mb-4" />
+                          <div className="w-16 h-16 rounded-full border-4 border-primary-300/30 border-t-primary-400 animate-spin mb-4" />
                           <div className="absolute inset-0 flex items-center justify-center">
-                            <Sparkles className="w-5 h-5 text-purple-200 animate-pulse mb-4" />
+                            <Sparkles className="w-5 h-5 text-primary-200 animate-pulse mb-4" />
                           </div>
                         </div>
                         <p className="font-bold text-lg animate-pulse">{progressMessages[progressStep] || progressMessages[progressMessages.length - 1]}</p>
                         
-                        <div className="w-full max-w-xs bg-purple-900/50 rounded-full h-1.5 mt-4 overflow-hidden">
+                        <div className="w-full max-w-xs bg-primary-900/50 rounded-full h-1.5 mt-4 overflow-hidden">
                           <div 
-                            className="bg-purple-400 h-1.5 rounded-full transition-all duration-1000 ease-out" 
+                            className="bg-primary-400 h-1.5 rounded-full transition-all duration-1000 ease-out" 
                             style={{ width: `${Math.min((progressStep / 4) * 100, 95)}%` }}
                           />
                         </div>
@@ -304,7 +304,7 @@ export function AIMenuScanner({ storeId }: { storeId?: string }) {
                   <button
                     onClick={handleScan}
                     disabled={isScanning}
-                    className="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-purple-500/25 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-2xl transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {isScanning ? (
                       <>
@@ -325,51 +325,51 @@ export function AIMenuScanner({ storeId }: { storeId?: string }) {
                   <p className="font-bold text-xl text-surface-950">{successResult}</p>
                 </div>
               ) : (
-                <div className="space-y-6 animate-slide-up">
-                  <div className="flex items-center justify-between bg-purple-50 p-4 rounded-xl border border-purple-100">
+                  <div className="space-y-6 animate-slide-up">
+                  <div className="flex items-center justify-between bg-primary-50 p-5 rounded-2xl border-2 border-primary-100">
                     <div className="flex items-center gap-3">
-                      <ListChecks className="w-6 h-6 text-purple-600" />
+                      <ListChecks className="w-8 h-8 text-primary-600" />
                       <div>
-                        <p className="font-bold text-purple-900">مراجعة الأصناف المستخرجة</p>
-                        <p className="text-xs text-purple-600 mt-0.5">الرجاء تحديد الأصناف التي تريد إضافتها</p>
+                        <p className="font-black text-primary-950">مراجعة الأصناف المستخرجة</p>
+                        <p className="text-sm font-bold text-primary-600 mt-0.5">الرجاء تحديد الأصناف التي تريد إضافتها</p>
                       </div>
                     </div>
                     <div className="text-end">
-                      <p className="text-sm font-bold text-purple-900">{totalCategories} أقسام</p>
-                      <p className="text-xs text-purple-700">{selectedItemsCount} من {totalItems} أصناف محددة</p>
+                      <p className="text-sm font-black text-primary-950">{totalCategories} أقسام</p>
+                      <p className="text-xs font-bold text-primary-700">{selectedItemsCount} من {totalItems} أصناف محددة</p>
                     </div>
                   </div>
 
                   <div className="space-y-6">
                     {parsedData.categories.map((category, catIndex) => (
-                      <div key={catIndex} className="bg-surface-50 border border-surface-200 rounded-2xl overflow-hidden">
-                        <div className="px-4 py-3 bg-surface-100 border-b border-surface-200 font-bold text-surface-950">
+                      <div key={catIndex} className="bg-surface-50 border-2 border-surface-200 rounded-[24px] overflow-hidden">
+                        <div className="px-5 py-4 bg-surface-100 border-b-2 border-surface-200 font-black text-surface-950 text-lg">
                           {category.name}
                         </div>
-                        <div className="divide-y divide-surface-100">
+                        <div className="divide-y-2 divide-surface-200">
                           {category.items.map((item, itemIndex) => (
                             <div 
                               key={itemIndex} 
                               onClick={() => handleToggleItem(catIndex, itemIndex)}
-                              className={`flex items-start gap-3 p-4 cursor-pointer hover:bg-purple-50/50 transition-colors ${!item.selected ? 'opacity-50 bg-surface-50 grayscale' : ''}`}
+                              className={`flex items-start gap-4 p-5 cursor-pointer hover:bg-primary-50 transition-colors ${!item.selected ? 'opacity-50 bg-surface-50 grayscale' : ''}`}
                             >
-                              <button type="button" className="mt-0.5 shrink-0 text-purple-600">
-                                {item.selected ? <CheckSquare className="w-5 h-5" /> : <Square className="w-5 h-5 text-surface-400" />}
+                              <button type="button" className="mt-1 shrink-0 text-primary-600">
+                                {item.selected ? <CheckSquare className="w-6 h-6" /> : <Square className="w-6 h-6 text-surface-400 border-2 rounded-md" />}
                               </button>
                               <div className="flex-1">
                                 <div className="flex justify-between items-start">
-                                  <p className="font-bold text-surface-950 text-sm">{item.name}</p>
-                                  <span className="font-bold text-purple-700 text-sm">{item.price}</span>
+                                  <p className="font-black text-surface-950 text-base">{item.name}</p>
+                                  <span className="font-black text-primary-700 text-base">{item.price}</span>
                                 </div>
                                 {item.description && (
-                                  <p className="text-xs text-surface-500 mt-1">{item.description}</p>
+                                  <p className="text-sm font-medium text-surface-500 mt-1">{item.description}</p>
                                 )}
                                 {item.sizes && item.sizes.length > 0 && (
-                                  <div className="mt-2 flex flex-wrap gap-2">
+                                  <div className="mt-3 flex flex-wrap gap-2">
                                     {item.sizes.map((size, sizeIndex) => (
-                                      <div key={sizeIndex} className="bg-purple-50 border border-purple-100 rounded-lg px-2 py-1 flex items-center gap-2 text-xs">
-                                        <span className="text-purple-700 font-medium">{size.name}</span>
-                                        <span className="text-purple-900 font-bold">{size.price}</span>
+                                      <div key={sizeIndex} className="bg-primary-50 border-2 border-primary-100 rounded-xl px-3 py-1.5 flex items-center gap-2 text-sm">
+                                        <span className="text-primary-700 font-bold">{size.name}</span>
+                                        <span className="text-primary-900 font-black">{size.price}</span>
                                       </div>
                                     ))}
                                   </div>
@@ -403,21 +403,21 @@ export function AIMenuScanner({ storeId }: { storeId?: string }) {
             
             {/* Footer actions for review step */}
             {parsedData && !successResult && (
-              <div className="p-4 border-t border-surface-200 bg-surface-50 flex gap-3 shrink-0">
+              <div className="p-6 border-t-2 border-surface-200 bg-surface-50 flex flex-col sm:flex-row gap-3 shrink-0">
                 <button
                   onClick={() => setParsedData(null)}
                   disabled={isImporting}
-                  className="flex-1 py-3 px-4 rounded-xl text-sm font-bold text-surface-700 bg-white border border-surface-200 hover:bg-surface-50 transition-colors disabled:opacity-50"
+                  className="flex-1 py-4 px-4 rounded-2xl text-base font-bold text-surface-700 bg-white border-2 border-surface-200 hover:bg-surface-50 transition-colors disabled:opacity-50"
                 >
                   إلغاء وإعادة المحاولة
                 </button>
                 <button
                   onClick={handleImport}
                   disabled={isImporting || selectedItemsCount === 0}
-                  className="flex-1 py-3 px-4 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 py-4 px-4 rounded-2xl text-base font-bold text-white bg-primary-600 hover:bg-primary-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isImporting ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <Loader2 className="w-6 h-6 animate-spin" />
                   ) : (
                     `تأكيد وإضافة (${selectedItemsCount})`
                   )}

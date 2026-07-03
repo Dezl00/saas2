@@ -92,7 +92,7 @@ export function ImageUpload({ name, defaultValue, className = "", label = "اخ�
 
   return (
     <div className={className}>
-      {label && <label className="block text-sm font-medium text-surface-950 mb-1">{label}</label>}
+      {label && <label className="block text-sm font-bold text-surface-950 mb-2">{label}</label>}
       
       <div 
         ref={containerRef}
@@ -100,11 +100,11 @@ export function ImageUpload({ name, defaultValue, className = "", label = "اخ�
         onDragLeave={onDragLeave}
         onDrop={onDrop}
         onClick={() => inputRef.current?.click()}
-        className={`relative w-full border border-dashed rounded-2xl p-6 text-center cursor-pointer transition-colors ${
+        className={`relative w-full border-2 border-dashed rounded-[24px] p-6 text-center cursor-pointer transition-colors ${
           isDragging 
             ? "border-primary-500 bg-primary-50" 
-            : "border-primary-200 bg-primary-50/30 hover:bg-primary-50/50"
-        } ${preview ? "" : ""}`}
+            : "border-primary-200 bg-surface-50 hover:bg-primary-50"
+        }`}
       >
         <input 
           type="file" 
@@ -116,32 +116,29 @@ export function ImageUpload({ name, defaultValue, className = "", label = "اخ�
         />
 
         {preview ? (
-          <div className="relative w-full h-48 group rounded-xl overflow-hidden border border-surface-200 bg-white">
+          <div className="relative w-full h-48 group rounded-2xl overflow-hidden border-2 border-surface-200 bg-white">
             <Image src={preview} alt="Preview" fill className="object-contain" unoptimized />
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
               <span className="text-white font-bold text-sm">تغيير الصورة</span>
             </div>
             <button 
               onClick={handleRemove}
-              className="absolute top-2 end-2 w-8 h-8 bg-error-500 hover:bg-error-600 text-white rounded-full flex items-center justify-center transition-colors z-10 shadow-lg"
+              className="absolute top-3 end-3 w-10 h-10 bg-error-600 hover:bg-error-700 text-white rounded-xl flex items-center justify-center transition-colors z-10"
               title="إزالة"
             >
-              <X className="w-4 h-4" />
+              <X className="w-5 h-5" />
             </button>
           </div>
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center py-4">
-            <div className={`w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3 transition-colors ${isDragging ? "bg-primary-500 text-white" : "bg-primary-100 text-primary-600"}`}>
-              <CloudUpload className="w-6 h-6" />
+          <div className="w-full h-full flex flex-col items-center justify-center py-6">
+            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 border-2 transition-colors ${isDragging ? "bg-primary-500 text-white border-primary-600" : "bg-primary-50 text-primary-600 border-primary-100"}`}>
+              <CloudUpload className="w-8 h-8" />
             </div>
-            <p className="text-sm font-bold text-surface-950 mb-1">اسحب وأفلت الصورة هنا</p>
-            <p className="text-xs text-surface-500">أو اضغط للاختيار، أو قم باللصق (Ctrl+V)</p>
+            <p className="font-black text-surface-950 mb-2">اسحب وأفلت الصورة هنا</p>
+            <p className="text-sm font-bold text-surface-500">أو اضغط للاختيار، أو قم باللصق (Ctrl+V)</p>
           </div>
         )}
       </div>
-      
-      {/* If there is a defaultValue but the user removed it and didn't upload a new one, we might need a way to tell the server it was cleared.
-          For now, standard forms will just send empty file if cleared. */}
     </div>
   );
 }
