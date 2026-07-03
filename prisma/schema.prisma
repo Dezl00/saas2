@@ -401,6 +401,7 @@ model PlatformSetting {
   // Dashboard Appearance
   dashboardTheme  String   @default("blue")
   dashboardFont   String   @default("cairo")
+  dashboardCustomColor String?
   
   // Subscription Settings
   trialDays       Int      @default(7)

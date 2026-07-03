@@ -11,18 +11,20 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { dashboardTheme, dashboardFont } = body;
+    const { dashboardTheme, dashboardFont, dashboardCustomColor } = body;
 
     const updated = await prisma.platformSetting.upsert({
       where: { id: "1" },
       update: {
         dashboardTheme,
         dashboardFont,
+        dashboardCustomColor: dashboardCustomColor || null,
       },
       create: {
         id: "1",
         dashboardTheme,
         dashboardFont,
+        dashboardCustomColor: dashboardCustomColor || null,
       },
     });
 

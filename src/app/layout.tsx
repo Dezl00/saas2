@@ -1,32 +1,5 @@
 import type { Metadata } from "next";
-import { Cairo, Tajawal, Inter, IBM_Plex_Sans_Arabic } from "next/font/google";
 import "./globals.css";
-
-const cairo = Cairo({
-  subsets: ["arabic", "latin"],
-  variable: "--font-cairo",
-  display: "swap",
-});
-
-const tajawal = Tajawal({
-  weight: ["200", "300", "400", "500", "700", "800", "900"],
-  subsets: ["arabic", "latin"],
-  variable: "--font-tajawal",
-  display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const ibm = IBM_Plex_Sans_Arabic({
-  weight: ["100", "200", "300", "400", "500", "600", "700"],
-  subsets: ["arabic", "latin"],
-  variable: "--font-ibm",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "منصتك - أنشئ متجرك الإلكتروني في دقائق",
@@ -44,8 +17,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl" className={`${cairo.variable} ${tajawal.variable} ${inter.variable} ${ibm.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-[family-name:var(--font-cairo)]">
+    <html lang="ar" dir="rtl" className={`h-full antialiased`}>
+      <head>
+        <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700&family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@400;700&family=Changa:wght@400;700&family=El+Messiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;700&family=Lalezar&family=Readex+Pro:wght@400;700&family=Tajawal:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+      </head>
+      <body className="min-h-full flex flex-col font-cairo">
         <NextTopLoader color="#2563eb" showSpinner={false} />
         {children}
         <Analytics />

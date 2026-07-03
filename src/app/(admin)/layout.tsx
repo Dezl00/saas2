@@ -37,6 +37,7 @@ export default async function AdminLayout({
   const platformSetting = await prisma.platformSetting.findFirst() || {
     dashboardTheme: "blue",
     dashboardFont: "cairo",
+    dashboardCustomColor: null,
   };
 
   const navItems = [
@@ -51,8 +52,25 @@ export default async function AdminLayout({
     { href: "/admin/settings", icon: Settings, label: "إعدادات المنصة" },
   ];
 
+  const customColorStyles = platformSetting.dashboardTheme === "custom" && platformSetting.dashboardCustomColor ? {
+    "--color-primary-50": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 10%, white)`,
+    "--color-primary-100": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 20%, white)`,
+    "--color-primary-200": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 40%, white)`,
+    "--color-primary-300": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 60%, white)`,
+    "--color-primary-400": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 80%, white)`,
+    "--color-primary-500": platformSetting.dashboardCustomColor,
+    "--color-primary-600": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 80%, black)`,
+    "--color-primary-700": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 60%, black)`,
+    "--color-primary-800": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 40%, black)`,
+    "--color-primary-900": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 20%, black)`,
+    "--color-primary-950": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 10%, black)`,
+  } as React.CSSProperties : {};
+
   return (
-    <div className={`min-h-screen bg-surface-50 flex flex-col md:flex-row w-full overflow-x-hidden theme-${platformSetting.dashboardTheme} font-${platformSetting.dashboardFont} dashboard-layout`}>
+    <div 
+      className={`min-h-screen bg-surface-50 flex flex-col md:flex-row w-full overflow-x-hidden theme-${platformSetting.dashboardTheme} font-${platformSetting.dashboardFont} dashboard-layout`}
+      style={customColorStyles}
+    >
       {/* Sidebar (Desktop) */}
       <aside className="hidden md:flex md:flex-col fixed inset-y-0 right-0 w-64 bg-white border-l border-surface-200 z-30">
         <div className="p-6 border-b border-surface-100 flex-shrink-0">

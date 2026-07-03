@@ -33,7 +33,7 @@ export default async function DashboardLayout({
     }
   }
 
-  let platformSetting = { dashboardTheme: "blue", dashboardFont: "cairo" };
+  let platformSetting: any = { dashboardTheme: "blue", dashboardFont: "cairo", dashboardCustomColor: null };
   try {
     const { prisma } = await import("@/lib/prisma");
     const settings = await prisma.platformSetting.findFirst();
@@ -44,8 +44,26 @@ export default async function DashboardLayout({
     console.error("Error fetching platform settings:", error);
   }
 
+  const customColorStyles = platformSetting.dashboardTheme === "custom" && platformSetting.dashboardCustomColor ? {
+    "--color-primary-50": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 10%, white)`,
+    "--color-primary-100": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 20%, white)`,
+    "--color-primary-200": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 40%, white)`,
+    "--color-primary-300": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 60%, white)`,
+    "--color-primary-400": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 80%, white)`,
+    "--color-primary-500": platformSetting.dashboardCustomColor,
+    "--color-primary-600": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 80%, black)`,
+    "--color-primary-700": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 60%, black)`,
+    "--color-primary-800": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 40%, black)`,
+    "--color-primary-900": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 20%, black)`,
+    "--color-primary-950": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 10%, black)`,
+  } as React.CSSProperties : {};
+
   return (
-    <div className={`flex h-screen bg-surface-50 overflow-hidden theme-${platformSetting.dashboardTheme} font-${platformSetting.dashboardFont} dashboard-layout`} dir="rtl">
+    <div 
+      className={`flex h-screen bg-surface-50 overflow-hidden theme-${platformSetting.dashboardTheme} font-${platformSetting.dashboardFont} dashboard-layout`} 
+      dir="rtl"
+      style={customColorStyles}
+    >
       <Sidebar />
       <main className="flex-1 overflow-auto flex flex-col pb-20 md:pb-0">
         {children}

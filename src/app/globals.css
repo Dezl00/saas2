@@ -244,18 +244,17 @@ body {
 }
 
 /* Font Families for Dashboard */
-.font-cairo {
-  font-family: var(--font-cairo), sans-serif;
-}
-.font-tajawal {
-  font-family: var(--font-tajawal), sans-serif;
-}
-.font-inter {
-  font-family: var(--font-inter), sans-serif;
-}
-.font-ibm {
-  font-family: var(--font-ibm), sans-serif;
-}
+.font-cairo { font-family: 'Cairo', sans-serif !important; }
+.font-tajawal { font-family: 'Tajawal', sans-serif !important; }
+.font-almarai { font-family: 'Almarai', sans-serif !important; }
+.font-readex { font-family: 'Readex Pro', sans-serif !important; }
+.font-ibm { font-family: 'IBM Plex Sans Arabic', sans-serif !important; }
+.font-changa { font-family: 'Changa', sans-serif !important; }
+.font-amiri { font-family: 'Amiri', serif !important; }
+.font-messiri { font-family: 'El Messiri', sans-serif !important; }
+.font-ruqaa { font-family: 'Aref Ruqaa', serif !important; }
+.font-lalezar { font-family: 'Lalezar', display !important; }
+.font-inter { font-family: 'Inter', sans-serif !important; }
 
 /* ===== Splash Screen Animations ===== */
 @keyframes splash-pulse-slow {
