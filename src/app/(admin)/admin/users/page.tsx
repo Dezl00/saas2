@@ -4,6 +4,8 @@ import { ChangeUserPasswordButton } from "@/components/admin/ChangeUserPasswordB
 import Link from "next/link";
 import { UserToggleStatus } from "./UserToggleStatus";
 
+import UserDeleteButton from "./UserDeleteButton";
+
 export default async function AdminUsersPage() {
   const users = await prisma.user.findMany({
     where: { role: "OWNER" },
@@ -96,7 +98,10 @@ export default async function AdminUsersPage() {
                     {new Date(user.createdAt).toLocaleDateString("ar-EG")}
                   </td>
                   <td className="px-6 py-4">
-                    <ChangeUserPasswordButton userId={user.id} userName={user.name} />
+                    <div className="flex items-center gap-2">
+                      <ChangeUserPasswordButton userId={user.id} userName={user.name} />
+                      <UserDeleteButton userId={user.id} storeName={user.store?.name} />
+                    </div>
                   </td>
                 </tr>
               ))}
