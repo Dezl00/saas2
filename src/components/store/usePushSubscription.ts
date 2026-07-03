@@ -29,7 +29,13 @@ export function usePushSubscription(storeId: string, enablePushPopup: boolean) {
     const isPushSupported = "Notification" in window && "serviceWorker" in navigator;
     setIsSupported(true); // Always show the UI, handle unsupported in click handler
 
-    const hasDismissed = localStorage.getItem(`push_dismissed_${storeId}`);
+    let hasDismissed = false;
+    try {
+      hasDismissed = !!localStorage.getItem(`push_dismissed_${storeId}`);
+    } catch (e) {
+      console.warn("localStorage not accessible");
+    }
+    
     if (!hasDismissed) {
       setIsDismissed(false);
     }
@@ -96,7 +102,9 @@ export function usePushSubscription(storeId: string, enablePushPopup: boolean) {
       } else {
         toast.error("تم رفض الإذن بالإشعارات");
         setIsDismissed(true);
-        localStorage.setItem(`push_dismissed_${storeId}`, "true");
+        try {
+          localStorage.setItem(`push_dismissed_${storeId}`, "true");
+        } catch (e) {}
       }
     } catch (error) {
       console.error("Error subscribing to push notifications", error);
@@ -106,7 +114,9 @@ export function usePushSubscription(storeId: string, enablePushPopup: boolean) {
 
   const handleDismiss = useCallback(() => {
     setIsDismissed(true);
-    localStorage.setItem(`push_dismissed_${storeId}`, "true");
+    try {
+      localStorage.setItem(`push_dismissed_${storeId}`, "true");
+    } catch (e) {}
   }, [storeId]);
 
   return { isSubscribed, isDismissed, isSupported, handleSubscribe, handleDismiss };
