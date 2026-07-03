@@ -20,7 +20,7 @@ import { AdminHeaderNotifications } from "@/components/admin/AdminHeaderNotifica
 import { PageTransitionLoader } from "@/components/ui/PageTransitionLoader";
 import { connection } from "next/server";
 
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 export default async function AdminLayout({
   children,
