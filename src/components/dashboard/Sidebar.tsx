@@ -39,7 +39,7 @@ export function Sidebar() {
     <>
       {/* Sidebar (Desktop) */}
       <aside className={cn(
-        "fixed inset-y-0 right-0 z-40 w-72 bg-surface-50 border-l border-surface-200 transform transition-transform duration-200 ease-in-out md:relative md:translate-x-0 flex flex-col",
+        "fixed inset-y-0 right-0 z-40 w-72 bg-white border-l border-surface-200 transform transition-transform duration-200 ease-in-out md:relative md:translate-x-0 flex flex-col",
         isOpen ? "translate-x-0" : "translate-x-full"
       )}>
         <div className="p-8 pb-4">
@@ -69,14 +69,14 @@ export function Sidebar() {
                 className={cn(
                   "flex items-center gap-3 px-4 py-3.5 transition-colors rounded-2xl",
                   isActive
-                    ? "bg-primary-100/50 text-primary-700 font-bold"
-                    : "text-surface-600 hover:bg-surface-200/50 hover:text-surface-950 font-medium"
+                    ? "bg-primary-600 text-white font-bold"
+                    : "text-surface-600 hover:bg-surface-100 hover:text-surface-950 font-medium"
                 )}
               >
                 <item.icon
                   className={cn(
                     "w-5 h-5",
-                    isActive ? "text-primary-600" : "text-surface-500"
+                    isActive ? "text-white" : "text-surface-500"
                   )}
                 />
                 <span>{item.label}</span>

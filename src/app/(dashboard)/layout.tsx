@@ -60,7 +60,7 @@ export default async function DashboardLayout({
 
   return (
     <div 
-      className={`flex h-screen bg-surface-50 overflow-hidden theme-${platformSetting.dashboardTheme} font-${platformSetting.dashboardFont} dashboard-layout`} 
+      className={`flex h-screen bg-white overflow-hidden theme-${platformSetting.dashboardTheme} font-${platformSetting.dashboardFont} dashboard-layout`} 
       dir="rtl"
       style={customColorStyles}
     >

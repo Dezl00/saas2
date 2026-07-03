@@ -68,7 +68,7 @@ export default async function AdminLayout({
 
   return (
     <div 
-      className={`min-h-screen bg-surface-50 flex flex-col md:flex-row w-full overflow-x-hidden theme-${platformSetting.dashboardTheme} font-${platformSetting.dashboardFont} dashboard-layout`}
+      className={`min-h-screen bg-white flex flex-col md:flex-row w-full overflow-x-hidden theme-${platformSetting.dashboardTheme} font-${platformSetting.dashboardFont} dashboard-layout`}
       style={customColorStyles}
     >
       {/* Sidebar (Desktop) */}

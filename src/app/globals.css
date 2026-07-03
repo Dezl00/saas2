@@ -174,13 +174,33 @@ body {
 }
 
 /* ===== Dashboard Appearance Overrides ===== */
-/* Prevent overly thick fonts in dashboards */
-.dashboard-layout .font-black {
-  font-weight: 700 !important;
+/* Completely strip all shadows to enforce Flat Design */
+.dashboard-layout * {
+  box-shadow: none !important;
 }
-.dashboard-layout .font-bold {
+
+/* Prevent overly thick fonts in dashboards - enforce modern, sleek typography */
+.dashboard-layout .font-black {
   font-weight: 600 !important;
 }
+.dashboard-layout .font-bold {
+  font-weight: 500 !important;
+}
+.dashboard-layout .font-semibold {
+  font-weight: 500 !important;
+}
+.dashboard-layout h1, .dashboard-layout h2, .dashboard-layout h3 {
+  font-weight: 600 !important;
+}
+
+/* Reduce exaggerated font sizes in dashboards for a sleeker mobile-app feel */
+.dashboard-layout .text-4xl { font-size: 1.875rem !important; line-height: 2.25rem !important; }
+.dashboard-layout .text-3xl { font-size: 1.5rem !important; line-height: 2rem !important; }
+.dashboard-layout .text-2xl { font-size: 1.25rem !important; line-height: 1.75rem !important; }
+.dashboard-layout .text-xl { font-size: 1.125rem !important; line-height: 1.75rem !important; }
+.dashboard-layout .text-lg { font-size: 1rem !important; line-height: 1.5rem !important; }
+.dashboard-layout .text-base { font-size: 0.875rem !important; line-height: 1.25rem !important; }
+.dashboard-layout { font-size: 0.875rem !important; }
 
 /* Theme Presets */
 .theme-blue {
