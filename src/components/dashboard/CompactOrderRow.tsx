@@ -6,12 +6,12 @@ import { formatPrice } from "@/lib/utils";
 import { Order } from "@prisma/client";
 
 const statusMap: Record<string, { label: string, color: string }> = {
-  PENDING: { label: "قيد الانتظار", color: "bg-yellow-50 text-yellow-800 border-yellow-200" },
-  CONFIRMED: { label: "مؤكد", color: "bg-blue-50 text-blue-800 border-blue-200" },
-  PREPARING: { label: "جاري التجهيز", color: "bg-purple-50 text-purple-800 border-purple-200" },
-  READY: { label: "جاهز", color: "bg-indigo-50 text-indigo-800 border-indigo-200" },
-  DELIVERED: { label: "مكتمل", color: "bg-success-50 text-success-800 border-success-200" },
-  CANCELLED: { label: "ملغي", color: "bg-error-50 text-error-800 border-error-200" },
+  PENDING: { label: "قيد الانتظار", color: "bg-amber-500 text-white" },
+  CONFIRMED: { label: "مؤكد", color: "bg-blue-500 text-white" },
+  PREPARING: { label: "جاري التجهيز", color: "bg-purple-500 text-white" },
+  READY: { label: "جاهز", color: "bg-indigo-500 text-white" },
+  DELIVERED: { label: "مكتمل", color: "bg-emerald-500 text-white" },
+  CANCELLED: { label: "ملغي", color: "bg-rose-500 text-white" },
 };
 
 export function CompactOrderRow({ order, currency }: { order: Order, currency?: string }) {
@@ -40,7 +40,7 @@ export function CompactOrderRow({ order, currency }: { order: Order, currency?: 
 
       {/* Status & Action */}
       <div className="flex items-center justify-between md:justify-end gap-4 w-full md:w-auto">
-        <span className={`px-3 py-1.5 font-bold text-xs rounded-xl border ${status.color}`}>
+        <span className={`px-3 py-1.5 font-bold text-xs rounded-xl ${status.color}`}>
           {status.label}
         </span>
         

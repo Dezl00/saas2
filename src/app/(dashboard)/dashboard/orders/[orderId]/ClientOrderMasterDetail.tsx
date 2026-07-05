@@ -8,12 +8,12 @@ import { updateOrderStatus } from "@/app/(dashboard)/dashboard/orders/actions";
 import { Order, OrderItem, Branch, DeliveryArea, OrderStatus } from "@prisma/client";
 
 const statusMap: Record<string, { label: string, color: string }> = {
-  PENDING: { label: "قيد الانتظار", color: "bg-yellow-50 text-yellow-800 border-yellow-200" },
-  CONFIRMED: { label: "مؤكد", color: "bg-blue-50 text-blue-800 border-blue-200" },
-  PREPARING: { label: "جاري التجهيز", color: "bg-purple-50 text-purple-800 border-purple-200" },
-  READY: { label: "جاهز", color: "bg-indigo-50 text-indigo-800 border-indigo-200" },
-  DELIVERED: { label: "مكتمل", color: "bg-success-50 text-success-800 border-success-200" },
-  CANCELLED: { label: "ملغي", color: "bg-error-50 text-error-800 border-error-200" },
+  PENDING: { label: "قيد الانتظار", color: "bg-amber-500 text-white" },
+  CONFIRMED: { label: "مؤكد", color: "bg-blue-500 text-white" },
+  PREPARING: { label: "جاري التجهيز", color: "bg-purple-500 text-white" },
+  READY: { label: "جاهز", color: "bg-indigo-500 text-white" },
+  DELIVERED: { label: "مكتمل", color: "bg-emerald-500 text-white" },
+  CANCELLED: { label: "ملغي", color: "bg-rose-500 text-white" },
 };
 
 type OrderListItem = {
@@ -102,7 +102,7 @@ export function ClientOrderMasterDetail({
               >
                 <div className="flex justify-between items-start mb-2">
                   <span className="font-black text-surface-950">#{order.orderNumber}</span>
-                  <span className={`text-[10px] font-bold px-2 py-1 rounded border ${status.color}`}>
+                  <span className={`text-[10px] font-bold px-2 py-1 rounded ${status.color}`}>
                     {status.label}
                   </span>
                 </div>
@@ -121,7 +121,7 @@ export function ClientOrderMasterDetail({
       </div>
 
       {/* Main Content (Order Details) */}
-      <div className={`flex-1 overflow-y-auto bg-white transition-opacity ${isPending ? 'opacity-70' : 'opacity-100'} p-4 md:p-8 flex flex-col lg:flex-row gap-8`}>
+      <div className={`flex-1 overflow-y-auto bg-white transition-opacity ${isPending ? 'opacity-70' : 'opacity-100'} p-4 md:p-8 flex flex-col gap-8`}>
         <div className="flex-1 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-surface-100 pb-6">
             <div>
@@ -131,7 +131,7 @@ export function ClientOrderMasterDetail({
                 {new Date(selectedOrder.createdAt).toLocaleString('ar-EG')}
               </p>
             </div>
-            <span className={`px-4 py-2 font-bold text-sm rounded-xl border ${statusMap[optimisticStatus]?.color || 'bg-surface-50 border-surface-200'}`}>
+            <span className={`px-4 py-2 font-bold text-sm rounded-xl ${statusMap[optimisticStatus]?.color || 'bg-surface-100 text-surface-800'}`}>
               {statusMap[optimisticStatus]?.label || optimisticStatus}
             </span>
           </div>
@@ -178,7 +178,7 @@ export function ClientOrderMasterDetail({
         </div>
 
         {/* Invoice & Actions Column */}
-        <div className="w-full lg:w-96 flex flex-col border-t-2 lg:border-t-0 lg:border-r-2 border-surface-100 lg:pr-8 pt-6 lg:pt-0">
+        <div className="w-full flex flex-col pt-2">
           <h4 className="font-black text-xl text-surface-950 mb-6 flex items-center gap-2">
             تفاصيل الفاتورة
           </h4>
@@ -192,7 +192,7 @@ export function ClientOrderMasterDetail({
                   </span>
                   <span className="font-bold text-surface-950 text-sm">{item.name}</span>
                 </div>
-                <span className="font-black text-primary-600 text-sm">{formatPrice(Number(item.price), currency)}</span>
+                <span className="font-black text-surface-950 text-sm">{formatPrice(Number(item.price), currency)}</span>
               </li>
             ))}
           </ul>
@@ -208,7 +208,7 @@ export function ClientOrderMasterDetail({
                 <span>{formatPrice(Number(selectedOrder.deliveryFee), currency)}</span>
               </div>
             )}
-            <div className="flex justify-between font-black text-xl text-primary-600 pt-3 border-t-2 border-surface-100 mt-3">
+            <div className="flex justify-between font-black text-xl text-surface-950 pt-3 border-t-2 border-surface-100 mt-3">
               <span>الإجمالي</span>
               <span>{formatPrice(Number(selectedOrder.total), currency)}</span>
             </div>
