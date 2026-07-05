@@ -6,6 +6,7 @@ import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea
 import toast from "react-hot-toast";
 import { toggleCategoryStatus, updateCategoryName, reorderCategories, deleteCategory } from "./actions";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { cn } from "@/lib/utils";
 import { Trash2 } from "lucide-react";
 
 interface Category {

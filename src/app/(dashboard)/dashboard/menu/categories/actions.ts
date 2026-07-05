@@ -29,7 +29,7 @@ export async function createCategory(formData: FormData) {
     });
 
     revalidatePath("/dashboard/menu/categories");
-    revalidateTag(`store-${session.user.storeId}`);
+    (revalidateTag as any)(`store-${session.user.storeId}`, "default");
     return { success: "تم إضافة القسم بنجاح" };
   } catch (error) {
     console.error("Create Category Error:", error);
@@ -58,7 +58,7 @@ export async function toggleCategoryStatus(categoryId: string, currentStatus: bo
     });
 
     revalidatePath("/dashboard/menu/categories");
-    revalidateTag(`store-${session.user.storeId}`);
+    (revalidateTag as any)(`store-${session.user.storeId}`, "default");
     return { success: "تم تحديث حالة القسم" };
   } catch (error) {
     console.error("Toggle Category Error:", error);
@@ -87,7 +87,7 @@ export async function updateCategoryName(categoryId: string, name: string) {
     });
 
     revalidatePath("/dashboard/menu/categories");
-    revalidateTag(`store-${session.user.storeId}`);
+    (revalidateTag as any)(`store-${session.user.storeId}`, "default");
     return { success: "تم تحديث اسم القسم" };
   } catch (error) {
     console.error("Update Category Name Error:", error);
@@ -113,7 +113,7 @@ export async function reorderCategories(orderedIds: string[]) {
     await prisma.$transaction(updates);
 
     revalidatePath("/dashboard/menu/categories");
-    revalidateTag(`store-${session.user.storeId}`);
+    (revalidateTag as any)(`store-${session.user.storeId}`, "default");
     return { success: "تم تحديث ترتيب الأقسام" };
   } catch (error) {
     console.error("Reorder Categories Error:", error);
@@ -149,7 +149,7 @@ export async function deleteCategory(categoryId: string) {
     });
 
     revalidatePath("/dashboard/menu/categories");
-    revalidateTag(`store-${session.user.storeId}`);
+    (revalidateTag as any)(`store-${session.user.storeId}`, "default");
     return { success: "تم حذف القسم بنجاح" };
   } catch (error) {
     console.error("Delete Category Error:", error);
