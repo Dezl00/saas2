@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { ShoppingBag } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 import { Pagination } from "@/components/ui/Pagination";
-import { OrderCard } from "@/components/dashboard/OrderCard";
+import { CompactOrderRow } from "@/components/dashboard/CompactOrderRow";
 
 export const metadata = {
   title: "الطلبات | لوحة التحكم",
@@ -55,9 +55,11 @@ export default async function OrdersPage(props: { searchParams: Promise<{ page?:
             <p className="text-surface-500 font-medium">الطلبات الجديدة ستظهر هنا فور استلامها.</p>
           </div>
         ) : (
-          orders.map(order => (
-            <OrderCard key={order.id} order={order} currency={store?.currency} />
-          ))
+          <div className="bg-white border-2 border-surface-100 rounded-[32px] overflow-hidden flex flex-col">
+            {orders.map(order => (
+              <CompactOrderRow key={order.id} order={order} currency={store?.currency} />
+            ))}
+          </div>
         )}
       </div>
       
