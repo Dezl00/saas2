@@ -28,7 +28,7 @@ export default async function DeliveryAreasPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* إضافة منطقة جديد */}
-        <div className="bg-surface-50 rounded-[32px] p-6 lg:p-8 self-start sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto scrollbar-hide">
+        <div className="bg-white border-2 border-surface-100 rounded-[32px] p-6 lg:p-8 self-start sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto scrollbar-hide">
           <h3 className="text-xl font-bold text-surface-950 mb-6 flex items-center gap-2">
             <Plus className="w-5 h-5 text-primary-600" />
             إضافة منطقة توصيل
@@ -51,7 +51,7 @@ export default async function DeliveryAreasPage() {
         {/* قائمة المناطق */}
         <div className="lg:col-span-2 space-y-4">
           {areas.length === 0 ? (
-            <div className="text-center py-20 bg-surface-50 rounded-[32px]">
+            <div className="text-center py-20 bg-white border-2 border-surface-100 rounded-[32px]">
               <Map className="w-16 h-16 text-surface-300 mx-auto mb-4" />
               <p className="text-surface-500 font-medium text-lg">لا توجد مناطق توصيل مضافة حالياً.</p>
             </div>

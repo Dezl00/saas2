@@ -52,7 +52,7 @@ export default function PushNotificationsClient({
   return (
     <div className="space-y-6">
       
-      <div className="bg-surface-50 rounded-[32px] p-6 lg:p-8 flex items-center justify-between gap-4">
+      <div className="bg-white border-2 border-surface-100 rounded-[32px] p-6 lg:p-8 flex items-center justify-between gap-4">
         <div>
           <h3 className="text-lg font-bold text-surface-950 mb-1">إجمالي المشتركين</h3>
           <p className="text-surface-500 font-medium text-sm">عدد الأشخاص الذين فعلوا الإشعارات</p>
@@ -65,7 +65,7 @@ export default function PushNotificationsClient({
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         
         {/* Send Notification Form */}
-        <div className="bg-surface-50 rounded-[32px] p-6 lg:p-8 h-max">
+        <div className="bg-white border-2 border-surface-100 rounded-[32px] p-6 lg:p-8 h-max">
           <h3 className="text-xl font-bold text-surface-950 mb-6 flex items-center gap-2">
             <Send className="w-5 h-5 text-primary-600" />
             إرسال إشعار جديد
@@ -136,7 +136,7 @@ export default function PushNotificationsClient({
         </div>
 
         {/* Campaign History */}
-        <div className="bg-surface-50 rounded-[32px] p-6 lg:p-8">
+        <div className="bg-white border-2 border-surface-100 rounded-[32px] p-6 lg:p-8">
           <h3 className="text-xl font-bold text-surface-950 mb-6 flex items-center gap-2">
             <Activity className="w-5 h-5 text-primary-600" />
             سجل الإشعارات المرسلة

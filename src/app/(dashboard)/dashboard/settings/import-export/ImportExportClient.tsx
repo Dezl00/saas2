@@ -71,7 +71,7 @@ export function ImportExportClient({ storeId }: { storeId: string }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
       {/* Export Section */}
-      <div className="bg-surface-50 border-2 border-surface-100 rounded-[32px] p-6 lg:p-8 hover:border-surface-200 transition-colors">
+      <div className="bg-white border-2 border-surface-100 rounded-[32px] p-6 lg:p-8 hover:border-surface-200 transition-colors">
         <div className="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center mb-6">
           <Download className="w-8 h-8 text-primary-600" />
         </div>
@@ -91,7 +91,7 @@ export function ImportExportClient({ storeId }: { storeId: string }) {
       </div>
 
       {/* Import Section */}
-      <div className="bg-surface-50 border-2 border-surface-100 rounded-[32px] p-6 lg:p-8 hover:border-surface-200 transition-colors">
+      <div className="bg-white border-2 border-surface-100 rounded-[32px] p-6 lg:p-8 hover:border-surface-200 transition-colors">
         <div className="w-16 h-16 bg-success-100 rounded-2xl flex items-center justify-center mb-6">
           <Upload className="w-8 h-8 text-success-600" />
         </div>

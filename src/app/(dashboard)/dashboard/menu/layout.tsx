@@ -34,10 +34,10 @@ export default function MenuLayout({
                     "flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-bold transition-all whitespace-nowrap",
                     isActive
                       ? "bg-primary-600 text-white"
-                      : "text-surface-500 hover:text-surface-950 hover:bg-surface-50"
+                      : "bg-surface-100 text-surface-600 hover:text-surface-950 hover:bg-surface-200"
                   )}
                 >
-                  <tab.icon className={cn("w-4 h-4", isActive ? "text-white" : "text-surface-400")} />
+                  <tab.icon className={cn("w-4 h-4", isActive ? "text-white" : "text-surface-500")} />
                   {tab.name}
                 </Link>
               );

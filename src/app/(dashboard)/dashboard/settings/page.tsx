@@ -29,7 +29,7 @@ export default async function SettingsPage() {
     <div className="space-y-6">
       
       {/* إعدادات الرابط (Subdomain) */}
-      <div className="bg-surface-50 rounded-[32px] p-6 lg:p-8">
+      <div className="bg-white border-2 border-surface-100 rounded-[32px] p-6 lg:p-8">
         <h3 className="text-xl font-bold text-surface-950 mb-2 flex items-center gap-2">
           <Globe className="w-6 h-6 text-primary-500" />
           رابط المتجر (Subdomain)
@@ -82,7 +82,7 @@ export default async function SettingsPage() {
       </div>
 
       {/* إعدادات الدومين الخاص (Custom Domain) */}
-      <div className="bg-surface-50 rounded-[32px] p-6 lg:p-8">
+      <div className="bg-white border-2 border-surface-100 rounded-[32px] p-6 lg:p-8">
         <h3 className="text-xl font-bold text-surface-950 mb-2 flex items-center gap-2">
           <Globe className="w-6 h-6 text-indigo-500" />
           الدومين الخاص (Custom Domain)
@@ -95,7 +95,7 @@ export default async function SettingsPage() {
       </div>
 
       {/* الإعدادات الأساسية */}
-      <div className="bg-surface-50 rounded-[32px] p-6 lg:p-8">
+      <div className="bg-white border-2 border-surface-100 rounded-[32px] p-6 lg:p-8">
         <h3 className="text-xl font-bold text-surface-950 mb-6 flex items-center gap-2">
           <Store className="w-6 h-6 text-surface-700" />
           البيانات الأساسية
@@ -235,7 +235,7 @@ export default async function SettingsPage() {
       </div>
 
       {/* مواعيد العمل */}
-      <div className="bg-surface-50 rounded-[32px] p-6 lg:p-8">
+      <div className="bg-white border-2 border-surface-100 rounded-[32px] p-6 lg:p-8">
         <h3 className="text-xl font-bold text-surface-950 mb-2 flex items-center gap-2">
           <Clock className="w-6 h-6 text-amber-500" />
           مواعيد العمل
@@ -314,7 +314,7 @@ export default async function SettingsPage() {
       </div>
 
       {/* بيانات التواصل والسوشيال ميديا */}
-      <div className="bg-surface-50 rounded-[32px] p-6 lg:p-8">
+      <div className="bg-white border-2 border-surface-100 rounded-[32px] p-6 lg:p-8">
         <h3 className="text-xl font-bold text-surface-950 mb-6 flex items-center gap-2">
           <Share2 className="w-6 h-6 text-surface-700" />
           بيانات التواصل والسوشيال ميديا

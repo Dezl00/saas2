@@ -108,7 +108,7 @@ export default async function TenantBillingPage() {
             const features = plan.features as any;
             const isCurrentPlan = currentPlanId === plan.id && sub?.status === "ACTIVE";
             return (
-              <div key={plan.id} className={`bg-surface-50 border-2 rounded-[32px] p-6 lg:p-8 flex flex-col transition-all ${
+              <div key={plan.id} className={`bg-white border-2 rounded-[32px] p-6 lg:p-8 flex flex-col transition-all ${
                 isCurrentPlan 
                   ? "border-primary-500 bg-primary-50/50" 
                   : "border-surface-100 hover:border-surface-200"

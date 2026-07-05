@@ -68,7 +68,7 @@ export default async function CheckoutPage({ params }: { params: Promise<{ planI
         
         {/* Plan Summary */}
         <div className="md:col-span-1 space-y-6">
-          <div className="bg-surface-50 rounded-2xl border border-surface-200 p-6">
+          <div className="bg-white rounded-2xl border border-surface-200 p-6">
             <h3 className="font-bold text-surface-900 mb-4">ملخص الطلب</h3>
             <div className="flex justify-between items-center py-3 border-b border-surface-200 text-sm">
               <span className="text-surface-600">اسم الباقة</span>

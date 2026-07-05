@@ -39,7 +39,7 @@ export function AppearanceClient({ currentFont }: { currentFont: string }) {
   return (
     <div className="space-y-6">
       <link href={fontsUrl} rel="stylesheet" />
-      <div className="bg-surface-50 rounded-[32px] p-6 lg:p-8">
+      <div className="bg-white border-2 border-surface-100 rounded-[32px] p-6 lg:p-8">
         <h3 className="text-xl font-bold text-surface-950 mb-6 flex items-center gap-2">
           <Check className="w-6 h-6 text-primary-500" />
           اختر خط المتجر
