@@ -415,3 +415,12 @@ body {
   animation: searchExpand 0.25s ease-out;
 }
 
+@layer utilities {
+  .hide-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}

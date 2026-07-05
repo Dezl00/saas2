@@ -61,7 +61,7 @@ export default async function DashboardLayout({
 
   return (
     <div 
-      className={`min-h-screen bg-white flex flex-col md:flex-row w-full overflow-x-hidden theme-${platformSetting.dashboardTheme} font-${platformSetting.dashboardFont} dashboard-layout`}
+      className={`min-h-screen bg-white flex flex-col md:flex-row w-full overflow-x-clip theme-${platformSetting.dashboardTheme} font-${platformSetting.dashboardFont} dashboard-layout`}
       dir="rtl"
       style={customColorStyles}
     >
@@ -75,7 +75,7 @@ export default async function DashboardLayout({
         />
 
         {/* Page Content */}
-        <main className="flex-1 pt-16 pb-20 md:pb-8 w-full max-w-full overflow-x-hidden">
+        <main className="flex-1 pt-16 pb-20 md:pb-8 w-full max-w-full overflow-x-clip">
           <div className="p-4 md:p-8 max-w-6xl mx-auto w-full">
             {children}
           </div>
