@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function updateStoreSettings(formData: FormData) {
   const session = await auth();
@@ -28,12 +28,21 @@ export async function updateStoreSettings(formData: FormData) {
     }
 
     try {
-      await prisma.store.update({
+      const updatedStore = await prisma.store.update({
         where: { id: session.user.storeId },
         data: { workingHours },
+        select: { subdomain: true, domains: { select: { name: true } } }
       });
 
       revalidatePath("/", "layout");
+      if (updatedStore.subdomain) {
+        revalidateTag(`store-${updatedStore.subdomain}`);
+      }
+      if (updatedStore.domains) {
+        for (const d of updatedStore.domains) {
+          revalidateTag(`store-${d.name}`);
+        }
+      }
       return { success: "تم حفظ مواعيد العمل بنجاح" };
     } catch (error) {
       console.error("Update Working Hours Error:", error);
@@ -81,7 +90,7 @@ export async function updateStoreSettings(formData: FormData) {
   }
 
   try {
-    await prisma.store.update({
+    const updatedStore = await prisma.store.update({
       where: { id: session.user.storeId },
       data: {
         name,
@@ -95,9 +104,18 @@ export async function updateStoreSettings(formData: FormData) {
         mapLatitude: mapLatitude || null,
         mapLongitude: mapLongitude || null,
       },
+      select: { subdomain: true, domains: { select: { name: true } } }
     });
 
     revalidatePath("/", "layout");
+    if (updatedStore.subdomain) {
+      revalidateTag(`store-${updatedStore.subdomain}`);
+    }
+    if (updatedStore.domains) {
+      for (const d of updatedStore.domains) {
+        revalidateTag(`store-${d.name}`);
+      }
+    }
     return { success: "تم حفظ الإعدادات الأساسية بنجاح" };
   } catch (error) {
     console.error("Update Store Error:", error);
@@ -138,12 +156,21 @@ export async function updateSubdomain(formData: FormData) {
       return { error: "عذراً، هذا الرابط مستخدم من قبل متجر آخر. يرجى اختيار رابط مختلف." };
     }
 
+    const oldStore = await prisma.store.findUnique({
+      where: { id: session.user.storeId },
+      select: { subdomain: true }
+    });
+
     await prisma.store.update({
       where: { id: session.user.storeId },
       data: { subdomain },
     });
 
     revalidatePath("/", "layout");
+    if (oldStore?.subdomain) {
+      revalidateTag(`store-${oldStore.subdomain}`);
+    }
+    revalidateTag(`store-${subdomain}`);
     return { success: "تم حجز الرابط بنجاح! متجرك الآن متاح عبر هذا الرابط." };
   } catch (error) {
     console.error("Update Subdomain Error:", error);
@@ -172,7 +199,7 @@ export async function updateContactSettings(formData: FormData) {
   const showSnapchat = formData.get("showSnapchat") === "on";
 
   try {
-    await prisma.store.update({
+    const updatedStore = await prisma.store.update({
       where: { id: session.user.storeId },
       data: {
         whatsappNumber,
@@ -189,9 +216,18 @@ export async function updateContactSettings(formData: FormData) {
         snapchatUrl,
         showSnapchat,
       },
+      select: { subdomain: true, domains: { select: { name: true } } }
     });
 
     revalidatePath("/", "layout");
+    if (updatedStore.subdomain) {
+      revalidateTag(`store-${updatedStore.subdomain}`);
+    }
+    if (updatedStore.domains) {
+      for (const d of updatedStore.domains) {
+        revalidateTag(`store-${d.name}`);
+      }
+    }
     return { success: "تم حفظ إعدادات التواصل بنجاح" };
   } catch (error) {
     console.error("Update Contact Error:", error);
