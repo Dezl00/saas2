@@ -116,8 +116,13 @@ export default async function SettingsPage() {
             />
           </div>
 
-          <div>
-            <ImageUpload name="logo" label="شعار المتجر (Logo)" defaultValue={store.logo} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <ImageUpload name="logo" label="شعار المتجر (Logo)" defaultValue={store.logo} />
+            </div>
+            <div>
+              <ImageUpload name="favicon" label="أيقونة المتجر (Favicon)" defaultValue={store.favicon} />
+            </div>
           </div>
 
           <div>

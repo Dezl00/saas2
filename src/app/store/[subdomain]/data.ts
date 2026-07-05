@@ -17,6 +17,7 @@ export async function getStoreInfo(subdomain: string) {
       name: true,
       description: true,
       logo: true,
+      favicon: true,
       status: true,
       phone: true,
       address: true,

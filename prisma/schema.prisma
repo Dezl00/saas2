@@ -118,6 +118,7 @@ model Store {
   name        String
   description String?
   logo        String?
+  favicon     String?
   type        StoreType   @default(RESTAURANT)
   subdomain   String?     @unique
   status      StoreStatus @default(ACTIVE)

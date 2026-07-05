@@ -71,6 +71,9 @@ export async function generateMetadata(props: { params: Promise<{ subdomain: str
   return {
     title: store.name,
     description: store.description || `اطلب الآن من ${store.name}`,
+    icons: {
+      icon: store.favicon || store.logo || "/favicon.ico",
+    },
   };
 }
 

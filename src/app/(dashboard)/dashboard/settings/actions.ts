@@ -56,6 +56,19 @@ export async function updateStoreSettings(formData: FormData) {
     logoStr = undefined; // Do not update if no new file is provided
   }
 
+  let faviconStr: string | File | null | undefined = formData.get("favicon") as string | File | null;
+  if (faviconStr && typeof faviconStr !== "string" && faviconStr.size > 0) {
+    const { uploadImageToCloudinary } = await import("@/lib/upload");
+    try {
+      faviconStr = await uploadImageToCloudinary(faviconStr);
+    } catch (e) {
+      console.error("Upload error", e);
+      return { error: "فشل رفع الأيقونة" };
+    }
+  } else if (typeof faviconStr !== "string") {
+    faviconStr = undefined; // Do not update if no new file is provided
+  }
+
   const primaryColor = formData.get("primaryColor") as string;
   const phone = formData.get("phone") as string;
   const address = formData.get("address") as string;
@@ -74,6 +87,7 @@ export async function updateStoreSettings(formData: FormData) {
         name,
         description,
         ...(logoStr !== undefined ? { logo: logoStr as string } : {}),
+        ...(faviconStr !== undefined ? { favicon: faviconStr as string } : {}),
         primaryColor,
         phone,
         address,
