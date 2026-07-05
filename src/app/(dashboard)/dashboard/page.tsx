@@ -11,8 +11,8 @@ function StatsSkeleton() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {[...Array(4)].map((_, i) => (
-        <div key={i} className="bg-surface-50 border-2 border-surface-100 rounded-[32px] p-6 lg:p-8 h-40 animate-pulse">
-          <div className="flex justify-between items-start mb-6">
+        <div key={i} className="bg-white border border-surface-100 rounded-[24px] p-6 h-36 animate-pulse">
+          <div className="flex justify-between items-start mb-4">
             <div className="w-14 h-14 bg-surface-200 rounded-2xl"></div>
             <div className="h-8 bg-surface-200 rounded-xl w-16"></div>
           </div>
@@ -26,14 +26,14 @@ function StatsSkeleton() {
 
 function OrdersSkeleton() {
   return (
-    <div className="bg-white border-2 border-surface-100 rounded-[32px] p-6 lg:p-8 h-96 animate-pulse">
-      <div className="flex justify-between items-center mb-6 pb-6 border-b-2 border-surface-50">
+    <div className="bg-white border border-surface-200 rounded-[24px] overflow-hidden animate-pulse">
+      <div className="p-6 border-b border-surface-100 flex justify-between items-center">
         <div className="h-8 bg-surface-200 rounded w-40"></div>
         <div className="h-10 bg-surface-200 rounded-xl w-24"></div>
       </div>
-      <div className="space-y-4">
+      <div className="divide-y divide-surface-100">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="h-24 bg-surface-50 border-2 border-surface-100 rounded-3xl w-full"></div>
+          <div key={i} className="h-20 bg-white w-full"></div>
         ))}
       </div>
     </div>
@@ -46,8 +46,8 @@ export default async function DashboardPage() {
 
   if (!storeId) {
     return (
-      <div className="text-center py-20 bg-surface-50 border-2 border-surface-100 rounded-[32px]">
-        <h2 className="text-2xl font-bold text-surface-950">لا يوجد متجر مرتبط بحسابك</h2>
+      <div className="text-center py-20 bg-white border border-surface-200 rounded-[24px]">
+        <h2 className="text-xl font-semibold text-surface-950">لا يوجد متجر مرتبط بحسابك</h2>
       </div>
     );
   }
@@ -61,7 +61,7 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-8 pb-10">
       {(store?.subdomain || store?.domains?.[0]?.name) && (
-        <div className="bg-primary-50 border-2 border-primary-100 rounded-[32px] p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div className="bg-primary-50/50 border border-primary-100 rounded-[24px] p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
             <h3 className="font-black text-xl text-primary-900">رابط متجرك جاهز!</h3>
             <p className="text-sm font-bold text-primary-700 mt-2">شارك هذا الرابط مع عملائك لاستقبال الطلبات</p>
@@ -75,7 +75,7 @@ export default async function DashboardPage() {
             <Link
               href={store.domains?.[0]?.name ? `https://${store.domains[0].name}` : `https://${store.subdomain}.menura.site`}
               target="_blank"
-              className="px-6 py-3 bg-white text-primary-600 font-bold rounded-2xl border-2 border-primary-200 hover:border-primary-300 hover:bg-primary-50 transition-colors w-full sm:w-auto text-center"
+              className="px-6 py-3 bg-white text-primary-600 font-medium rounded-xl border border-primary-200 hover:border-primary-300 hover:bg-primary-50 transition-colors w-full sm:w-auto text-center"
             >
               زيارة المتجر
             </Link>
