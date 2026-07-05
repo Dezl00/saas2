@@ -51,7 +51,7 @@ export async function DashboardStats({ storeId, currency }: { storeId: string, c
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
       {stats.map((stat, i) => (
         <StatsCard key={i} {...stat} />
       ))}

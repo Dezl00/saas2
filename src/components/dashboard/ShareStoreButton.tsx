@@ -44,7 +44,7 @@ export function ShareStoreButton({ storeUrl, storeName, qrUrl }: { storeUrl: str
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="px-6 py-3 bg-white text-surface-700 font-bold rounded-2xl border-2 border-surface-200 hover:bg-surface-50 transition-colors flex items-center gap-2"
+        className="flex-1 sm:flex-none px-6 py-3 bg-surface-100 text-surface-900 font-medium rounded-xl hover:bg-surface-200 transition-colors flex items-center justify-center gap-2"
       >
         <Share2 className="w-5 h-5" />
         مشاركة المتجر

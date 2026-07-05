@@ -15,12 +15,12 @@ interface StatsCardProps {
 
 export function StatsCard({ title, value, icon: Icon, trend, cardClasses, iconClasses, labelClasses }: StatsCardProps) {
   return (
-    <div className={`rounded-[24px] p-6 border transition-colors ${cardClasses}`}>
+    <div className={`rounded-[24px] p-4 sm:p-6 border transition-colors ${cardClasses}`}>
       <div className="flex items-start justify-between mb-4">
         <div
-          className={`w-12 h-12 rounded-xl flex items-center justify-center ${iconClasses}`}
+          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shrink-0 ${iconClasses}`}
         >
-          <Icon className="w-6 h-6" />
+          <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
         </div>
         {trend && (
           <span
@@ -35,8 +35,8 @@ export function StatsCard({ title, value, icon: Icon, trend, cardClasses, iconCl
         )}
       </div>
       <div>
-        <p className="text-2xl font-bold mb-1">{value}</p>
-        <p className={`text-sm font-semibold ${labelClasses}`}>{title}</p>
+        <p className="text-xl sm:text-2xl font-bold mb-1 truncate">{value}</p>
+        <p className={`text-xs sm:text-sm font-semibold truncate ${labelClasses}`}>{title}</p>
       </div>
     </div>
   );

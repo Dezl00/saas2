@@ -9,7 +9,7 @@ import { RecentOrders } from "@/components/dashboard/RecentOrders";
 // Skeletons for Suspense
 function StatsSkeleton() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
       {[...Array(4)].map((_, i) => (
         <div key={i} className="bg-white border border-surface-100 rounded-[24px] p-6 h-36 animate-pulse">
           <div className="flex justify-between items-start mb-4">
@@ -61,12 +61,12 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-8 pb-10">
       {(store?.subdomain || store?.domains?.[0]?.name) && (
-        <div className="bg-primary-50/50 border border-primary-100 rounded-[24px] p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 w-full">
           <div>
             <h3 className="font-black text-xl text-primary-900">رابط متجرك جاهز!</h3>
             <p className="text-sm font-bold text-primary-700 mt-2">شارك هذا الرابط مع عملائك لاستقبال الطلبات</p>
           </div>
-          <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+          <div className="flex items-center gap-3 w-full sm:w-auto">
             <ShareStoreButton 
               storeUrl={store.domains?.[0]?.name ? `https://${store.domains[0].name}` : `https://${store.subdomain}.menura.site`} 
               storeName={store.name}
@@ -75,7 +75,7 @@ export default async function DashboardPage() {
             <Link
               href={store.domains?.[0]?.name ? `https://${store.domains[0].name}` : `https://${store.subdomain}.menura.site`}
               target="_blank"
-              className="px-6 py-3 bg-white text-primary-600 font-medium rounded-xl border border-primary-200 hover:border-primary-300 hover:bg-primary-50 transition-colors w-full sm:w-auto text-center"
+              className="flex-1 sm:flex-none px-6 py-3 bg-primary-600 text-white font-medium rounded-xl hover:bg-primary-700 transition-colors text-center"
             >
               زيارة المتجر
             </Link>
