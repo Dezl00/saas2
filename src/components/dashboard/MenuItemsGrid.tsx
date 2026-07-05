@@ -7,6 +7,7 @@ import { MenuItemEditButton } from "@/components/dashboard/MenuItemEditButton";
 import { DeleteConfirmButton } from "@/components/dashboard/DeleteConfirmButton";
 import { GenerateImageButton } from "@/components/dashboard/GenerateImageButton";
 import toast from "react-hot-toast";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import Image from "next/image";
 
 type MenuItemType = {
@@ -40,6 +41,8 @@ export function MenuItemsGrid({
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [isDeletingBulk, setIsDeletingBulk] = useState(false);
 
+  const [showBulkConfirm, setShowBulkConfirm] = useState(false);
+
   const toggleSelectAll = () => {
     if (selectedIds.size === menuItems.length) {
       setSelectedIds(new Set());
@@ -61,8 +64,6 @@ export function MenuItemsGrid({
   const handleBulkDelete = async () => {
     if (selectedIds.size === 0) return;
     
-    if (!confirm(`هل أنت متأكد من حذف ${selectedIds.size} صنف؟`)) return;
-
     setIsDeletingBulk(true);
     const result = await bulkDeleteMenuItems(Array.from(selectedIds), storeId);
     
@@ -73,10 +74,19 @@ export function MenuItemsGrid({
       setSelectedIds(new Set());
     }
     setIsDeletingBulk(false);
+    setShowBulkConfirm(false);
   };
 
   return (
     <div className="space-y-6">
+      <ConfirmModal
+        isOpen={showBulkConfirm}
+        title="تأكيد الحذف المجمع"
+        description={`هل أنت متأكد من حذف ${selectedIds.size} صنف؟ لا يمكن التراجع عن هذا الإجراء.`}
+        onConfirm={handleBulkDelete}
+        onCancel={() => setShowBulkConfirm(false)}
+        isLoading={isDeletingBulk}
+      />
       {/* Action Bar */}
       <div className="flex flex-wrap items-center justify-between gap-4 bg-white border-2 border-surface-100 p-4 rounded-3xl">
         <button 
@@ -97,7 +107,7 @@ export function MenuItemsGrid({
               تم تحديد {selectedIds.size}
             </span>
             <button
-              onClick={handleBulkDelete}
+              onClick={() => setShowBulkConfirm(true)}
               disabled={isDeletingBulk}
               className="flex items-center gap-2 px-6 py-2 bg-error-600 text-white rounded-xl font-bold hover:bg-error-700 transition-colors disabled:opacity-50"
             >
@@ -145,17 +155,17 @@ export function MenuItemsGrid({
                 </div>
 
                 {/* Content */}
-                <div className="flex flex-col flex-grow justify-between py-1">
-                  <div>
+                <div className="flex flex-col flex-grow justify-between py-1 min-w-0">
+                  <div className="min-w-0">
                     <div className="flex justify-between items-start gap-2 mb-1">
-                      <h4 className="font-bold text-surface-950 text-lg leading-tight line-clamp-1">{item.name}</h4>
+                      <h4 className="font-bold text-surface-950 text-lg leading-tight line-clamp-1 break-words">{item.name}</h4>
                       <span className="font-black text-primary-600 shrink-0">{Number(item.price).toFixed(2)}</span>
                     </div>
-                    <span className="inline-block px-2.5 py-1 bg-surface-100 text-surface-600 text-xs font-bold rounded-lg mb-2">
+                    <span className="inline-block px-2.5 py-1 bg-surface-100 text-surface-600 text-xs font-bold rounded-lg mb-2 max-w-full truncate">
                       {item.category.name}
                     </span>
                     {item.description && (
-                      <p className="text-xs text-surface-500 line-clamp-1 font-medium">{item.description}</p>
+                      <p className="text-xs text-surface-500 line-clamp-1 font-medium break-words">{item.description}</p>
                     )}
                   </div>
 
@@ -178,16 +188,7 @@ export function MenuItemsGrid({
 
                     <div className="flex items-center gap-1">
                       <GenerateImageButton itemId={item.id} hasImage={!!item.image} />
-                      <MenuItemEditButton 
-                        storeId={storeId}
-                        item={{
-                          ...item,
-                          price: item.price.toString(),
-                          sizes: item.sizes.map(s => ({ ...s, price: s.price.toString() })),
-                          addons: item.addons.map(a => ({ ...a, price: a.price.toString() }))
-                        }} 
-                        categories={categories.map(c => ({ id: c.id, name: c.name }))} 
-                      />
+                      <MenuItemEditButton itemId={item.id} />
                       <DeleteConfirmButton action={deleteMenuItem.bind(null, item.id, storeId) as any} />
                     </div>
                   </div>

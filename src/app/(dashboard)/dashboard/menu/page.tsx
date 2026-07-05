@@ -13,9 +13,10 @@ export const metadata = {
 
 export const maxDuration = 60;
 
-export default async function MenuPage(props: { searchParams: Promise<{ page?: string }> }) {
+export default async function MenuPage(props: { searchParams: Promise<{ page?: string; edit?: string }> }) {
   const searchParams = await props.searchParams;
   const page = Number(searchParams.page) || 1;
+  const editItemId = searchParams.edit;
   const pageSize = 12;
   
   const session = await auth();
@@ -47,6 +48,11 @@ export default async function MenuPage(props: { searchParams: Promise<{ page?: s
     take: pageSize
   });
 
+  const editItem = editItemId ? await prisma.menuItem.findUnique({
+    where: { id: editItemId, storeId: session.user.storeId },
+    include: { sizes: true, addons: true }
+  }) : null;
+
   return (
     <div className="space-y-6">
       <div className="flex justify-end">
@@ -54,12 +60,13 @@ export default async function MenuPage(props: { searchParams: Promise<{ page?: s
       </div>
       
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        {/* نموذج إضافة صنف */}
+        {/* نموذج إضافة / تعديل صنف */}
         <div className="xl:col-span-1">
-          <div className="bg-surface-50 border-2 border-surface-100 rounded-[32px] p-6 lg:p-8 sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto scrollbar-hide">
+          {/* Removed bg-surface-50, removed max-h overflow scroll */}
+          <div className="bg-white border-2 border-surface-100 rounded-[32px] p-6 lg:p-8 sticky top-36">
             <h3 className="text-xl font-bold text-surface-950 mb-6 flex items-center gap-2">
               <Plus className="w-5 h-5 text-primary-600" />
-              إضافة صنف جديد
+              {editItem ? "تعديل الصنف" : "إضافة صنف جديد"}
             </h3>
             
             {categories.length === 0 ? (
@@ -67,7 +74,15 @@ export default async function MenuPage(props: { searchParams: Promise<{ page?: s
                 يجب إضافة "قسم" واحد على الأقل قبل إضافة الأصناف. يرجى الذهاب لصفحة الأقسام أولاً.
               </div>
             ) : (
-              <MenuItemForm categories={categories.map(c => ({ id: c.id, name: c.name }))} />
+              <MenuItemForm 
+                categories={categories.map(c => ({ id: c.id, name: c.name }))} 
+                initialData={editItem ? {
+                  ...editItem,
+                  price: editItem.price.toString(),
+                  sizes: editItem.sizes.map(s => ({ ...s, price: s.price.toString() })),
+                  addons: editItem.addons.map(a => ({ ...a, price: a.price.toString() }))
+                } : undefined}
+              />
             )}
           </div>
         </div>

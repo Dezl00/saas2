@@ -13,8 +13,7 @@ export default async function DashboardSubLayout({
 
   return (
     <>
-      <Header userName={session?.user?.name || "المستخدم"} isAdminImpersonating={isAdminImpersonating} />
-      <div className="p-6 lg:p-8 flex-1 animate-fade-in">
+      <div className="p-4 md:p-8 flex-1 animate-fade-in">
         <div className="max-w-5xl mx-auto">
           {children}
         </div>

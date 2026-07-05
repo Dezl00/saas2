@@ -214,14 +214,29 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
         ))}
       </div>
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-2xl transition-all active:scale-[0.98] disabled:opacity-50 flex justify-center items-center gap-2"
-      >
-        {isSubmitting && <Loader2 className="w-5 h-5 animate-spin" />}
-        {initialData ? "تحديث الصنف" : "حفظ الصنف"}
-      </button>
+      <div className="flex flex-col gap-3">
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-2xl transition-all active:scale-[0.98] disabled:opacity-50 flex justify-center items-center gap-2"
+        >
+          {isSubmitting && <Loader2 className="w-5 h-5 animate-spin" />}
+          {initialData ? "تحديث الصنف" : "حفظ الصنف"}
+        </button>
+
+        {initialData && (
+          <button
+            type="button"
+            onClick={() => {
+              if (onSuccess) onSuccess();
+              else window.location.href = window.location.pathname;
+            }}
+            className="w-full py-3.5 bg-surface-100 hover:bg-surface-200 text-surface-700 font-bold rounded-2xl transition-all active:scale-[0.98]"
+          >
+            إلغاء التعديل
+          </button>
+        )}
+      </div>
     </form>
   );
 }

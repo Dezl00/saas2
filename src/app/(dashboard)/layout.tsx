@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { Sidebar } from "@/components/dashboard/Sidebar";
 import { Toaster } from "react-hot-toast";
 import { PageTransitionLoader } from "@/components/ui/PageTransitionLoader";
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { connection } from "next/server";
 
 export default async function DashboardLayout({
@@ -68,13 +69,10 @@ export default async function DashboardLayout({
       
       {/* Main Content Area */}
       <div className="flex-1 md:mr-64 flex flex-col min-h-screen relative w-full max-w-full">
-        {/* Simple Header */}
-        <header className="fixed top-0 left-0 right-0 md:right-64 z-20 bg-white/80 backdrop-blur-md border-b border-surface-100 h-16 flex items-center justify-between px-4 md:px-8">
-          <div className="flex-1"></div>
-          <div className="mr-4 flex items-center gap-2">
-            {/* Future Store Notifications/Profile can go here */}
-          </div>
-        </header>
+        <DashboardHeader 
+          userName={session?.user?.name || "المستخدم"} 
+          isAdminImpersonating={isAdminImpersonating} 
+        />
 
         {/* Page Content */}
         <main className="flex-1 pt-16 pb-20 md:pb-8 w-full max-w-full overflow-x-hidden">
