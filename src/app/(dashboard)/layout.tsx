@@ -60,14 +60,30 @@ export default async function DashboardLayout({
 
   return (
     <div 
-      className={`flex h-screen bg-white overflow-hidden theme-${platformSetting.dashboardTheme} font-${platformSetting.dashboardFont} dashboard-layout`} 
+      className={`min-h-screen bg-white flex flex-col md:flex-row w-full overflow-x-hidden theme-${platformSetting.dashboardTheme} font-${platformSetting.dashboardFont} dashboard-layout`}
       dir="rtl"
       style={customColorStyles}
     >
       <Sidebar />
-      <main className="flex-1 overflow-auto flex flex-col pb-20 md:pb-0">
-        {children}
-      </main>
+      
+      {/* Main Content Area */}
+      <div className="flex-1 md:mr-64 flex flex-col min-h-screen relative w-full max-w-full">
+        {/* Simple Header */}
+        <header className="fixed top-0 left-0 right-0 md:right-64 z-20 bg-white/80 backdrop-blur-md border-b border-surface-100 h-16 flex items-center justify-between px-4 md:px-8">
+          <div className="flex-1"></div>
+          <div className="mr-4 flex items-center gap-2">
+            {/* Future Store Notifications/Profile can go here */}
+          </div>
+        </header>
+
+        {/* Page Content */}
+        <main className="flex-1 pt-16 pb-20 md:pb-8 w-full max-w-full overflow-x-hidden">
+          <div className="p-4 md:p-8 max-w-6xl mx-auto w-full">
+            {children}
+          </div>
+        </main>
+      </div>
+
       <Toaster position="top-center" />
     </div>
   );
