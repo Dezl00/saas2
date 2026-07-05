@@ -11,7 +11,7 @@ export default async function CheckoutPage({ params }: { params: Promise<{ planI
   if (!session?.user?.id) redirect("/login");
 
   const store = await prisma.store.findUnique({
-    where: { userId: session.user.id },
+    where: { id: session.user.storeId as string },
     include: {
       subscription: true
     }

@@ -11,7 +11,7 @@ export default async function TenantBillingPage() {
 
   // Get Store
   const store = await prisma.store.findUnique({
-    where: { userId: session.user.id },
+    where: { id: session.user.storeId as string },
     include: {
       subscription: {
         include: { plan: true }

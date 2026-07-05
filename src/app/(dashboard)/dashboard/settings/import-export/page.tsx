@@ -9,7 +9,7 @@ export default async function ImportExportPage() {
   if (!session?.user?.id) redirect("/login");
 
   const store = await prisma.store.findUnique({
-    where: { userId: session.user.id }
+    where: { id: session.user.storeId as string }
   });
 
   if (!store) redirect("/onboarding");
