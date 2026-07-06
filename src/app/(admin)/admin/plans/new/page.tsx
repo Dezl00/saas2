@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { PlanForm } from "./PlanForm";
+import { createPlanAction } from "../actions";
 
 export default function NewPlanPage() {
   return (
@@ -20,7 +21,7 @@ export default function NewPlanPage() {
         </div>
       </div>
 
-      <PlanForm />
+      <PlanForm actionFn={createPlanAction} />
     </div>
   );
 }
