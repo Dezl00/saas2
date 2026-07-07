@@ -7,11 +7,10 @@ import { AlreadySubscribedToast } from "./AlreadySubscribedToast";
 
 export default async function TenantBillingPage() {
   const session = await auth();
-  if (!session?.user?.id) redirect("/login");
 
   // Get Store
   const store = await prisma.store.findUnique({
-    where: { id: session.user.storeId as string },
+    where: { id: session?.user?.storeId as string },
     include: {
       subscription: {
         include: { plan: true }
