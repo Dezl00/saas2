@@ -161,7 +161,7 @@ export default async function TenantBillingPage() {
                   </div>
                 ) : (
                   <Link
-                    href={`/dashboard/billing/${plan.id}`}
+                    href={`/dashboard/settings/billing/${plan.id}`}
                     className="mt-auto flex items-center justify-center gap-2 w-full py-4 px-4 rounded-2xl font-bold text-white bg-primary-600 hover:bg-primary-700 transition-colors"
                   >
                     اشتراك الآن

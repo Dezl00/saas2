@@ -25,7 +25,7 @@ export default async function CheckoutPage({ params }: { params: Promise<{ planI
 
   // Block re-subscribing to current active plan
   if (store.subscription?.planId === plan.id && store.subscription?.status === "ACTIVE") {
-    redirect("/dashboard/billing?already=true");
+    redirect("/dashboard/settings/billing?already=true");
   }
 
   const methods = await prisma.platformPaymentMethod.findMany({
@@ -51,7 +51,7 @@ export default async function CheckoutPage({ params }: { params: Promise<{ planI
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center gap-4">
         <Link 
-          href="/dashboard/billing"
+          href="/dashboard/settings/billing"
           className="p-2 text-surface-500 hover:text-surface-900 bg-white rounded-lg border border-surface-200 hover:bg-surface-50 transition-colors"
         >
           <ChevronRight className="w-5 h-5 rtl:rotate-180" />
