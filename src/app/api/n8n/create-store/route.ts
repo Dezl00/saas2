@@ -78,10 +78,14 @@ export async function POST(request: Request) {
             }
         });
 
-        // إنشاء اشتراك تجريبي لمدة 7 أيام
+        // Fetch platform settings for trial days
+        const settings = await tx.platformSetting.findFirst();
+        const trialDays = settings?.trialDays ?? 7;
+
+        // إنشاء اشتراك تجريبي لمدة حسب إعدادات المنصة
         const startDate = new Date();
         const endDate = new Date();
-        endDate.setDate(startDate.getDate() + 7);
+        endDate.setDate(startDate.getDate() + trialDays);
 
         await tx.subscription.create({
             data: {
