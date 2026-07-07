@@ -55,7 +55,7 @@ export async function checkProductLimit(storeId: string, addingCount: number = 1
   });
 
   return {
-    allowed: (currentCount + addingCount) <= limits.products,
+    allowed: limits.products === -1 ? true : (currentCount + addingCount) <= limits.products,
     limit: limits.products,
     current: currentCount
   };
@@ -69,7 +69,7 @@ export async function checkBranchLimit(storeId: string, addingCount: number = 1)
   });
 
   return {
-    allowed: (currentCount + addingCount) <= limits.branches,
+    allowed: limits.branches === -1 ? true : (currentCount + addingCount) <= limits.branches,
     limit: limits.branches,
     current: currentCount
   };
