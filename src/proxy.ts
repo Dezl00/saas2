@@ -31,7 +31,8 @@ export default function proxy(req: NextRequest) {
     hostname === rootDomain ||
     hostname === "menura.site" ||
     hostname.startsWith("localhost") ||
-    hostname.endsWith(".vercel.app")
+    hostname.endsWith(".vercel.app") ||
+    hostname.endsWith(".hostingersite.com")
   ) {
     // Protect dashboard routes
     if (pathname.startsWith("/dashboard") || pathname.startsWith("/admin")) {
