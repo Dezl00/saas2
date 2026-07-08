@@ -134,7 +134,7 @@ export default async function AdminDashboard() {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-sm text-surface-800/70">
-                    {store.user.name}
+                    {store.user?.name || "مستخدم محذوف"}
                   </td>
                   <td className="px-6 py-4">
                     <span className="inline-flex px-2.5 py-1 rounded-lg text-xs font-medium bg-primary-100 text-primary-700">

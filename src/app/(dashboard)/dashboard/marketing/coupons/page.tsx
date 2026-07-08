@@ -33,7 +33,7 @@ export default async function CouponsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* إضافة كوبون جديد */}
-        <div className="bg-surface-50 border-2 border-surface-100 rounded-[32px] p-6 lg:p-8 self-start sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto scrollbar-hide">
+        <div className="bg-white border-2 border-surface-100 rounded-[24px] p-6 lg:p-8 self-start sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto scrollbar-hide">
           <h3 className="text-xl font-bold text-surface-950 mb-6 flex items-center gap-2">
             <Plus className="w-5 h-5 text-primary-600" />
             إضافة كوبون جديد
@@ -90,7 +90,7 @@ export default async function CouponsPage() {
         {/* قائمة الكوبونات */}
         <div className="lg:col-span-2 space-y-4">
           {coupons.length === 0 ? (
-            <div className="text-center py-16 bg-surface-50 border-2 border-surface-100 rounded-[32px]">
+            <div className="text-center py-16 bg-white border-2 border-surface-100 rounded-[24px]">
               <Ticket className="w-16 h-16 text-surface-300 mx-auto mb-4" />
               <p className="text-surface-500 font-medium text-lg">لا توجد كوبونات مضافة حالياً.</p>
             </div>

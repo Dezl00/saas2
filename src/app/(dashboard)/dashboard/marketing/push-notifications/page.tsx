@@ -24,7 +24,7 @@ export default async function PushNotificationsServerPage() {
   const campaigns = await prisma.pushCampaign.findMany({
     where: { storeId },
     orderBy: { createdAt: "desc" },
-    take: 20,
+    take: 3,
   });
 
   return (
