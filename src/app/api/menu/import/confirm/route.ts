@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "تم الوصول للحد الأقصى للمنتجات" }, { status: 403 });
     }
 
-    const remainingSlots = limitCheck.limit - limitCheck.currentCount;
+    const remainingSlots = limitCheck.limit - limitCheck.current;
     if (products.length > remainingSlots) {
       return NextResponse.json({ 
         error: `لا يمكنك استيراد ${products.length} منتج. الباقة تسمح لك بإضافة ${remainingSlots} منتج فقط حالياً.` 
