@@ -1,6 +1,4 @@
 "use server";
-import { revalidateTag } from 'next/cache';
-import { revalidateTag } from 'next/cache';
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
@@ -51,9 +49,9 @@ export async function updateSubdomain(formData: FormData) {
 
     revalidatePath("/", "layout");
     if (oldStore?.subdomain) {
-      revalidateTag(`store-${oldStore.subdomain}`);
+      revalidatePath(`store-${oldStore.subdomain}`);
     }
-    revalidateTag(`store-${subdomain}`);
+    revalidatePath(`store-${subdomain}`);
     return { success: "تم حجز الرابط بنجاح! متجرك الآن متاح عبر هذا الرابط." };
   } catch (error) {
     console.error("Update Subdomain Error:", error);

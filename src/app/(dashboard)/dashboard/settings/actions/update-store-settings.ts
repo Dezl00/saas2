@@ -1,6 +1,4 @@
 "use server";
-import { revalidateTag } from 'next/cache';
-import { revalidateTag } from 'next/cache';
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
@@ -39,12 +37,12 @@ export async function updateStoreSettings(formData: FormData) {
       revalidatePath("/", "layout");
       if (updatedStore.subdomain) {
 // @ts-ignore
-        revalidateTag(`store-${updatedStore.subdomain}`);
+        revalidatePath(`store-${updatedStore.subdomain}`);
       }
       if (updatedStore.domains) {
         for (const d of updatedStore.domains) {
   // @ts-ignore
-        revalidateTag(`store-${d.name}`);
+        revalidatePath(`store-${d.name}`);
         }
       }
       return { success: "تم حفظ مواعيد العمل بنجاح" };
@@ -113,12 +111,12 @@ export async function updateStoreSettings(formData: FormData) {
 
     revalidatePath("/", "layout");
     if (updatedStore.subdomain) {
-      revalidateTag(`store-${updatedStore.subdomain}`);
+      revalidatePath(`store-${updatedStore.subdomain}`);
     }
     if (updatedStore.domains) {
       for (const d of updatedStore.domains) {
 // @ts-ignore
-        revalidateTag(`store-${d.name}`);
+        revalidatePath(`store-${d.name}`);
       }
     }
     return { success: "تم حفظ الإعدادات الأساسية بنجاح" };

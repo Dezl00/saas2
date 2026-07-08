@@ -1,8 +1,4 @@
 "use server";
-import { revalidateTag } from 'next/cache';
-import { uploadImageToCloudinary } from '@/lib/cloudinary';
-import { revalidateTag } from 'next/cache';
-import { uploadImageToCloudinary } from '@/lib/cloudinary';
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
@@ -32,6 +28,7 @@ export async function updateBanner(formData: FormData) {
 
     let imageUrl = banner.image;
     if (imageFile && imageFile.size > 0) {
+      const { uploadImageToCloudinary } = await import('@/lib/upload');
       imageUrl = await uploadImageToCloudinary(imageFile);
     }
 
@@ -46,7 +43,7 @@ export async function updateBanner(formData: FormData) {
       },
     });
 
-    (revalidateTag as any)(`store-banners-${session.user.storeId}`, "default");
+    
     revalidatePath("/dashboard/banners");
     return { success: "تم تحديث البانر بنجاح" };
   } catch (error) {

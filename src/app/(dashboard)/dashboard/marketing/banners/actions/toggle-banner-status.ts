@@ -1,8 +1,4 @@
 "use server";
-import { revalidateTag } from 'next/cache';
-import { uploadImageToCloudinary } from '@/lib/cloudinary';
-import { revalidateTag } from 'next/cache';
-import { uploadImageToCloudinary } from '@/lib/cloudinary';
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
@@ -25,7 +21,7 @@ export async function toggleBannerStatus(id: string, isActive: boolean) {
       data: { isActive },
     });
 
-    (revalidateTag as any)(`store-banners-${session.user.storeId}`, "default");
+    
     revalidatePath("/dashboard/banners");
     return { success: isActive ? "تم تنشيط البانر" : "تم إيقاف البانر" };
   } catch (error) {

@@ -1,8 +1,4 @@
 "use server";
-import { revalidateTag } from 'next/cache';
-import { uploadImageToCloudinary } from '@/lib/cloudinary';
-import { revalidateTag } from 'next/cache';
-import { uploadImageToCloudinary } from '@/lib/cloudinary';
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
@@ -27,7 +23,7 @@ export async function deleteBanner(id: string) {
       where: { id },
     });
 
-    (revalidateTag as any)(`store-banners-${session.user.storeId}`, "default");
+    
     revalidatePath("/dashboard/banners");
     return { success: "تم حذف البانر بنجاح" };
   } catch (error) {

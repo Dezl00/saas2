@@ -1,6 +1,4 @@
 "use server";
-import { createStoreSchema } from '@/lib/validations';
-import { createStoreSchema } from '@/lib/validations';
 
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
@@ -8,6 +6,18 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
+
+const createStoreSchema = z.object({
+  name: z.string().min(2, "الاسم يجب أن يكون أكثر من حرفين"),
+  email: z.string().email("بريد إلكتروني غير صالح"),
+  password: z.string().min(6, "كلمة المرور يجب أن تكون 6 أحرف على الأقل"),
+  phone: z.string().optional(),
+  whatsappNumber: z.string().optional(),
+  address: z.string().optional(),
+  subdomain: z.string().min(2, "الرابط يجب أن يكون أكثر من حرفين"),
+  primaryColor: z.string().optional().default("#000000"),
+  logo: z.any().optional(),
+});
 
 export async function createStoreFromAdminAction(prevState: any, formData: FormData) {
   const rawData = Object.fromEntries(formData);

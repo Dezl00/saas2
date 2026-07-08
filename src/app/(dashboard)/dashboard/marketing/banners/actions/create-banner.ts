@@ -1,8 +1,4 @@
 "use server";
-import { revalidateTag } from 'next/cache';
-import { uploadImageToCloudinary } from '@/lib/cloudinary';
-import { revalidateTag } from 'next/cache';
-import { uploadImageToCloudinary } from '@/lib/cloudinary';
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
@@ -24,7 +20,8 @@ export async function createBanner(formData: FormData) {
   }
 
   try {
-    const imageUrl = await uploadImageToCloudinary(imageFile);
+    const { uploadImageToCloudinary } = await import('@/lib/upload');
+      const imageUrl = await uploadImageToCloudinary(imageFile);
 
     await prisma.storeBanner.create({
       data: {
@@ -36,7 +33,7 @@ export async function createBanner(formData: FormData) {
       },
     });
 
-    (revalidateTag as any)(`store-banners-${session.user.storeId}`, "default");
+    
     revalidatePath("/dashboard/banners");
     return { success: "تم إضافة البانر بنجاح" };
   } catch (error) {
