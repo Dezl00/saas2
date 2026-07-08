@@ -35,8 +35,9 @@ export async function POST(req: Request) {
     let importedCount = 0;
 
     // Process Categories Sheet
-    if (wb.SheetNames.includes("Categories")) {
-      const wsCategories = wb.Sheets["Categories"];
+    const categoriesSheetName = wb.SheetNames.includes("Categories") ? "Categories" : (wb.SheetNames.includes("الأقسام") ? "الأقسام" : null);
+    if (categoriesSheetName) {
+      const wsCategories = wb.Sheets[categoriesSheetName];
       const categoriesData = xlsx.utils.sheet_to_json<any>(wsCategories);
 
       for (const row of categoriesData) {
@@ -67,10 +68,11 @@ export async function POST(req: Request) {
     }
 
     // Process Products Sheet
-    if (wb.SheetNames.includes("Products")) {
+    const productsSheetName = wb.SheetNames.includes("Products") ? "Products" : (wb.SheetNames.includes("المنتجات") ? "المنتجات" : null);
+    if (productsSheetName) {
       const { checkProductLimit } = await import("@/lib/limits");
       
-      const wsProducts = wb.Sheets["Products"];
+      const wsProducts = wb.Sheets[productsSheetName];
       const productsData = xlsx.utils.sheet_to_json<any>(wsProducts);
 
       for (const row of productsData) {

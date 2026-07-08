@@ -19,9 +19,9 @@ export function Sidebar() {
 
   const navItems = [
     { href: "/dashboard", icon: LayoutDashboard, label: "الرئيسية", exact: true },
-    { href: "/dashboard/orders", icon: ShoppingBag, label: "العمليات" },
     { href: "/dashboard/catalog", icon: UtensilsCrossed, label: "المنتجات" },
-    { href: "/dashboard/marketing/banners", icon: Megaphone, label: "التسويق" }, // Add marketing link, pointing to a valid page
+    { href: "/dashboard/orders", icon: ShoppingBag, label: "العمليات" },
+    { href: "/dashboard/marketing/banners", icon: Megaphone, label: "التسويق" },
     { href: "/dashboard/settings", icon: Settings, label: "الإعدادات" },
   ];
 

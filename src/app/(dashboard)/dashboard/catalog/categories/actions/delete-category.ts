@@ -31,8 +31,9 @@ export async function deleteCategory(categoryId: string) {
       where: { id: categoryId },
     });
 
-    revalidatePath("/dashboard/menu/categories");
-    (revalidateTag as any)(`store-${session.user.storeId}`, "default");
+    revalidatePath("/dashboard/catalog/categories");
+    revalidatePath("/dashboard/catalog");
+    
     return { success: "تم حذف القسم بنجاح" };
   } catch (error) {
     console.error("Delete Category Error:", error);

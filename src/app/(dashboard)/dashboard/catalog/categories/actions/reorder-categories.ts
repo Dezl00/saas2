@@ -21,8 +21,9 @@ export async function reorderCategories(orderedIds: string[]) {
     
     await prisma.$transaction(updates);
 
-    revalidatePath("/dashboard/menu/categories");
-    (revalidateTag as any)(`store-${session.user.storeId}`, "default");
+    revalidatePath("/dashboard/catalog/categories");
+    revalidatePath("/dashboard/catalog");
+    
     return { success: "تم تحديث ترتيب الأقسام" };
   } catch (error) {
     console.error("Reorder Categories Error:", error);

@@ -24,8 +24,9 @@ export async function toggleCategoryStatus(categoryId: string, currentStatus: bo
       data: { isActive: !currentStatus },
     });
 
-    revalidatePath("/dashboard/menu/categories");
-    (revalidateTag as any)(`store-${session.user.storeId}`, "default");
+    revalidatePath("/dashboard/catalog/categories");
+    revalidatePath("/dashboard/catalog");
+    
     return { success: "تم تحديث حالة القسم" };
   } catch (error) {
     console.error("Toggle Category Error:", error);

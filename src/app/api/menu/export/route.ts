@@ -93,13 +93,13 @@ export async function GET() {
     // Create a new workbook
     const wb = xlsx.utils.book_new();
     
-    // Add Categories Sheet
-    const wsCategories = xlsx.utils.json_to_sheet(categoriesData);
-    xlsx.utils.book_append_sheet(wb, wsCategories, "Categories");
-
-    // Add Products Sheet
+    // Add Products Sheet FIRST
     const wsProducts = xlsx.utils.json_to_sheet(productsData);
-    xlsx.utils.book_append_sheet(wb, wsProducts, "Products");
+    xlsx.utils.book_append_sheet(wb, wsProducts, "المنتجات");
+
+    // Add Categories Sheet SECOND
+    const wsCategories = xlsx.utils.json_to_sheet(categoriesData);
+    xlsx.utils.book_append_sheet(wb, wsCategories, "الأقسام");
 
     // Write to buffer
     const buf = xlsx.write(wb, { type: 'buffer', bookType: 'xlsx' });

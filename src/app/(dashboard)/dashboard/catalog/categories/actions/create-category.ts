@@ -28,8 +28,9 @@ export async function createCategory(formData: FormData) {
       },
     });
 
-    revalidatePath("/dashboard/menu/categories");
-    (revalidateTag as any)(`store-${session.user.storeId}`, "default");
+    revalidatePath("/dashboard/catalog/categories");
+    revalidatePath("/dashboard/catalog");
+    // 
     return { success: "تم إضافة القسم بنجاح" };
   } catch (error) {
     console.error("Create Category Error:", error);

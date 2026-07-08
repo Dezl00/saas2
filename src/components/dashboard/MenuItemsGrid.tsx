@@ -127,7 +127,7 @@ export function MenuItemsGrid({
           <p className="text-lg font-medium text-surface-500">لم تقم بإضافة أي أصناف بعد.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-4">
           {menuItems.map((item) => {
             const isSelected = selectedIds.has(item.id);
             return (
@@ -151,7 +151,7 @@ export function MenuItemsGrid({
                   )}
                   {isSelected && (
                     <div className="absolute inset-0 bg-primary-600/20 flex items-center justify-center">
-                      <CheckSquare className="w-6 h-6 text-white drop-" />
+                      <CheckSquare className="w-6 h-6 text-white drop-shadow-md" />
                     </div>
                   )}
                 </div>

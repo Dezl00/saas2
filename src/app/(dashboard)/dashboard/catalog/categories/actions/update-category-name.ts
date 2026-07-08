@@ -24,8 +24,9 @@ export async function updateCategoryName(categoryId: string, name: string) {
       data: { name },
     });
 
-    revalidatePath("/dashboard/menu/categories");
-    (revalidateTag as any)(`store-${session.user.storeId}`, "default");
+    revalidatePath("/dashboard/catalog/categories");
+    revalidatePath("/dashboard/catalog");
+    
     return { success: "تم تحديث اسم القسم" };
   } catch (error) {
     console.error("Update Category Name Error:", error);
