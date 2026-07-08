@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { Plus, X, Loader2 } from "lucide-react";
-import { createMenuItem, updateMenuItem } from "@/app/(dashboard)/dashboard/menu/actions";
+import { createMenuItem } from "@/app/(dashboard)/dashboard/catalog/actions/create-menu-item";
+import { updateMenuItem } from "@/app/(dashboard)/dashboard/catalog/actions/update-menu-item";
 import { ImageUpload } from "@/components/dashboard/ImageUpload";
 import toast from "react-hot-toast";
 
@@ -92,7 +93,7 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
             name="categoryId"
             required
             defaultValue={initialData?.categoryId || ""}
-            className="w-full px-4 py-3 bg-surface-50 border-2 border-surface-200 rounded-xl text-surface-950 font-bold focus:border-primary-500 outline-none transition-colors cursor-pointer"
+            className="w-full px-4 py-3 bg-surface-50 border-2 border-surface-200 rounded-[24px] text-surface-950 font-bold focus:border-primary-500 outline-none transition-colors cursor-pointer"
           >
             <option value="">اختر القسم...</option>
             {categories.map(c => (
@@ -110,7 +111,7 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
             required
             defaultValue={initialData?.name}
             placeholder="مثال: برجر لحم مشوي"
-            className="w-full px-4 py-3 bg-surface-50 border-2 border-surface-200 rounded-xl text-surface-950 font-bold focus:border-primary-500 outline-none transition-colors"
+            className="w-full px-4 py-3 bg-surface-50 border-2 border-surface-200 rounded-[24px] text-surface-950 font-bold focus:border-primary-500 outline-none transition-colors"
           />
         </div>
 
@@ -126,7 +127,7 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
             required
             defaultValue={initialData?.price}
             placeholder="0.00"
-            className="w-full px-4 py-3 bg-surface-50 border-2 border-surface-200 rounded-xl text-surface-950 font-bold focus:border-primary-500 outline-none transition-colors"
+            className="w-full px-4 py-3 bg-surface-50 border-2 border-surface-200 rounded-[24px] text-surface-950 font-bold focus:border-primary-500 outline-none transition-colors"
           />
         </div>
 
@@ -137,7 +138,7 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
             name="description"
             rows={3}
             defaultValue={initialData?.description || ""}
-            className="w-full px-4 py-3 bg-surface-50 border-2 border-surface-200 rounded-xl text-surface-950 font-medium focus:border-primary-500 outline-none transition-colors resize-none"
+            className="w-full px-4 py-3 bg-surface-50 border-2 border-surface-200 rounded-[24px] text-surface-950 font-medium focus:border-primary-500 outline-none transition-colors resize-none"
           />
         </div>
 
@@ -147,7 +148,7 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
       </div>
 
       {/* الأحجام */}
-      <div className="border-2 border-surface-100 rounded-2xl p-5 bg-surface-50 space-y-4">
+      <div className="border-2 border-surface-100 rounded-[24px] p-5 bg-surface-50 space-y-4">
         <div className="flex items-center justify-between">
           <h4 className="font-bold text-surface-950">الأحجام (اختياري)</h4>
           <button type="button" onClick={addSize} className="text-xs font-bold bg-primary-100 text-primary-700 px-3 py-2 rounded-lg flex items-center gap-1 hover:bg-primary-200 transition-colors">
@@ -155,7 +156,7 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
           </button>
         </div>
         {sizes.map((size, index) => (
-          <div key={index} className="flex flex-wrap sm:flex-nowrap gap-3 items-center bg-white p-2 rounded-xl border-2 border-surface-100">
+          <div key={index} className="flex flex-wrap sm:flex-nowrap gap-3 items-center bg-white p-2 rounded-[24px] border-2 border-surface-100">
             <input
               type="text"
               placeholder="اسم الحجم (مثال: كبير)"
@@ -181,7 +182,7 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
       </div>
 
       {/* الإضافات */}
-      <div className="border-2 border-surface-100 rounded-2xl p-5 bg-surface-50 space-y-4">
+      <div className="border-2 border-surface-100 rounded-[24px] p-5 bg-surface-50 space-y-4">
         <div className="flex items-center justify-between">
           <h4 className="font-bold text-surface-950">الإضافات (اختياري)</h4>
           <button type="button" onClick={addAddon} className="text-xs font-bold bg-primary-100 text-primary-700 px-3 py-2 rounded-lg flex items-center gap-1 hover:bg-primary-200 transition-colors">
@@ -189,7 +190,7 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
           </button>
         </div>
         {addons.map((addon, index) => (
-          <div key={index} className="flex flex-wrap sm:flex-nowrap gap-3 items-center bg-white p-2 rounded-xl border-2 border-surface-100">
+          <div key={index} className="flex flex-wrap sm:flex-nowrap gap-3 items-center bg-white p-2 rounded-[24px] border-2 border-surface-100">
             <input
               type="text"
               placeholder="اسم الإضافة (مثال: جبنة زيادة)"
@@ -218,7 +219,7 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-2xl transition-all active:scale-[0.98] disabled:opacity-50 flex justify-center items-center gap-2"
+          className="w-full py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-[24px] transition-all active:scale-[0.98] disabled:opacity-50 flex justify-center items-center gap-2"
         >
           {isSubmitting && <Loader2 className="w-5 h-5 animate-spin" />}
           {initialData ? "تحديث الصنف" : "حفظ الصنف"}
@@ -231,7 +232,7 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
               if (onSuccess) onSuccess();
               else window.location.href = window.location.pathname;
             }}
-            className="w-full py-3.5 bg-surface-100 hover:bg-surface-200 text-surface-700 font-bold rounded-2xl transition-all active:scale-[0.98]"
+            className="w-full py-3.5 bg-surface-100 hover:bg-surface-200 text-surface-700 font-bold rounded-[24px] transition-all active:scale-[0.98]"
           >
             إلغاء التعديل
           </button>

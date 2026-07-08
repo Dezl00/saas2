@@ -2,9 +2,9 @@ import { prisma } from "@/lib/prisma";
 import { Users as UsersIcon } from "lucide-react";
 import { ChangeUserPasswordButton } from "@/components/admin/ChangeUserPasswordButton";
 import Link from "next/link";
-import { UserToggleStatus } from "./UserToggleStatus";
+import { UserToggleStatus } from "./components/UserToggleStatus";
 
-import UserDeleteButton from "./UserDeleteButton";
+import UserDeleteButton from "./components/UserDeleteButton";
 
 export default async function AdminUsersPage() {
   const users = await prisma.user.findMany({
@@ -27,7 +27,7 @@ export default async function AdminUsersPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-surface-200 overflow-hidden">
+      <div className="bg-white rounded-[24px] border border-surface-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>

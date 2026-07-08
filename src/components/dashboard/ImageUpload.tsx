@@ -116,14 +116,14 @@ export function ImageUpload({ name, defaultValue, className = "", label = "اخ�
         />
 
         {preview ? (
-          <div className="relative w-full h-48 group rounded-2xl overflow-hidden border-2 border-surface-200 bg-white">
+          <div className="relative w-full h-48 group rounded-[24px] overflow-hidden border-2 border-surface-200 bg-white">
             <Image src={preview} alt="Preview" fill className="object-contain" unoptimized />
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
               <span className="text-white font-bold text-sm">تغيير الصورة</span>
             </div>
             <button 
               onClick={handleRemove}
-              className="absolute top-3 end-3 w-10 h-10 bg-error-600 hover:bg-error-700 text-white rounded-xl flex items-center justify-center transition-colors z-10"
+              className="absolute top-3 end-3 w-10 h-10 bg-error-600 hover:bg-error-700 text-white rounded-[24px] flex items-center justify-center transition-colors z-10"
               title="إزالة"
             >
               <X className="w-5 h-5" />
@@ -131,7 +131,7 @@ export function ImageUpload({ name, defaultValue, className = "", label = "اخ�
           </div>
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center py-6">
-            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 border-2 transition-colors ${isDragging ? "bg-primary-500 text-white border-primary-600" : "bg-primary-50 text-primary-600 border-primary-100"}`}>
+            <div className={`w-16 h-16 rounded-[24px] flex items-center justify-center mx-auto mb-4 border-2 transition-colors ${isDragging ? "bg-primary-500 text-white border-primary-600" : "bg-primary-50 text-primary-600 border-primary-100"}`}>
               <CloudUpload className="w-8 h-8" />
             </div>
             <p className="font-black text-surface-950 mb-2">اسحب وأفلت الصورة هنا</p>

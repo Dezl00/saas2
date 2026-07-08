@@ -3,7 +3,7 @@ import { auth } from "@/lib/auth";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronRight, Check, X } from "lucide-react";
-import { CheckoutForm } from "./CheckoutForm";
+import { CheckoutForm } from "./components/CheckoutForm";
 
 export default async function CheckoutPage({ params }: { params: Promise<{ planId: string }> }) {
   const { planId } = await params;
@@ -68,7 +68,7 @@ export default async function CheckoutPage({ params }: { params: Promise<{ planI
         
         {/* Plan Summary */}
         <div className="md:col-span-1 space-y-6">
-          <div className="bg-white rounded-2xl border border-surface-200 p-6">
+          <div className="bg-white rounded-[24px] border border-surface-200 p-6">
             <h3 className="font-bold text-surface-900 mb-4">ملخص الطلب</h3>
             <div className="flex justify-between items-center py-3 border-b border-surface-200 text-sm">
               <span className="text-surface-600">اسم الباقة</span>
@@ -85,7 +85,7 @@ export default async function CheckoutPage({ params }: { params: Promise<{ planI
           </div>
 
           {/* Plan Features */}
-          <div className="bg-white rounded-2xl border border-surface-200 p-6">
+          <div className="bg-white rounded-[24px] border border-surface-200 p-6">
             <h3 className="font-bold text-surface-900 mb-4">ميزات الباقة</h3>
             <div className="space-y-2.5 text-sm">
               {Object.entries(featureLabels).map(([key, meta]) => {
@@ -115,7 +115,7 @@ export default async function CheckoutPage({ params }: { params: Promise<{ planI
             </div>
           </div>
 
-          <div className="bg-primary-50 rounded-2xl p-5 border border-primary-100">
+          <div className="bg-primary-50 rounded-[24px] p-5 border border-primary-100">
             <h4 className="font-bold text-primary-900 text-sm mb-2">تعليمات هامة</h4>
             <ul className="text-xs text-primary-800 space-y-2 list-disc list-inside leading-relaxed">
               <li>يرجى اختيار طريقة الدفع المناسبة وتحويل المبلغ المطلوب.</li>

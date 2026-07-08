@@ -113,7 +113,7 @@ export default async function DefaultProductsPage(props: {
                 </h3>
                 
                 {categories.length === 0 ? (
-                  <div className="p-5 bg-primary-50 text-primary-800 rounded-2xl font-bold border-2 border-primary-100 mb-6">
+                  <div className="p-5 bg-primary-50 text-primary-800 rounded-[24px] font-bold border-2 border-primary-100 mb-6">
                     يجب إضافة قسم واحد على الأقل للمتجر الافتراضي لكي تتمكن من إضافة أصناف.
                   </div>
                 ) : null}
@@ -141,7 +141,7 @@ export default async function DefaultProductsPage(props: {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6 animate-fade-in">
           {/* Add Category Form */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl border border-surface-200 p-6 sticky top-6 max-h-[calc(100vh-2rem)] overflow-y-auto scrollbar-hide">
+            <div className="bg-white rounded-[24px] border border-surface-200 p-6 sticky top-6 max-h-[calc(100vh-2rem)] overflow-y-auto scrollbar-hide">
               <h3 className="text-lg font-bold text-surface-950 mb-4 flex items-center gap-2">
                 <Plus className="w-5 h-5 text-primary-500" />
                 إضافة قسم افتراضي
@@ -150,24 +150,24 @@ export default async function DefaultProductsPage(props: {
               <form action={createDefaultCategory as any} className="space-y-4">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-surface-950 mb-1">اسم القسم *</label>
-                  <input type="text" id="name" name="name" required placeholder="مثال: مقبلات" className="w-full px-3 py-2 bg-surface-50 border border-surface-200 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" />
+                  <input type="text" id="name" name="name" required placeholder="مثال: مقبلات" className="w-full px-3 py-2 bg-surface-50 border border-surface-200 rounded-[24px] focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" />
                 </div>
                 <div>
                   <label htmlFor="description" className="block text-sm font-medium text-surface-950 mb-1">الوصف (اختياري)</label>
-                  <textarea id="description" name="description" rows={2} className="w-full px-3 py-2 bg-surface-50 border border-surface-200 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" />
+                  <textarea id="description" name="description" rows={2} className="w-full px-3 py-2 bg-surface-50 border border-surface-200 rounded-[24px] focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" />
                 </div>
                 <div>
                   <label htmlFor="sortOrder" className="block text-sm font-medium text-surface-950 mb-1">الترتيب</label>
-                  <input type="number" id="sortOrder" name="sortOrder" defaultValue="0" className="w-full px-3 py-2 bg-surface-50 border border-surface-200 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" />
+                  <input type="number" id="sortOrder" name="sortOrder" defaultValue="0" className="w-full px-3 py-2 bg-surface-50 border border-surface-200 rounded-[24px] focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" />
                 </div>
-                <SubmitButton className="w-full py-2.5 px-4 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-bold transition-all">حفظ القسم</SubmitButton>
+                <SubmitButton className="w-full py-2.5 px-4 bg-primary-600 hover:bg-primary-700 text-white rounded-[24px] font-bold transition-all">حفظ القسم</SubmitButton>
               </form>
             </div>
           </div>
 
           {/* Categories List */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl border border-surface-200 overflow-hidden">
+            <div className="bg-white rounded-[24px] border border-surface-200 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-start">
                   <thead>
@@ -213,7 +213,7 @@ export default async function DefaultProductsPage(props: {
       )}
 
       {currentTab === 'stores' && (
-        <div className="mt-6 bg-white rounded-2xl border border-surface-200 overflow-hidden animate-fade-in">
+        <div className="mt-6 bg-white rounded-[24px] border border-surface-200 overflow-hidden animate-fade-in">
           <div className="overflow-x-auto">
             <table className="w-full text-start">
               <thead>

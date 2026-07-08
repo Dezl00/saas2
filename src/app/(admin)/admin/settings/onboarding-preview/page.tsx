@@ -29,7 +29,7 @@ export default function OnboardingPreviewPage() {
       <div className="flex items-center gap-4 border-b border-surface-200 pb-6">
         <Link
           href="/admin/settings"
-          className="p-2 bg-white border border-surface-200 rounded-xl hover:bg-surface-50 transition-colors"
+          className="p-2 bg-white border border-surface-200 rounded-[24px] hover:bg-surface-50 transition-colors"
         >
           <ArrowRight className="w-5 h-5 rtl:-scale-x-100 text-surface-600" />
         </Link>

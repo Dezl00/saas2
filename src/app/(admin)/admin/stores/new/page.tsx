@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { createStoreFromAdminAction } from "./actions";
+import { createStoreFromAdminAction } from "./actions/create-store-from-admin-action";
 import Link from "next/link";
 import { ArrowRight, Store, Palette, MapPin, Phone, Link as LinkIcon, Mail, Lock } from "lucide-react";
 import { ImageUpload } from "@/components/dashboard/ImageUpload";
@@ -15,7 +15,7 @@ export default function NewStorePage() {
       <div className="flex items-center gap-4">
         <Link
           href="/admin/stores"
-          className="p-2 bg-white border border-surface-200 rounded-xl hover:bg-surface-50 transition-colors"
+          className="p-2 bg-white border border-surface-200 rounded-[24px] hover:bg-surface-50 transition-colors"
         >
           <ArrowRight className="w-5 h-5 rtl:-scale-x-100 text-surface-600" />
         </Link>
@@ -27,12 +27,12 @@ export default function NewStorePage() {
 
       <form action={formAction} className="space-y-8">
         {state?.error && (
-          <div className="p-4 bg-error-50 text-error-600 font-medium rounded-xl border border-error-200 animate-slide-up">
+          <div className="p-4 bg-error-50 text-error-600 font-medium rounded-[24px] border border-error-200 animate-slide-up">
             {state.error}
           </div>
         )}
 
-        <div className="bg-white rounded-3xl p-8 border border-surface-200 space-y-8 shadow-sm">
+        <div className="bg-white rounded-[24px] p-8 border border-surface-200 space-y-8 ">
           {/* Logo Section */}
           <div className="max-w-md mx-auto">
             <h2 className="text-center font-bold text-surface-950 mb-4">شعار المتجر</h2>
@@ -50,7 +50,7 @@ export default function NewStorePage() {
                   type="text"
                   required
                   defaultValue={state?.data?.name as string || ""}
-                  className={`w-full ps-11 pe-4 py-3 bg-surface-50 border rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors ${state?.fieldErrors?.name ? "border-error-500" : "border-surface-200"}`}
+                  className={`w-full ps-11 pe-4 py-3 bg-surface-50 border rounded-[24px] focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors ${state?.fieldErrors?.name ? "border-error-500" : "border-surface-200"}`}
                   placeholder="مثال: مطعم البيك"
                 />
               </div>
@@ -66,14 +66,14 @@ export default function NewStorePage() {
                     name="primaryColor"
                     type="text"
                     defaultValue={state?.data?.primaryColor as string || "#10b981"}
-                    className="w-full ps-11 pe-4 py-3 bg-surface-50 border border-surface-200 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
+                    className="w-full ps-11 pe-4 py-3 bg-surface-50 border border-surface-200 rounded-[24px] focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
                     placeholder="#10b981"
                     dir="ltr"
                   />
                   <input
                     type="color"
                     defaultValue={state?.data?.primaryColor as string || "#10b981"}
-                    className="w-14 h-12 p-1 bg-surface-50 border border-surface-200 rounded-xl cursor-pointer shrink-0"
+                    className="w-14 h-12 p-1 bg-surface-50 border border-surface-200 rounded-[24px] cursor-pointer shrink-0"
                     onChange={(e) => {
                       const textInput = e.target.previousElementSibling as HTMLInputElement;
                       if (textInput) textInput.value = e.target.value;
@@ -91,7 +91,7 @@ export default function NewStorePage() {
                     type="text"
                     required
                     defaultValue={state?.data?.subdomain as string || ""}
-                    className={`w-full ps-11 pe-24 py-3 bg-surface-50 border rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors ${state?.fieldErrors?.subdomain ? "border-error-500" : "border-surface-200"}`}
+                    className={`w-full ps-11 pe-24 py-3 bg-surface-50 border rounded-[24px] focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors ${state?.fieldErrors?.subdomain ? "border-error-500" : "border-surface-200"}`}
                     placeholder="my-store"
                     dir="ltr"
                   />
@@ -111,7 +111,7 @@ export default function NewStorePage() {
                   name="address"
                   type="text"
                   defaultValue={state?.data?.address as string || ""}
-                  className={`w-full ps-11 pe-4 py-3 bg-surface-50 border rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors ${state?.fieldErrors?.address ? "border-error-500" : "border-surface-200"}`}
+                  className={`w-full ps-11 pe-4 py-3 bg-surface-50 border rounded-[24px] focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors ${state?.fieldErrors?.address ? "border-error-500" : "border-surface-200"}`}
                   placeholder="عنوان المتجر كاملاً"
                 />
               </div>
@@ -128,7 +128,7 @@ export default function NewStorePage() {
                     type="tel"
                     required
                     defaultValue={state?.data?.phone as string || ""}
-                    className={`w-full ps-11 pe-4 py-3 bg-surface-50 border rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 text-end transition-colors ${state?.fieldErrors?.phone ? "border-error-500" : "border-surface-200"}`}
+                    className={`w-full ps-11 pe-4 py-3 bg-surface-50 border rounded-[24px] focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 text-end transition-colors ${state?.fieldErrors?.phone ? "border-error-500" : "border-surface-200"}`}
                     placeholder="01012345678"
                     dir="ltr"
                   />
@@ -144,7 +144,7 @@ export default function NewStorePage() {
                     name="whatsappNumber"
                     type="tel"
                     defaultValue={state?.data?.whatsappNumber as string || ""}
-                    className={`w-full ps-11 pe-4 py-3 bg-surface-50 border rounded-xl focus:ring-2 focus:ring-success-500/20 focus:border-success-500 text-end transition-colors ${state?.fieldErrors?.whatsappNumber ? "border-error-500" : "border-surface-200"}`}
+                    className={`w-full ps-11 pe-4 py-3 bg-surface-50 border rounded-[24px] focus:ring-2 focus:ring-success-500/20 focus:border-success-500 text-end transition-colors ${state?.fieldErrors?.whatsappNumber ? "border-error-500" : "border-surface-200"}`}
                     placeholder="01012345678"
                     dir="ltr"
                   />
@@ -156,7 +156,7 @@ export default function NewStorePage() {
         </div>
 
         {/* Owner Account Section */}
-        <div className="bg-white rounded-3xl p-8 border border-surface-200 space-y-6 shadow-sm">
+        <div className="bg-white rounded-[24px] p-8 border border-surface-200 space-y-6 ">
           <h2 className="text-lg font-bold text-surface-950 flex items-center gap-2">
             <Lock className="w-5 h-5 text-primary-500" />
             حساب مدير المتجر
@@ -172,7 +172,7 @@ export default function NewStorePage() {
                   type="email"
                   required
                   defaultValue={state?.data?.email as string || ""}
-                  className={`w-full ps-11 pe-4 py-3 bg-surface-50 border rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors ${state?.fieldErrors?.email ? "border-error-500" : "border-surface-200"}`}
+                  className={`w-full ps-11 pe-4 py-3 bg-surface-50 border rounded-[24px] focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors ${state?.fieldErrors?.email ? "border-error-500" : "border-surface-200"}`}
                   placeholder="admin@store.com"
                   dir="ltr"
                 />
@@ -189,7 +189,7 @@ export default function NewStorePage() {
                   type="password"
                   required
                   defaultValue={state?.data?.password as string || ""}
-                  className={`w-full ps-11 pe-4 py-3 bg-surface-50 border rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors ${state?.fieldErrors?.password ? "border-error-500" : "border-surface-200"}`}
+                  className={`w-full ps-11 pe-4 py-3 bg-surface-50 border rounded-[24px] focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors ${state?.fieldErrors?.password ? "border-error-500" : "border-surface-200"}`}
                   placeholder="••••••••"
                   dir="ltr"
                 />
@@ -201,7 +201,7 @@ export default function NewStorePage() {
 
         <div className="flex justify-end pt-4">
           <SubmitButton 
-            className="px-8 py-3 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl shadow-lg shadow-primary-500/20 w-full md:w-auto"
+            className="px-8 py-3 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-[24px]  shadow-primary-500/20 w-full md:w-auto"
           >
             إنشاء المتجر وتفعيل الحساب
           </SubmitButton>

@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { AppearanceClient } from "./AppearanceClient";
+import { AppearanceClient } from "./components/AppearanceClient";
 import { notFound } from "next/navigation";
 
 export const metadata = {

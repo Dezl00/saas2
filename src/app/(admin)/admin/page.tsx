@@ -63,11 +63,11 @@ export default async function AdminDashboard() {
         {stats.map((stat, i) => (
           <div
             key={i}
-            className={`rounded-2xl p-6 border ${stat.cardClasses}`}
+            className={`rounded-[24px] p-6 border ${stat.cardClasses}`}
           >
             <div className="flex items-center justify-between mb-4">
               <div
-                className={`w-12 h-12 rounded-xl flex items-center justify-center ${stat.iconClasses}`}
+                className={`w-12 h-12 rounded-[24px] flex items-center justify-center ${stat.iconClasses}`}
               >
                 <stat.icon className="w-6 h-6" />
               </div>
@@ -79,7 +79,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Recent Stores */}
-      <div className="bg-white rounded-2xl border border-surface-200 overflow-hidden">
+      <div className="bg-white rounded-[24px] border border-surface-200 overflow-hidden">
         <div className="p-6 border-b border-surface-100 flex items-center justify-between">
           <h2 className="text-base font-semibold text-surface-950">آخر المتاجر المسجلة</h2>
           <Link
@@ -118,7 +118,7 @@ export default async function AdminDashboard() {
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-primary-100 flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-[24px] bg-primary-100 flex items-center justify-center">
                         <Store className="w-5 h-5 text-primary-600" />
                       </div>
                       <div>

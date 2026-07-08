@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { Camera, Upload, X, Loader2, Sparkles, CheckCircle2, ListChecks, CheckSquare, Square, FileText } from "lucide-react";
 import toast from "react-hot-toast";
 import Image from "next/image";
-import { importAIMenuItems } from "@/app/(dashboard)/dashboard/menu/ai-actions";
+import { importAIMenuItems } from "@/app/(dashboard)/dashboard/catalog/actions/import-ai-items";
 
 type ParsedCategory = {
   name: string;
@@ -219,7 +219,7 @@ export function AIMenuScanner({ storeId }: { storeId?: string }) {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="flex items-center gap-2 px-5 py-3 bg-primary-600 text-white font-bold rounded-2xl hover:bg-primary-700 transition-all"
+        className="flex items-center gap-2 px-5 py-3 bg-primary-600 text-white font-bold rounded-[24px] hover:bg-primary-700 transition-all"
       >
         <Sparkles className="w-5 h-5" />
         مسح منيو بالذكاء الاصطناعي
@@ -236,7 +236,7 @@ export function AIMenuScanner({ storeId }: { storeId?: string }) {
               <button
                 onClick={handleClose}
                 disabled={isScanning || isImporting}
-                className="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-50 border-2 border-surface-200 text-surface-500 hover:bg-surface-100 hover:text-surface-950 transition-colors disabled:opacity-50 shrink-0"
+                className="w-10 h-10 flex items-center justify-center rounded-[24px] bg-surface-50 border-2 border-surface-200 text-surface-500 hover:bg-surface-100 hover:text-surface-950 transition-colors disabled:opacity-50 shrink-0"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -247,14 +247,14 @@ export function AIMenuScanner({ storeId }: { storeId?: string }) {
                 <div className="flex flex-col sm:flex-row gap-4 mt-2">
                   <button 
                     onClick={() => cameraInputRef.current?.click()}
-                    className="flex-1 h-32 border-2 border-dashed border-primary-200 rounded-2xl flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-primary-500 hover:bg-primary-50 transition-colors"
+                    className="flex-1 h-32 border-2 border-dashed border-primary-200 rounded-[24px] flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-primary-500 hover:bg-primary-50 transition-colors"
                   >
                     <Camera className="w-8 h-8 text-primary-600" />
                     <span className="font-bold text-primary-900">تصوير المنيو</span>
                   </button>
                   <button 
                     onClick={() => fileInputRef.current?.click()}
-                    className="flex-1 h-32 border-2 border-dashed border-primary-200 rounded-2xl flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-primary-500 hover:bg-primary-50 transition-colors"
+                    className="flex-1 h-32 border-2 border-dashed border-primary-200 rounded-[24px] flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-primary-500 hover:bg-primary-50 transition-colors"
                   >
                     <Upload className="w-8 h-8 text-primary-600" />
                     <span className="font-bold text-primary-900">اختيار صورة أو ملف PDF</span>
@@ -275,7 +275,7 @@ export function AIMenuScanner({ storeId }: { storeId?: string }) {
                     {!isScanning && !successResult && (
                       <button 
                         onClick={() => { setImage(null); setFile(null); setFileType(null); }}
-                        className="absolute top-3 end-3 w-10 h-10 bg-error-600 hover:bg-error-700 rounded-xl text-white flex items-center justify-center transition-colors"
+                        className="absolute top-3 end-3 w-10 h-10 bg-error-600 hover:bg-error-700 rounded-[24px] text-white flex items-center justify-center transition-colors"
                       >
                         <X className="w-5 h-5" />
                       </button>
@@ -304,7 +304,7 @@ export function AIMenuScanner({ storeId }: { storeId?: string }) {
                   <button
                     onClick={handleScan}
                     disabled={isScanning}
-                    className="w-full py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-2xl transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="w-full py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-[24px] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {isScanning ? (
                       <>
@@ -326,7 +326,7 @@ export function AIMenuScanner({ storeId }: { storeId?: string }) {
                 </div>
               ) : (
                   <div className="space-y-6 animate-slide-up">
-                  <div className="flex items-center justify-between bg-primary-50 p-5 rounded-2xl border-2 border-primary-100">
+                  <div className="flex items-center justify-between bg-primary-50 p-5 rounded-[24px] border-2 border-primary-100">
                     <div className="flex items-center gap-3">
                       <ListChecks className="w-8 h-8 text-primary-600" />
                       <div>
@@ -367,7 +367,7 @@ export function AIMenuScanner({ storeId }: { storeId?: string }) {
                                 {item.sizes && item.sizes.length > 0 && (
                                   <div className="mt-3 flex flex-wrap gap-2">
                                     {item.sizes.map((size, sizeIndex) => (
-                                      <div key={sizeIndex} className="bg-primary-50 border-2 border-primary-100 rounded-xl px-3 py-1.5 flex items-center gap-2 text-sm">
+                                      <div key={sizeIndex} className="bg-primary-50 border-2 border-primary-100 rounded-[24px] px-3 py-1.5 flex items-center gap-2 text-sm">
                                         <span className="text-primary-700 font-bold">{size.name}</span>
                                         <span className="text-primary-900 font-black">{size.price}</span>
                                       </div>
@@ -407,14 +407,14 @@ export function AIMenuScanner({ storeId }: { storeId?: string }) {
                 <button
                   onClick={() => setParsedData(null)}
                   disabled={isImporting}
-                  className="flex-1 py-4 px-4 rounded-2xl text-base font-bold text-surface-700 bg-white border-2 border-surface-200 hover:bg-surface-50 transition-colors disabled:opacity-50"
+                  className="flex-1 py-4 px-4 rounded-[24px] text-base font-bold text-surface-700 bg-white border-2 border-surface-200 hover:bg-surface-50 transition-colors disabled:opacity-50"
                 >
                   إلغاء وإعادة المحاولة
                 </button>
                 <button
                   onClick={handleImport}
                   disabled={isImporting || selectedItemsCount === 0}
-                  className="flex-1 py-4 px-4 rounded-2xl text-base font-bold text-white bg-primary-600 hover:bg-primary-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 py-4 px-4 rounded-[24px] text-base font-bold text-white bg-primary-600 hover:bg-primary-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isImporting ? (
                     <Loader2 className="w-6 h-6 animate-spin" />

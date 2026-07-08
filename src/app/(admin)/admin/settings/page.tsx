@@ -34,7 +34,7 @@ export default async function AdminSettingsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
         {/* إعدادات المنصة الأساسية */}
-        <div className="bg-white rounded-2xl border border-surface-200 p-6">
+        <div className="bg-white rounded-[24px] border border-surface-200 p-6">
           <h3 className="text-xl font-semibold text-surface-950 mb-6 flex items-center gap-2">
             <Settings className="w-6 h-6 text-primary-500" />
             الهوية البصرية للمنصة
@@ -51,7 +51,7 @@ export default async function AdminSettingsPage() {
                 name="name"
                 defaultValue={settings?.name || "منصتك"}
                 required
-                className="w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-xl text-surface-950 focus:bg-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all outline-none"
+                className="w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-[24px] text-surface-950 focus:bg-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all outline-none"
               />
             </div>
 
@@ -66,7 +66,7 @@ export default async function AdminSettingsPage() {
                 dir="ltr"
                 defaultValue={settings?.supportWhatsapp || ""}
                 placeholder="01012345678"
-                className="w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-xl text-surface-950 focus:bg-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all outline-none"
+                className="w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-[24px] text-surface-950 focus:bg-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all outline-none"
               />
             </div>
 
@@ -78,7 +78,7 @@ export default async function AdminSettingsPage() {
               <h4 className="text-sm font-semibold text-surface-950 mb-3">خيارات التحقق (OTP)</h4>
               
               <div className="space-y-3">
-                <label className="flex items-center gap-3 p-3 bg-surface-50 border border-surface-200 rounded-xl cursor-pointer hover:bg-surface-100 transition-colors">
+                <label className="flex items-center gap-3 p-3 bg-surface-50 border border-surface-200 rounded-[24px] cursor-pointer hover:bg-surface-100 transition-colors">
                   <div className="relative flex items-center">
                     <input 
                       type="checkbox" 
@@ -94,7 +94,7 @@ export default async function AdminSettingsPage() {
                   </div>
                 </label>
 
-                <label className="flex items-center gap-3 p-3 bg-surface-50 border border-surface-200 rounded-xl cursor-pointer hover:bg-surface-100 transition-colors">
+                <label className="flex items-center gap-3 p-3 bg-surface-50 border border-surface-200 rounded-[24px] cursor-pointer hover:bg-surface-100 transition-colors">
                   <div className="relative flex items-center">
                     <input 
                       type="checkbox" 
@@ -117,7 +117,7 @@ export default async function AdminSettingsPage() {
             </div>
 
             <SubmitButton
-              className="mt-6 w-full py-3 px-8 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-semibold transition-all flex items-center justify-center gap-2"
+              className="mt-6 w-full py-3 px-8 bg-primary-600 hover:bg-primary-700 text-white rounded-[24px] font-semibold transition-all flex items-center justify-center gap-2"
             >
               <Save className="w-5 h-5" />
               حفظ بيانات المنصة
@@ -126,7 +126,7 @@ export default async function AdminSettingsPage() {
         </div>
 
         {/* تغيير كلمة مرور الأدمن */}
-        <div className="bg-white rounded-2xl border border-surface-200 p-6 self-start">
+        <div className="bg-white rounded-[24px] border border-surface-200 p-6 self-start">
           <h3 className="text-xl font-semibold text-surface-950 mb-6 flex items-center gap-2">
             <Lock className="w-6 h-6 text-surface-700" />
             تغيير كلمة المرور الخاصة بك
@@ -144,12 +144,12 @@ export default async function AdminSettingsPage() {
                 required
                 minLength={6}
                 dir="ltr"
-                className="w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-xl text-surface-950 focus:bg-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all outline-none"
+                className="w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-[24px] text-surface-950 focus:bg-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all outline-none"
               />
             </div>
 
             <SubmitButton
-              className="mt-6 w-full py-3 px-8 bg-surface-950 hover:bg-surface-800 text-white rounded-xl font-semibold transition-all flex items-center justify-center gap-2"
+              className="mt-6 w-full py-3 px-8 bg-surface-950 hover:bg-surface-800 text-white rounded-[24px] font-semibold transition-all flex items-center justify-center gap-2"
             >
               <Save className="w-5 h-5" />
               تحديث كلمة المرور
@@ -158,7 +158,7 @@ export default async function AdminSettingsPage() {
         </div>
 
         {/* أدوات إضافية */}
-        <div className="bg-white rounded-2xl border border-surface-200 p-6 self-start lg:col-span-2">
+        <div className="bg-white rounded-[24px] border border-surface-200 p-6 self-start lg:col-span-2">
           <h3 className="text-xl font-semibold text-surface-950 mb-6 flex items-center gap-2">
             <LayoutTemplate className="w-6 h-6 text-primary-500" />
             أدوات إضافية
@@ -167,7 +167,7 @@ export default async function AdminSettingsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Link 
               href="/admin/settings/onboarding-preview"
-              className="group flex items-center justify-between p-4 rounded-xl border border-surface-200 bg-surface-50 hover:bg-white hover:border-primary-200 hover:shadow-sm transition-all"
+              className="group flex items-center justify-between p-4 rounded-[24px] border border-surface-200 bg-surface-50 hover:bg-white hover:border-primary-200 hover: transition-all"
             >
               <div>
                 <h4 className="font-bold text-surface-950 mb-1 group-hover:text-primary-600 transition-colors">معاينة مراحل التهيئة (Onboarding)</h4>

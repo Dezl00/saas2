@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { ImageIcon, Trash2, CheckSquare, Square, Loader2, PackageOpen } from "lucide-react";
-import { toggleMenuItemStatus, deleteMenuItem, bulkDeleteMenuItems } from "@/app/(dashboard)/dashboard/menu/actions";
+import { toggleMenuItemStatus } from "@/app/(dashboard)/dashboard/catalog/actions/toggle-menu-item-status";
+import { deleteMenuItem } from "@/app/(dashboard)/dashboard/catalog/actions/delete-menu-item";
+import { bulkDeleteMenuItems } from "@/app/(dashboard)/dashboard/catalog/actions/bulk-delete-menu-items";
 import { MenuItemEditButton } from "@/components/dashboard/MenuItemEditButton";
 import { DeleteConfirmButton } from "@/components/dashboard/DeleteConfirmButton";
 import { GenerateImageButton } from "@/components/dashboard/GenerateImageButton";
@@ -88,10 +90,10 @@ export function MenuItemsGrid({
         isLoading={isDeletingBulk}
       />
       {/* Action Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 bg-white border-2 border-surface-100 p-4 rounded-3xl">
+      <div className="flex flex-wrap items-center justify-between gap-4 bg-white border-2 border-surface-100 p-4 rounded-[24px]">
         <button 
           onClick={toggleSelectAll} 
-          className="flex items-center gap-2 text-surface-600 hover:text-primary-600 transition-colors font-bold px-3 py-2 rounded-xl hover:bg-primary-50"
+          className="flex items-center gap-2 text-surface-600 hover:text-primary-600 transition-colors font-bold px-3 py-2 rounded-[24px] hover:bg-primary-50"
         >
           {selectedIds.size === menuItems.length && menuItems.length > 0 ? (
             <CheckSquare className="w-5 h-5 text-primary-600" />
@@ -103,13 +105,13 @@ export function MenuItemsGrid({
         
         {selectedIds.size > 0 && (
           <div className="flex items-center gap-4 animate-fade-in">
-            <span className="font-bold text-primary-600 bg-primary-50 px-4 py-2 rounded-xl">
+            <span className="font-bold text-primary-600 bg-primary-50 px-4 py-2 rounded-[24px]">
               تم تحديد {selectedIds.size}
             </span>
             <button
               onClick={() => setShowBulkConfirm(true)}
               disabled={isDeletingBulk}
-              className="flex items-center gap-2 px-6 py-2 bg-error-600 text-white rounded-xl font-bold hover:bg-error-700 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-6 py-2 bg-error-600 text-white rounded-[24px] font-bold hover:bg-error-700 transition-colors disabled:opacity-50"
             >
               {isDeletingBulk ? <Loader2 className="w-5 h-5 animate-spin" /> : <Trash2 className="w-5 h-5" />}
               حذف المحدد
@@ -131,7 +133,7 @@ export function MenuItemsGrid({
             return (
               <div 
                 key={item.id} 
-                className={`flex gap-4 p-4 rounded-3xl border-2 transition-all cursor-pointer ${
+                className={`flex gap-4 p-4 rounded-[24px] border-2 transition-all cursor-pointer ${
                   isSelected 
                     ? 'border-primary-500 bg-primary-50' 
                     : 'border-surface-100 bg-white hover:border-surface-200'
@@ -139,7 +141,7 @@ export function MenuItemsGrid({
                 onClick={() => toggleSelectRow(item.id)}
               >
                 {/* Image */}
-                <div className="relative w-24 h-24 shrink-0 rounded-2xl overflow-hidden bg-surface-100">
+                <div className="relative w-24 h-24 shrink-0 rounded-[24px] overflow-hidden bg-surface-100">
                   {item.image ? (
                     <Image src={item.image} alt={item.name} fill className="object-cover" />
                   ) : (
@@ -149,7 +151,7 @@ export function MenuItemsGrid({
                   )}
                   {isSelected && (
                     <div className="absolute inset-0 bg-primary-600/20 flex items-center justify-center">
-                      <CheckSquare className="w-6 h-6 text-white drop-shadow-md" />
+                      <CheckSquare className="w-6 h-6 text-white drop-" />
                     </div>
                   )}
                 </div>

@@ -1,0 +1,38 @@
+"use server";
+
+import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { revalidatePath, revalidateTag } from "next/cache";
+
+export async function createCategory(formData: FormData) {
+  const session = await auth();
+  if (!session?.user?.storeId) {
+    return { error: "غير مصرح لك بالقيام بهذه العملية" };
+  }
+
+  const name = formData.get("name") as string;
+  const description = formData.get("description") as string;
+  const sortOrder = parseInt((formData.get("sortOrder") as string) || "0");
+
+  if (!name) {
+    return { error: "اسم القسم مطلوب" };
+  }
+
+  try {
+    await prisma.category.create({
+      data: {
+        name,
+        description,
+        sortOrder,
+        storeId: session.user.storeId,
+      },
+    });
+
+    revalidatePath("/dashboard/menu/categories");
+    (revalidateTag as any)(`store-${session.user.storeId}`, "default");
+    return { success: "تم إضافة القسم بنجاح" };
+  } catch (error) {
+    console.error("Create Category Error:", error);
+    return { error: "حدث خطأ أثناء إضافة القسم" };
+  }
+}

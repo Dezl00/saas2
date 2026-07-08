@@ -36,17 +36,17 @@ export default async function BranchesPage() {
           <form action={addBranch as any} className="space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-bold text-surface-950 mb-2">اسم الفرع *</label>
-              <input type="text" name="name" id="name" required placeholder="مثال: فرع المهندسين" className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-2xl text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors outline-none" />
+              <input type="text" name="name" id="name" required placeholder="مثال: فرع المهندسين" className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-[24px] text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors outline-none" />
             </div>
             <div>
               <label htmlFor="phone" className="block text-sm font-bold text-surface-950 mb-2">هاتف الفرع</label>
-              <input type="text" name="phone" id="phone" dir="ltr" placeholder="01xxxxxxxxx" className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-2xl text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors outline-none text-end" />
+              <input type="text" name="phone" id="phone" dir="ltr" placeholder="01xxxxxxxxx" className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-[24px] text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors outline-none text-end" />
             </div>
             <div>
               <label htmlFor="address" className="block text-sm font-bold text-surface-950 mb-2">العنوان التفصيلي</label>
-              <textarea name="address" id="address" rows={2} className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-2xl text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors outline-none" />
+              <textarea name="address" id="address" rows={2} className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-[24px] text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors outline-none" />
             </div>
-            <SubmitButton className="w-full mt-4 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-bold transition-colors">
+            <SubmitButton className="w-full mt-4 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-[24px] font-bold transition-colors">
               حفظ الفرع
             </SubmitButton>
           </form>
@@ -61,7 +61,7 @@ export default async function BranchesPage() {
             </div>
           ) : (
             branches.map(branch => (
-              <div key={branch.id} className="bg-white border-2 border-surface-100 rounded-3xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-colors hover:border-surface-200">
+              <div key={branch.id} className="bg-white border-2 border-surface-100 rounded-[24px] p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-colors hover:border-surface-200">
                 <div>
                   <h4 className="font-bold text-xl text-surface-950">{branch.name}</h4>
                   {branch.phone && <p className="text-sm font-medium text-surface-500 mt-2" dir="ltr">{branch.phone}</p>}

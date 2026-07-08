@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { Store, Eye, LogIn } from "lucide-react";
 import Link from "next/link";
-import { impersonateStore } from "./actions";
-import { StoreActions } from "./StoreActions";
-import { StoreTabs } from "./StoreTabs";
+import { impersonateStore } from "./actions/impersonate-store";
+import { StoreActions } from "./components/StoreActions";
+import { StoreTabs } from "./components/StoreTabs";
 import Image from "next/image";
 
 export default async function AdminStoresPage(props: { searchParams: Promise<{ status?: string }> }) {
@@ -30,7 +30,7 @@ export default async function AdminStoresPage(props: { searchParams: Promise<{ s
         </div>
         <Link
           href="/admin/stores/new"
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-colors"
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-[24px] hover:bg-primary-700 transition-colors"
         >
           <Store className="w-5 h-5" />
           إضافة متجر جديد
@@ -43,12 +43,12 @@ export default async function AdminStoresPage(props: { searchParams: Promise<{ s
         {stores.map((store) => (
           <div
             key={store.id}
-            className="bg-white rounded-2xl border border-surface-200 p-6"
+            className="bg-white rounded-[24px] border border-surface-200 p-6"
           >
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               {/* Store Info */}
               <div className="flex items-center gap-4 flex-1">
-                <div className="w-14 h-14 rounded-2xl bg-primary-100 flex items-center justify-center flex-shrink-0 overflow-hidden border border-surface-200">
+                <div className="w-14 h-14 rounded-[24px] bg-primary-100 flex items-center justify-center flex-shrink-0 overflow-hidden border border-surface-200">
                   {store.logo ? (
                     <Image src={store.logo} alt={store.name} width={56} height={56} className="w-full h-full object-cover" />
                   ) : (
@@ -114,7 +114,7 @@ export default async function AdminStoresPage(props: { searchParams: Promise<{ s
                   <Link
                     href={`https://${store.domains[0] ? store.domains[0].name : `${store.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'menura.site'}`}`}
                     target="_blank"
-                    className="p-2 rounded-xl hover:bg-surface-50 text-surface-800/50 hover:text-primary-500 transition-colors"
+                    className="p-2 rounded-[24px] hover:bg-surface-50 text-surface-800/50 hover:text-primary-500 transition-colors"
                     title="عرض المتجر"
                   >
                     <Eye className="w-5 h-5" />
@@ -124,7 +124,7 @@ export default async function AdminStoresPage(props: { searchParams: Promise<{ s
                 <form action={impersonateStore.bind(null, store.id)}>
                   <button
                     type="submit"
-                    className="p-2 rounded-xl hover:bg-primary-50 text-surface-800/50 hover:text-primary-600 transition-colors"
+                    className="p-2 rounded-[24px] hover:bg-primary-50 text-surface-800/50 hover:text-primary-600 transition-colors"
                     title="دخول للوحة التحكم (كأدمن)"
                   >
                     <LogIn className="w-5 h-5" />
@@ -143,7 +143,7 @@ export default async function AdminStoresPage(props: { searchParams: Promise<{ s
         ))}
 
         {stores.length === 0 && (
-          <div className="bg-white rounded-2xl border border-surface-200 p-16 text-center">
+          <div className="bg-white rounded-[24px] border border-surface-200 p-16 text-center">
             <Store className="w-16 h-16 text-surface-800/20 mx-auto mb-4" />
             <p className="text-lg text-surface-800/50">
               لا توجد متاجر مسجلة بعد

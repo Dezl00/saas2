@@ -2,7 +2,9 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { CustomDomainWizard } from "@/components/dashboard/CustomDomainWizard";
 import { Globe, Store, Save, Share2, MessageCircle, Clock } from "lucide-react";
-import { updateStoreSettings, updateSubdomain, updateContactSettings } from "./actions";
+import { updateStoreSettings } from "./actions/update-store-settings";
+import { updateSubdomain } from "./actions/update-subdomain";
+import { updateContactSettings } from "./actions/update-contact-settings";
 import { SubmitButton } from "@/components/dashboard/SubmitButton";
 import { ImageUpload } from "@/components/dashboard/ImageUpload";
 import { ClientForm } from "@/components/dashboard/ClientForm";
@@ -65,13 +67,13 @@ export default async function SettingsPage() {
               </div>
             </div>
             <SubmitButton
-              className="py-3 px-8 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-bold transition-colors whitespace-nowrap"
+              className="py-3 px-8 bg-primary-600 hover:bg-primary-700 text-white rounded-[24px] font-bold transition-colors whitespace-nowrap"
             >
               تحديث الرابط
             </SubmitButton>
           </div>
           {store.subdomain && (
-            <div className="mt-6 p-5 bg-success-50 text-success-800 rounded-2xl font-medium text-sm">
+            <div className="mt-6 p-5 bg-success-50 text-success-800 rounded-[24px] font-medium text-sm">
               متجرك متاح حالياً للعملاء عبر الرابط: <br/>
               <a href={`https://${store.subdomain}.menura.site`} target="_blank" className="font-bold underline mt-2 inline-block" dir="ltr">
                 https://{store.subdomain}.menura.site
@@ -112,7 +114,7 @@ export default async function SettingsPage() {
               name="name"
               defaultValue={store.name}
               required
-              className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-2xl text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors outline-none"
+              className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-[24px] text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors outline-none"
             />
           </div>
 
@@ -127,13 +129,13 @@ export default async function SettingsPage() {
 
           <div>
             <label htmlFor="primaryColor" className="block text-sm font-bold text-surface-950 mb-2">اللون الرئيسي للمتجر</label>
-            <div className="flex items-center gap-4 bg-white p-2 rounded-2xl border border-surface-200 w-fit pr-4">
+            <div className="flex items-center gap-4 bg-white p-2 rounded-[24px] border border-surface-200 w-fit pr-4">
               <input
                 type="color"
                 id="primaryColor"
                 name="primaryColor"
                 defaultValue={store.primaryColor || "#000000"}
-                className="w-10 h-10 rounded-xl cursor-pointer border-0 p-0 shrink-0"
+                className="w-10 h-10 rounded-[24px] cursor-pointer border-0 p-0 shrink-0"
               />
               <span className="text-sm font-bold text-surface-600" dir="ltr">{store.primaryColor || "#000000"}</span>
             </div>
@@ -149,7 +151,7 @@ export default async function SettingsPage() {
               defaultValue={store.description || ""}
               rows={3}
               placeholder="نبذة مختصرة عن المتجر تظهر للعملاء..."
-              className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-2xl text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
+              className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-[24px] text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
             />
           </div>
 
@@ -164,7 +166,7 @@ export default async function SettingsPage() {
                 name="phone"
                 defaultValue={store.phone || ""}
                 dir="ltr"
-                className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-2xl text-surface-950 font-medium text-end focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
+                className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-[24px] text-surface-950 font-medium text-end focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
               />
             </div>
 
@@ -176,7 +178,7 @@ export default async function SettingsPage() {
                 id="currency"
                 name="currency"
                 defaultValue={store.currency}
-                className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-2xl text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
+                className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-[24px] text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
               >
                 <option value="EGP">جنيه مصري (EGP)</option>
                 <option value="SAR">ريال سعودي (SAR)</option>
@@ -195,7 +197,7 @@ export default async function SettingsPage() {
               id="address"
               name="address"
               defaultValue={store.address || ""}
-              className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-2xl text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
+              className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-[24px] text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
             />
           </div>
 
@@ -211,7 +213,7 @@ export default async function SettingsPage() {
                 defaultValue={(store as any).mapLatitude || ""}
                 dir="ltr"
                 placeholder="مثال: 24.7136"
-                className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-2xl text-surface-950 font-medium text-end focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
+                className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-[24px] text-surface-950 font-medium text-end focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
               />
             </div>
             <div>
@@ -225,13 +227,13 @@ export default async function SettingsPage() {
                 defaultValue={(store as any).mapLongitude || ""}
                 dir="ltr"
                 placeholder="مثال: 46.6753"
-                className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-2xl text-surface-950 font-medium text-end focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
+                className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-[24px] text-surface-950 font-medium text-end focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
               />
             </div>
           </div>
 
           <SubmitButton
-            className="w-full sm:w-auto mt-6 py-4 px-10 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-bold transition-colors flex items-center justify-center gap-2"
+            className="w-full sm:w-auto mt-6 py-4 px-10 bg-primary-600 hover:bg-primary-700 text-white rounded-[24px] font-bold transition-colors flex items-center justify-center gap-2"
           >
             <Save className="w-5 h-5" />
             حفظ التغييرات الأساسية
@@ -268,7 +270,7 @@ export default async function SettingsPage() {
             return days.map((day) => {
               const dayData = workingHours[day.key] || { enabled: true, allDay: true };
               return (
-                <div key={day.key} className="flex flex-wrap items-center gap-4 p-4 bg-white rounded-2xl border border-surface-200">
+                <div key={day.key} className="flex flex-wrap items-center gap-4 p-4 bg-white rounded-[24px] border border-surface-200">
                   <label className="flex items-center gap-3 min-w-[120px]">
                     <input
                       type="checkbox"
@@ -294,14 +296,14 @@ export default async function SettingsPage() {
                       type="time"
                       name={`wh_${day.key}_from`}
                       defaultValue={dayData.from || "09:00"}
-                      className="flex-1 sm:flex-none px-3 py-2 text-sm border border-surface-200 rounded-xl bg-surface-50 text-surface-950 font-medium"
+                      className="flex-1 sm:flex-none px-3 py-2 text-sm border border-surface-200 rounded-[24px] bg-surface-50 text-surface-950 font-medium"
                     />
                     <span className="text-sm font-bold text-surface-400">إلى</span>
                     <input
                       type="time"
                       name={`wh_${day.key}_to`}
                       defaultValue={dayData.to || "23:00"}
-                      className="flex-1 sm:flex-none px-3 py-2 text-sm border border-surface-200 rounded-xl bg-surface-50 text-surface-950 font-medium"
+                      className="flex-1 sm:flex-none px-3 py-2 text-sm border border-surface-200 rounded-[24px] bg-surface-50 text-surface-950 font-medium"
                     />
                   </div>
                 </div>
@@ -310,7 +312,7 @@ export default async function SettingsPage() {
           })()}
 
           <SubmitButton
-            className="w-full sm:w-auto mt-6 py-4 px-10 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl font-bold transition-colors flex items-center justify-center gap-2"
+            className="w-full sm:w-auto mt-6 py-4 px-10 bg-amber-500 hover:bg-amber-600 text-white rounded-[24px] font-bold transition-colors flex items-center justify-center gap-2"
           >
             <Save className="w-5 h-5" />
             حفظ مواعيد العمل
@@ -345,7 +347,7 @@ export default async function SettingsPage() {
                   placeholder="01012345678"
                   defaultValue={store.whatsappNumber || ""}
                   dir="ltr"
-                  className="w-full px-5 py-3.5 bg-white border border-success-200 rounded-2xl text-surface-950 font-medium text-end focus:ring-2 focus:ring-success-500/20 focus:border-success-500 transition-colors"
+                  className="w-full px-5 py-3.5 bg-white border border-success-200 rounded-[24px] text-surface-950 font-medium text-end focus:ring-2 focus:ring-success-500/20 focus:border-success-500 transition-colors"
                 />
               </div>
 
@@ -401,7 +403,7 @@ export default async function SettingsPage() {
                 defaultValue={store.facebookUrl || ""}
                 dir="ltr"
                 placeholder="https://facebook.com/..."
-                className="w-full px-5 py-3 bg-white border border-surface-200 rounded-2xl text-surface-950 font-medium text-end focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
+                className="w-full px-5 py-3 bg-white border border-surface-200 rounded-[24px] text-surface-950 font-medium text-end focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
               />
             </div>
 
@@ -428,7 +430,7 @@ export default async function SettingsPage() {
                 defaultValue={store.instagramUrl || ""}
                 dir="ltr"
                 placeholder="https://instagram.com/..."
-                className="w-full px-5 py-3 bg-white border border-surface-200 rounded-2xl text-surface-950 font-medium text-end focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
+                className="w-full px-5 py-3 bg-white border border-surface-200 rounded-[24px] text-surface-950 font-medium text-end focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
               />
             </div>
 
@@ -455,7 +457,7 @@ export default async function SettingsPage() {
                 defaultValue={store.twitterUrl || ""}
                 dir="ltr"
                 placeholder="https://x.com/..."
-                className="w-full px-5 py-3 bg-white border border-surface-200 rounded-2xl text-surface-950 font-medium text-end focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
+                className="w-full px-5 py-3 bg-white border border-surface-200 rounded-[24px] text-surface-950 font-medium text-end focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
               />
             </div>
 
@@ -482,7 +484,7 @@ export default async function SettingsPage() {
                 defaultValue={store.tiktokUrl || ""}
                 dir="ltr"
                 placeholder="https://tiktok.com/@..."
-                className="w-full px-5 py-3 bg-white border border-surface-200 rounded-2xl text-surface-950 font-medium text-end focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
+                className="w-full px-5 py-3 bg-white border border-surface-200 rounded-[24px] text-surface-950 font-medium text-end focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
               />
             </div>
 
@@ -509,13 +511,13 @@ export default async function SettingsPage() {
                 defaultValue={store.snapchatUrl || ""}
                 dir="ltr"
                 placeholder="https://snapchat.com/add/..."
-                className="w-full px-5 py-3 bg-white border border-surface-200 rounded-2xl text-surface-950 font-medium text-end focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
+                className="w-full px-5 py-3 bg-white border border-surface-200 rounded-[24px] text-surface-950 font-medium text-end focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
               />
             </div>
           </div>
 
           <SubmitButton
-            className="mt-8 w-full sm:w-auto py-4 px-10 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-bold transition-colors flex items-center justify-center gap-2"
+            className="mt-8 w-full sm:w-auto py-4 px-10 bg-primary-600 hover:bg-primary-700 text-white rounded-[24px] font-bold transition-colors flex items-center justify-center gap-2"
           >
             <Save className="w-5 h-5" />
             حفظ بيانات التواصل

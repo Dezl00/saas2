@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { KeyRound, X } from "lucide-react";
 import { toast } from "react-hot-toast";
-import { changeUserPassword } from "@/app/(admin)/admin/users/actions";
+import { changeUserPassword } from "@/app/(admin)/admin/users/actions/change-user-password";
 
 export function ChangeUserPasswordButton({ userId, userName }: { userId: string, userName: string }) {
   const [isOpen, setIsOpen] = useState(false);

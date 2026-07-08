@@ -49,7 +49,7 @@ export default async function AdminNotificationsPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-surface-200 overflow-hidden">
+      <div className="bg-white rounded-[24px] border border-surface-200 overflow-hidden">
         <div className="p-6 border-b border-surface-100 flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold text-surface-950 flex items-center gap-2">
@@ -64,7 +64,7 @@ export default async function AdminNotificationsPage() {
             <form action={markAllAsRead}>
               <button
                 type="submit"
-                className="hidden sm:flex items-center gap-2 px-4 py-2 bg-primary-50 text-primary-700 font-medium rounded-xl hover:bg-primary-100 transition-colors"
+                className="hidden sm:flex items-center gap-2 px-4 py-2 bg-primary-50 text-primary-700 font-medium rounded-[24px] hover:bg-primary-100 transition-colors"
               >
                 <CheckCheck className="w-5 h-5" />
                 تحديد الكل كمقروء
@@ -107,13 +107,13 @@ export default async function AdminNotificationsPage() {
                     {notif.link && (
                       <Link
                         href={notif.link}
-                        className="px-4 py-2 bg-white border border-surface-200 text-surface-700 text-sm font-medium rounded-xl hover:bg-surface-50 transition-colors whitespace-nowrap shadow-sm"
+                        className="px-4 py-2 bg-white border border-surface-200 text-surface-700 text-sm font-medium rounded-[24px] hover:bg-surface-50 transition-colors whitespace-nowrap "
                       >
                         عرض التفاصيل
                       </Link>
                     )}
                     {!notif.isRead && (
-                      <div className="w-2.5 h-2.5 rounded-full bg-primary-500 shadow-sm" title="غير مقروء" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-primary-500 " title="غير مقروء" />
                     )}
                   </div>
                 </div>

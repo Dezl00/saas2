@@ -3,10 +3,10 @@ export function TableSkeleton() {
     <div className="space-y-6 w-full animate-pulse">
       <div className="flex justify-between items-center">
         <div className="h-8 bg-surface-200 rounded w-1/4"></div>
-        <div className="h-10 bg-surface-200 rounded-xl w-32"></div>
+        <div className="h-10 bg-surface-200 rounded-[24px] w-32"></div>
       </div>
       
-      <div className="bg-white border border-surface-200 rounded-2xl overflow-hidden">
+      <div className="bg-white border border-surface-200 rounded-[24px] overflow-hidden">
         <div className="h-12 bg-surface-50 border-b border-surface-100 w-full"></div>
         <div className="p-4 space-y-4">
           {[...Array(6)].map((_, i) => (

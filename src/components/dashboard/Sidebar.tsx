@@ -9,7 +9,8 @@ import {
   Settings,
   LogOut,
   Store,
-  Home
+  Home,
+  Megaphone
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -19,7 +20,8 @@ export function Sidebar() {
   const navItems = [
     { href: "/dashboard", icon: LayoutDashboard, label: "الرئيسية", exact: true },
     { href: "/dashboard/orders", icon: ShoppingBag, label: "العمليات" },
-    { href: "/dashboard/menu", icon: UtensilsCrossed, label: "المنيو" },
+    { href: "/dashboard/catalog", icon: UtensilsCrossed, label: "المنتجات" },
+    { href: "/dashboard/marketing/banners", icon: Megaphone, label: "التسويق" }, // Add marketing link, pointing to a valid page
     { href: "/dashboard/settings", icon: Settings, label: "الإعدادات" },
   ];
 
@@ -29,7 +31,7 @@ export function Sidebar() {
       <aside className="hidden md:flex md:flex-col fixed inset-y-0 right-0 w-64 bg-white border-l border-surface-200 z-30">
         <div className="p-6 border-b border-surface-100 flex-shrink-0">
           <Link href="/dashboard" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary-100 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-[24px] bg-primary-100 flex items-center justify-center">
               <Store className="w-5 h-5 text-primary-600" />
             </div>
             <div>
@@ -49,7 +51,7 @@ export function Sidebar() {
                 href={item.href}
                 prefetch={true}
                 className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-xl transition-all group",
+                  "flex items-center gap-3 px-4 py-3 rounded-[24px] transition-all group",
                   isActive
                     ? "bg-primary-600 text-white font-bold"
                     : "text-surface-800/70 hover:bg-surface-50 hover:text-surface-950 font-medium"
@@ -65,7 +67,7 @@ export function Sidebar() {
         <div className="p-4 border-t border-surface-100 flex-shrink-0">
           <Link
             href="/api/auth/signout"
-            className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-error-500 hover:bg-red-50 transition-all"
+            className="flex items-center gap-3 w-full px-4 py-3 rounded-[24px] text-error-500 hover:bg-red-50 transition-all"
           >
             <LogOut className="w-5 h-5" />
             <span className="font-medium">تسجيل الخروج</span>

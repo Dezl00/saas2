@@ -130,7 +130,7 @@ export function AppearanceClient({
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-surface-200 p-6 md:p-8">
+    <div className="bg-white rounded-[24px] border border-surface-200 p-6 md:p-8">
       <div className="mb-8">
         <h2 className="text-xl font-bold text-surface-950 mb-2">إعدادات المظهر الشاملة (معاينة حية)</h2>
         <p className="text-surface-500 text-sm font-medium">
@@ -149,9 +149,9 @@ export function AppearanceClient({
             {themes.map((theme) => (
               <label
                 key={theme.id}
-                className={`relative flex flex-col items-center justify-center p-4 border-2 rounded-2xl cursor-pointer transition-all ${
+                className={`relative flex flex-col items-center justify-center p-4 border-2 rounded-[24px] cursor-pointer transition-all ${
                   selectedTheme === theme.id
-                    ? "border-primary-500 bg-primary-50/50 scale-[1.02] shadow-sm"
+                    ? "border-primary-500 bg-primary-50/50 scale-[1.02] "
                     : "border-surface-200 bg-surface-50 hover:bg-surface-100 hover:border-surface-300"
                 }`}
               >
@@ -164,11 +164,11 @@ export function AppearanceClient({
                   className="sr-only"
                 />
                 {theme.id === "custom" ? (
-                  <div className="w-8 h-8 rounded-full mb-3 shadow-sm flex items-center justify-center bg-surface-200">
+                  <div className="w-8 h-8 rounded-full mb-3  flex items-center justify-center bg-surface-200">
                     <PaintBucket className="w-4 h-4 text-surface-600" />
                   </div>
                 ) : (
-                  <div className={`w-8 h-8 rounded-full mb-3 shadow-sm ${theme.color}`} />
+                  <div className={`w-8 h-8 rounded-full mb-3  ${theme.color}`} />
                 )}
                 <span className="text-xs font-bold text-surface-950 text-center">{theme.name}</span>
                 {selectedTheme === theme.id && (
@@ -181,7 +181,7 @@ export function AppearanceClient({
           </div>
           
           {selectedTheme === "custom" && (
-            <div className="mt-6 p-4 bg-surface-50 border border-surface-200 rounded-2xl flex items-center gap-4 animate-fade-in">
+            <div className="mt-6 p-4 bg-surface-50 border border-surface-200 rounded-[24px] flex items-center gap-4 animate-fade-in">
               <label className="text-sm font-bold text-surface-950">اختر اللون المفضل:</label>
               <div className="flex items-center gap-2">
                 <input
@@ -208,9 +208,9 @@ export function AppearanceClient({
             {fonts.map((font) => (
               <label
                 key={font.id}
-                className={`relative flex flex-col p-5 border-2 rounded-2xl cursor-pointer transition-all ${
+                className={`relative flex flex-col p-5 border-2 rounded-[24px] cursor-pointer transition-all ${
                   selectedFont === font.id
-                    ? "border-primary-500 bg-primary-50/50 scale-[1.02] shadow-sm"
+                    ? "border-primary-500 bg-primary-50/50 scale-[1.02] "
                     : "border-surface-200 bg-surface-50 hover:bg-surface-100 hover:border-surface-300"
                 }`}
               >
@@ -244,7 +244,7 @@ export function AppearanceClient({
           <button
             onClick={handleSave}
             disabled={isSaving || !hasChanges}
-            className="w-full sm:w-auto min-w-[240px] py-4 px-8 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-bold transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+            className="w-full sm:w-auto min-w-[240px] py-4 px-8 bg-primary-600 hover:bg-primary-700 text-white rounded-[24px] font-bold transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed  hover:"
           >
             {isSaving ? (
               <Loader2 className="w-5 h-5 animate-spin" />

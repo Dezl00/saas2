@@ -46,13 +46,13 @@ export function CompactOrderRow({ order, currency }: { order: Order, currency?: 
 
       {/* Status & Action */}
       <div className="flex items-center justify-end gap-3 md:gap-6 shrink-0 md:w-48">
-        <span className={`px-2.5 py-1 md:px-3 md:py-1.5 font-bold text-[11px] md:text-xs rounded-lg md:rounded-xl ${status.color}`}>
+        <span className={`px-2.5 py-1 md:px-3 md:py-1.5 font-bold text-[11px] md:text-xs rounded-lg md:rounded-[24px] ${status.color}`}>
           {status.label}
         </span>
         
         <Link 
           href={`/dashboard/orders/${order.id}`}
-          className="flex items-center justify-center w-8 h-8 md:w-auto md:h-auto md:px-4 md:py-2 bg-surface-100 md:bg-white text-surface-600 hover:text-primary-600 md:border md:border-surface-200 hover:bg-primary-50 md:hover:border-primary-200 rounded-lg md:rounded-xl font-bold text-sm transition-all shrink-0"
+          className="flex items-center justify-center w-8 h-8 md:w-auto md:h-auto md:px-4 md:py-2 bg-surface-100 md:bg-white text-surface-600 hover:text-primary-600 md:border md:border-surface-200 hover:bg-primary-50 md:hover:border-primary-200 rounded-lg md:rounded-[24px] font-bold text-sm transition-all shrink-0"
           title="تفاصيل الطلب"
         >
           <span className="hidden md:block">التفاصيل</span>

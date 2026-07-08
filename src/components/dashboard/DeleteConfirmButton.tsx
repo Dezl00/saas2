@@ -39,7 +39,7 @@ export function DeleteConfirmButton({ action }: Props) {
           e.stopPropagation();
           setIsOpen(true);
         }}
-        className="p-2 text-surface-400 hover:text-error-600 hover:bg-error-50 rounded-xl transition-colors shrink-0"
+        className="p-2 text-surface-400 hover:text-error-600 hover:bg-error-50 rounded-[24px] transition-colors shrink-0"
       >
         <Trash2 className="w-5 h-5" />
       </button>

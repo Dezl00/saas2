@@ -45,7 +45,7 @@ export function GenerateImageButton({ itemId, hasImage }: { itemId: string, hasI
       onClick={handleGenerate}
       disabled={isGenerating}
       title={hasImage ? "توليد صورة أخرى" : "توليد صورة بالذكاء الاصطناعي"}
-      className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold border-2 transition-colors shrink-0 ${
+      className={`flex items-center gap-1.5 px-4 py-2 rounded-[24px] text-sm font-bold border-2 transition-colors shrink-0 ${
         hasImage 
           ? "bg-surface-50 border-surface-200 text-surface-700 hover:bg-surface-100" 
           : "bg-primary-50 border-primary-200 text-primary-700 hover:bg-primary-100"

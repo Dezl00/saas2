@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { addCustomDomain, verifyDomainStatus, removeCustomDomain } from "@/app/(dashboard)/dashboard/settings/domain-actions";
+import { addCustomDomain } from "@/app/(dashboard)/dashboard/settings/domains/actions/add-custom-domain";
+import { verifyDomainStatus } from "@/app/(dashboard)/dashboard/settings/domains/actions/verify-domain-status";
+import { removeCustomDomain } from "@/app/(dashboard)/dashboard/settings/domains/actions/remove-custom-domain";
 import { Globe, CheckCircle, Clock, AlertTriangle, RefreshCw, Trash2, Copy } from "lucide-react";
 
 export function CustomDomainWizard({ initialDomain }: { initialDomain: any }) {
@@ -50,7 +52,7 @@ export function CustomDomainWizard({ initialDomain }: { initialDomain: any }) {
   if (!initialDomain) {
     return (
       <form onSubmit={handleAdd} className="max-w-xl space-y-5">
-        {error && <div className="p-4 bg-error-50 text-error-700 rounded-2xl border-2 border-error-100 font-bold text-sm">{error}</div>}
+        {error && <div className="p-4 bg-error-50 text-error-700 rounded-[24px] border-2 border-error-100 font-bold text-sm">{error}</div>}
         <div>
           <label htmlFor="domain" className="block text-sm font-bold text-surface-950 mb-2">
             الدومين الخاص
@@ -72,7 +74,7 @@ export function CustomDomainWizard({ initialDomain }: { initialDomain: any }) {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full sm:w-auto py-4 px-8 bg-primary-600 hover:bg-primary-700 disabled:opacity-50 text-white rounded-2xl font-bold transition-all"
+          className="w-full sm:w-auto py-4 px-8 bg-primary-600 hover:bg-primary-700 disabled:opacity-50 text-white rounded-[24px] font-bold transition-all"
         >
           {isSubmitting ? "جاري الإضافة..." : "إضافة الدومين"}
         </button>
@@ -82,8 +84,8 @@ export function CustomDomainWizard({ initialDomain }: { initialDomain: any }) {
 
   return (
     <div className="space-y-6">
-      {error && <div className="p-4 bg-error-50 text-error-700 rounded-2xl border-2 border-error-100 font-bold text-sm">{error}</div>}
-      {success && <div className="p-4 bg-success-50 text-success-700 rounded-2xl border-2 border-success-100 font-bold text-sm">{success}</div>}
+      {error && <div className="p-4 bg-error-50 text-error-700 rounded-[24px] border-2 border-error-100 font-bold text-sm">{error}</div>}
+      {success && <div className="p-4 bg-success-50 text-success-700 rounded-[24px] border-2 border-success-100 font-bold text-sm">{success}</div>}
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-surface-50 border-2 border-surface-200 rounded-[24px] gap-4">
         <div>
@@ -92,11 +94,11 @@ export function CustomDomainWizard({ initialDomain }: { initialDomain: any }) {
         </div>
         <div className="flex items-center gap-2 shrink-0">
           {initialDomain.status === "CONNECTED" ? (
-            <span className="flex items-center gap-1.5 text-success-700 bg-success-50 border-2 border-success-100 px-4 py-2 rounded-xl text-sm font-bold">
+            <span className="flex items-center gap-1.5 text-success-700 bg-success-50 border-2 border-success-100 px-4 py-2 rounded-[24px] text-sm font-bold">
               <CheckCircle className="w-4 h-4" /> متصل
             </span>
           ) : (
-            <span className="flex items-center gap-1.5 text-warning-700 bg-warning-50 border-2 border-warning-100 px-4 py-2 rounded-xl text-sm font-bold">
+            <span className="flex items-center gap-1.5 text-warning-700 bg-warning-50 border-2 border-warning-100 px-4 py-2 rounded-[24px] text-sm font-bold">
               <Clock className="w-4 h-4" /> قيد المعالجة ({initialDomain.status})
             </span>
           )}
@@ -176,7 +178,7 @@ export function CustomDomainWizard({ initialDomain }: { initialDomain: any }) {
           <button
             onClick={handleVerify}
             disabled={isSubmitting}
-            className="flex items-center gap-2 py-4 px-6 bg-primary-50 text-primary-700 hover:bg-primary-100 rounded-2xl font-bold transition-colors"
+            className="flex items-center gap-2 py-4 px-6 bg-primary-50 text-primary-700 hover:bg-primary-100 rounded-[24px] font-bold transition-colors"
           >
             <RefreshCw className={`w-5 h-5 ${isSubmitting ? 'animate-spin' : ''}`} />
             تحقق الآن
@@ -185,7 +187,7 @@ export function CustomDomainWizard({ initialDomain }: { initialDomain: any }) {
         <button
           onClick={handleRemove}
           disabled={isSubmitting}
-          className="flex items-center gap-2 py-4 px-6 text-error-600 bg-error-50 border-2 border-error-100 hover:bg-error-100 rounded-2xl font-bold transition-colors"
+          className="flex items-center gap-2 py-4 px-6 text-error-600 bg-error-50 border-2 border-error-100 hover:bg-error-100 rounded-[24px] font-bold transition-colors"
         >
           <Trash2 className="w-5 h-5" />
           حذف الدومين

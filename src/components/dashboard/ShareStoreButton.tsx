@@ -44,7 +44,7 @@ export function ShareStoreButton({ storeUrl, storeName, qrUrl }: { storeUrl: str
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="flex-1 sm:flex-none px-6 py-3 bg-surface-100 text-surface-900 font-medium rounded-xl hover:bg-surface-200 transition-colors flex items-center justify-center gap-2"
+        className="flex-1 sm:flex-none px-6 py-3 bg-surface-100 text-surface-900 font-medium rounded-[24px] hover:bg-surface-200 transition-colors flex items-center justify-center gap-2"
       >
         <Share2 className="w-5 h-5" />
         مشاركة المتجر
@@ -58,7 +58,7 @@ export function ShareStoreButton({ storeUrl, storeName, qrUrl }: { storeUrl: str
               <h3 className="font-black text-surface-950 text-xl">مشاركة المتجر</h3>
               <button
                 onClick={() => setIsOpen(false)}
-                className="w-10 h-10 flex items-center justify-center bg-white border-2 border-surface-200 text-surface-500 hover:bg-surface-100 rounded-xl transition-colors shrink-0"
+                className="w-10 h-10 flex items-center justify-center bg-white border-2 border-surface-200 text-surface-500 hover:bg-surface-100 rounded-[24px] transition-colors shrink-0"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -74,19 +74,19 @@ export function ShareStoreButton({ storeUrl, storeName, qrUrl }: { storeUrl: str
                     size={200}
                     level="H"
                     includeMargin={true}
-                    className="rounded-2xl"
+                    className="rounded-[24px]"
                   />
                 </div>
                 {/* Download Button inside QR wrapper */}
                 <button
                   onClick={downloadQRCode}
-                  className="absolute -top-4 -end-4 w-12 h-12 flex items-center justify-center bg-primary-600 text-white rounded-2xl hover:bg-primary-700 transition-colors opacity-100"
+                  className="absolute -top-4 -end-4 w-12 h-12 flex items-center justify-center bg-primary-600 text-white rounded-[24px] hover:bg-primary-700 transition-colors opacity-100"
                   title="تنزيل رمز QR"
                 >
                   <Download className="w-6 h-6" />
                 </button>
               </div>
-              <p className="text-surface-500 font-bold text-sm mt-6 text-center bg-surface-100 px-4 py-2 rounded-xl">
+              <p className="text-surface-500 font-bold text-sm mt-6 text-center bg-surface-100 px-4 py-2 rounded-[24px]">
                 امسح الرمز بكاميرا الهاتف لزيارة المتجر
               </p>
             </div>
@@ -95,7 +95,7 @@ export function ShareStoreButton({ storeUrl, storeName, qrUrl }: { storeUrl: str
             <div className="p-5 border-t-2 border-surface-100 space-y-3 bg-white">
               <button
                 onClick={handleShare}
-                className="w-full flex items-center justify-center gap-2 py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-2xl transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-[24px] transition-colors"
               >
                 <Share2 className="w-5 h-5" />
                 مشاركة مع الأصدقاء
@@ -107,7 +107,7 @@ export function ShareStoreButton({ storeUrl, storeName, qrUrl }: { storeUrl: str
                   setIsCopied(true);
                   setTimeout(() => setIsCopied(false), 2000);
                 }}
-                className="w-full flex items-center justify-center gap-2 py-4 bg-surface-50 hover:bg-surface-100 text-surface-700 font-bold border-2 border-surface-200 rounded-2xl transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-4 bg-surface-50 hover:bg-surface-100 text-surface-700 font-bold border-2 border-surface-200 rounded-[24px] transition-colors"
               >
                 {isCopied ? (
                   <>

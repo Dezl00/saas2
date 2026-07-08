@@ -79,7 +79,7 @@ export function AdminHeaderNotifications() {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 md:right-0 md:left-auto mt-2 w-80 sm:w-96 bg-white rounded-2xl border border-surface-100 overflow-hidden z-50 animate-fade-in">
+        <div className="absolute top-full left-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl border border-surface-100 overflow-hidden z-50 animate-fade-in">
           <div className="p-4 border-b border-surface-100 flex items-center justify-between bg-surface-50/50">
             <h3 className="font-bold text-surface-950 flex items-center gap-2">
               الإشعارات

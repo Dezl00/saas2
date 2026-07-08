@@ -3,7 +3,7 @@
 import { useOptimistic, useTransition } from "react";
 import { Clock, Truck, Store as StoreIcon } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
-import { updateOrderStatus } from "@/app/(dashboard)/dashboard/orders/actions";
+import { updateOrderStatus } from "@/app/(dashboard)/dashboard/orders/actions/update-order-status";
 import { Order, OrderItem, Branch, DeliveryArea, OrderStatus } from "@prisma/client";
 
 const statusMap: Record<string, { label: string, color: string }> = {
@@ -50,7 +50,7 @@ export function OrderCard({ order, currency }: { order: OrderWithRelations, curr
               {new Date(order.createdAt).toLocaleString('ar-EG')}
             </p>
           </div>
-          <span className={`px-4 py-2 font-bold text-sm rounded-xl border-2 ${statusMap[optimisticStatus]?.color || 'bg-surface-100 border-surface-200'}`}>
+          <span className={`px-4 py-2 font-bold text-sm rounded-[24px] border-2 ${statusMap[optimisticStatus]?.color || 'bg-surface-100 border-surface-200'}`}>
             {statusMap[optimisticStatus]?.label || optimisticStatus}
           </span>
         </div>
@@ -104,9 +104,9 @@ export function OrderCard({ order, currency }: { order: OrderWithRelations, curr
         
         <ul className="space-y-4 mb-6 flex-1">
           {order.items.map(item => (
-            <li key={item.id} className="flex justify-between items-center bg-white p-4 rounded-2xl border-2 border-surface-100">
+            <li key={item.id} className="flex justify-between items-center bg-white p-4 rounded-[24px] border-2 border-surface-100">
               <div className="flex items-center gap-3">
-                <span className="w-8 h-8 bg-surface-50 border-2 border-surface-200 rounded-xl flex items-center justify-center font-bold text-surface-950 text-sm">
+                <span className="w-8 h-8 bg-surface-50 border-2 border-surface-200 rounded-[24px] flex items-center justify-center font-bold text-surface-950 text-sm">
                   {item.quantity}
                 </span>
                 <span className="font-bold text-surface-950">{item.name}</span>
@@ -116,7 +116,7 @@ export function OrderCard({ order, currency }: { order: OrderWithRelations, curr
           ))}
         </ul>
         
-        <div className="bg-white rounded-3xl p-5 border-2 border-surface-100 space-y-3 mb-6">
+        <div className="bg-white rounded-[24px] p-5 border-2 border-surface-100 space-y-3 mb-6">
           <div className="flex justify-between font-bold text-surface-600">
             <span>المجموع</span>
             <span>{formatPrice(Number(order.subtotal), currency)}</span>
@@ -137,13 +137,13 @@ export function OrderCard({ order, currency }: { order: OrderWithRelations, curr
           <input type="hidden" name="orderId" value={order.id} />
           <label className="block text-sm font-bold text-surface-950 mb-2">تحديث حالة الطلب</label>
           <div className="flex flex-col sm:flex-row gap-3">
-            <select name="status" defaultValue={optimisticStatus} className="flex-1 px-4 py-4 bg-white border-2 border-surface-200 rounded-2xl focus:border-primary-500 outline-none font-bold text-surface-950 transition-colors cursor-pointer">
+            <select name="status" defaultValue={optimisticStatus} className="flex-1 px-4 py-4 bg-white border-2 border-surface-200 rounded-[24px] focus:border-primary-500 outline-none font-bold text-surface-950 transition-colors cursor-pointer">
               <option value="PENDING">قيد الانتظار</option>
               <option value="CONFIRMED">مؤكد (جاري التحضير)</option>
               <option value="DELIVERED">مكتمل (تم التسليم)</option>
               <option value="CANCELLED">ملغي</option>
             </select>
-            <button type="submit" disabled={isPending} className="px-8 py-4 bg-primary-600 hover:bg-primary-700 disabled:opacity-50 text-white font-bold rounded-2xl transition-all active:scale-95 whitespace-nowrap">
+            <button type="submit" disabled={isPending} className="px-8 py-4 bg-primary-600 hover:bg-primary-700 disabled:opacity-50 text-white font-bold rounded-[24px] transition-all active:scale-95 whitespace-nowrap">
               حفظ
             </button>
           </div>

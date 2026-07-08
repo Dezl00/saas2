@@ -38,28 +38,28 @@ export default function NewPaymentMethodPage() {
         </div>
       </div>
 
-      <form action={formAction} className="bg-white rounded-2xl border border-surface-200 overflow-hidden shadow-sm">
+      <form action={formAction} className="bg-white rounded-[24px] border border-surface-200 overflow-hidden ">
         <div className="p-6 sm:p-8 space-y-6">
           
           <div>
             <label className="block text-sm font-medium text-surface-900 mb-1">اسم طريقة الدفع *</label>
-            <input type="text" name="name" required className="w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500" placeholder="مثال: فودافون كاش" />
+            <input type="text" name="name" required className="w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-[24px] focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500" placeholder="مثال: فودافون كاش" />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-surface-900 mb-1">معلومات الحساب / الرقم *</label>
-            <input type="text" name="accountInfo" required className="w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500" placeholder="رقم الموبايل أو رقم الحساب البنكي" />
+            <input type="text" name="accountInfo" required className="w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-[24px] focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500" placeholder="رقم الموبايل أو رقم الحساب البنكي" />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-surface-900 mb-1">تعليمات الدفع (اختياري)</label>
-            <textarea name="instructions" rows={3} className="w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500" placeholder="اكتب أي تعليمات إضافية يقرأها التاجر قبل الدفع..."></textarea>
+            <textarea name="instructions" rows={3} className="w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-[24px] focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500" placeholder="اكتب أي تعليمات إضافية يقرأها التاجر قبل الدفع..."></textarea>
           </div>
 
           <div className="grid grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-surface-900 mb-1">الترتيب</label>
-              <input type="number" name="sortOrder" defaultValue="0" className="w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500" />
+              <input type="number" name="sortOrder" defaultValue="0" className="w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-[24px] focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500" />
             </div>
           </div>
 
@@ -75,14 +75,14 @@ export default function NewPaymentMethodPage() {
         <div className="bg-surface-50 p-6 border-t border-surface-200 flex justify-end gap-3">
           <Link 
             href="/admin/payment-methods"
-            className="px-6 py-2.5 text-sm font-bold text-surface-700 bg-white border border-surface-200 rounded-xl hover:bg-surface-50 transition-colors"
+            className="px-6 py-2.5 text-sm font-bold text-surface-700 bg-white border border-surface-200 rounded-[24px] hover:bg-surface-50 transition-colors"
           >
             إلغاء
           </Link>
           <button
             type="submit"
             disabled={isPending}
-            className="inline-flex items-center gap-2 px-8 py-2.5 text-sm font-bold text-white bg-primary-600 rounded-xl hover:bg-primary-700 transition-colors disabled:opacity-70"
+            className="inline-flex items-center gap-2 px-8 py-2.5 text-sm font-bold text-white bg-primary-600 rounded-[24px] hover:bg-primary-700 transition-colors disabled:opacity-70"
           >
             {isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
             إضافة الطريقة

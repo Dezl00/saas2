@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { PlanForm } from "./PlanForm";
-import { createPlanAction } from "../actions";
+import { PlanForm } from "./components/PlanForm";
+import { createPlanAction } from "../actions/create-plan-action";
 
 export default function NewPlanPage() {
   return (

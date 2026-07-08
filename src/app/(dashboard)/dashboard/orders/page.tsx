@@ -41,14 +41,14 @@ export default async function OrdersPage(props: { searchParams: Promise<{ page?:
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between bg-white p-4 rounded-3xl border-2 border-surface-100">
+      <div className="flex items-center justify-between bg-white p-4 rounded-[24px] border-2 border-surface-100">
         <h2 className="text-xl font-bold text-surface-950 px-2">الطلبات الواردة</h2>
       </div>
       
       <div className="space-y-6">
         {orders.length === 0 ? (
           <div className="text-center py-20 bg-surface-50 border-2 border-surface-100 rounded-[32px]">
-            <div className="w-20 h-20 bg-white border-2 border-surface-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <div className="w-20 h-20 bg-white border-2 border-surface-200 rounded-[24px] flex items-center justify-center mx-auto mb-6">
               <ShoppingBag className="w-10 h-10 text-surface-400" />
             </div>
             <p className="text-xl text-surface-950 font-bold mb-2">لا توجد طلبات حتى الآن.</p>

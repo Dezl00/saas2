@@ -21,7 +21,7 @@ export default async function PaymentRequestsPage() {
         </p>
       </div>
 
-      <div className="bg-white rounded-2xl border border-surface-200 overflow-hidden shadow-sm">
+      <div className="bg-white rounded-[24px] border border-surface-200 overflow-hidden ">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-right">
             <thead className="bg-surface-50 text-surface-600 font-medium border-b border-surface-200">

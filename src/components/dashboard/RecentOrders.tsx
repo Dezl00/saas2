@@ -45,7 +45,7 @@ export async function RecentOrders({ storeId, currency }: { storeId: string, cur
               className="flex items-center justify-between p-6 hover:bg-surface-50 transition-colors group"
             >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center text-primary-600 font-bold shrink-0">
+                <div className="w-12 h-12 bg-primary-50 rounded-[24px] flex items-center justify-center text-primary-600 font-bold shrink-0">
                   #{order.orderNumber}
                 </div>
                 <div>

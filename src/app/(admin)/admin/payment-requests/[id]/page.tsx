@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, CheckCircle, XCircle } from "lucide-react";
-import { ProcessButtons } from "./ProcessButtons";
+import { ProcessButtons } from "./components/ProcessButtons";
 
 export default async function PaymentRequestDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -38,7 +38,7 @@ export default async function PaymentRequestDetailsPage({ params }: { params: Pr
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         {/* Payment Details */}
-        <div className="bg-white rounded-2xl border border-surface-200 p-6 space-y-6">
+        <div className="bg-white rounded-[24px] border border-surface-200 p-6 space-y-6">
           <h3 className="text-lg font-bold text-surface-900 border-b border-surface-100 pb-2">بيانات العملية</h3>
           
           <div className="space-y-4 text-sm">
@@ -84,10 +84,10 @@ export default async function PaymentRequestDetailsPage({ params }: { params: Pr
         </div>
 
         {/* Receipt Image */}
-        <div className="bg-white rounded-2xl border border-surface-200 p-6 space-y-4">
+        <div className="bg-white rounded-[24px] border border-surface-200 p-6 space-y-4">
           <h3 className="text-lg font-bold text-surface-900 border-b border-surface-100 pb-2">صورة الإيصال (التحويل)</h3>
           
-          <div className="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-surface-100 border border-surface-200">
+          <div className="relative aspect-[3/4] w-full rounded-[24px] overflow-hidden bg-surface-100 border border-surface-200">
             {req.receiptImage ? (
               <Image 
                 src={req.receiptImage}

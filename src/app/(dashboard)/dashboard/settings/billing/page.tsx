@@ -57,7 +57,7 @@ export default async function TenantBillingPage() {
             <h2 className="text-xl font-bold text-surface-950">
               الباقة الحالية: {sub?.plan?.name || "الفترة التجريبية (Trial)"}
             </h2>
-            <span className={`px-3 py-1 text-sm font-bold rounded-xl ${
+            <span className={`px-3 py-1 text-sm font-bold rounded-[24px] ${
               !sub || sub.status === "TRIAL" ? "bg-white text-primary-700" :
               sub.status === "ACTIVE" ? "bg-white text-success-700" :
               sub.status === "PENDING_PAYMENT" ? "bg-white text-warning-700" :
@@ -80,13 +80,13 @@ export default async function TenantBillingPage() {
             )}
             
             {isExpired && (
-              <div className="flex items-center gap-2 text-danger-700 bg-white px-4 py-2 rounded-xl border-2 border-danger-100">
+              <div className="flex items-center gap-2 text-danger-700 bg-white px-4 py-2 rounded-[24px] border-2 border-danger-100">
                 <AlertTriangle className="w-5 h-5" />
                 <span>اشتراكك منتهي. يرجى التجديد لتتمكن من التعديل وإدارة متجرك.</span>
               </div>
             )}
             {isGrace && (
-              <div className="flex items-center gap-2 text-warning-700 bg-white px-4 py-2 rounded-xl border-2 border-warning-100">
+              <div className="flex items-center gap-2 text-warning-700 bg-white px-4 py-2 rounded-[24px] border-2 border-warning-100">
                 <AlertTriangle className="w-5 h-5" />
                 <span>أنت في فترة السماح. قم بالتجديد لتجنب توقف التعديل على متجرك.</span>
               </div>
@@ -113,7 +113,7 @@ export default async function TenantBillingPage() {
                   : "border-surface-100 hover:border-surface-200"
               }`}>
                 {isCurrentPlan && (
-                  <div className="bg-primary-600 text-white text-xs font-bold px-4 py-1.5 rounded-xl self-start mb-4">
+                  <div className="bg-primary-600 text-white text-xs font-bold px-4 py-1.5 rounded-[24px] self-start mb-4">
                     ✓ باقتك الحالية
                   </div>
                 )}
@@ -156,13 +156,13 @@ export default async function TenantBillingPage() {
                 </div>
 
                 {isCurrentPlan ? (
-                  <div className="mt-auto flex items-center justify-center gap-2 w-full py-4 px-4 rounded-2xl font-bold text-primary-600 bg-white border-2 border-primary-200 cursor-default">
+                  <div className="mt-auto flex items-center justify-center gap-2 w-full py-4 px-4 rounded-[24px] font-bold text-primary-600 bg-white border-2 border-primary-200 cursor-default">
                     أنت مشترك بالفعل
                   </div>
                 ) : (
                   <Link
                     href={`/dashboard/settings/billing/${plan.id}`}
-                    className="mt-auto flex items-center justify-center gap-2 w-full py-4 px-4 rounded-2xl font-bold text-white bg-primary-600 hover:bg-primary-700 transition-colors"
+                    className="mt-auto flex items-center justify-center gap-2 w-full py-4 px-4 rounded-[24px] font-bold text-white bg-primary-600 hover:bg-primary-700 transition-colors"
                   >
                     اشتراك الآن
                     <ArrowLeft className="w-5 h-5 rtl:rotate-180" />

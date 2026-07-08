@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { PlanForm } from "../new/PlanForm";
-import { updatePlanAction } from "../actions";
+import { PlanForm } from "../new/components/PlanForm";
+import { updatePlanAction } from "../actions/update-plan-action";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 

@@ -36,13 +36,13 @@ export default async function DeliveryAreasPage() {
           <form action={addDeliveryArea as any} className="space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-bold text-surface-950 mb-2">اسم المنطقة *</label>
-              <input type="text" name="name" id="name" required placeholder="مثال: مدينة نصر" className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-2xl text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors outline-none" />
+              <input type="text" name="name" id="name" required placeholder="مثال: مدينة نصر" className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-[24px] text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors outline-none" />
             </div>
             <div>
               <label htmlFor="fee" className="block text-sm font-bold text-surface-950 mb-2">رسوم التوصيل *</label>
-              <input type="number" step="0.01" min="0" name="fee" id="fee" required placeholder="0.00" className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-2xl text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors outline-none text-end" dir="ltr" />
+              <input type="number" step="0.01" min="0" name="fee" id="fee" required placeholder="0.00" className="w-full px-5 py-3.5 bg-white border border-surface-200 rounded-[24px] text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors outline-none text-end" dir="ltr" />
             </div>
-            <SubmitButton className="w-full mt-4 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-bold transition-colors">
+            <SubmitButton className="w-full mt-4 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-[24px] font-bold transition-colors">
               حفظ المنطقة
             </SubmitButton>
           </form>
@@ -57,7 +57,7 @@ export default async function DeliveryAreasPage() {
             </div>
           ) : (
             areas.map(area => (
-              <div key={area.id} className="bg-white border-2 border-surface-100 rounded-3xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-colors hover:border-surface-200">
+              <div key={area.id} className="bg-white border-2 border-surface-100 rounded-[24px] p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-colors hover:border-surface-200">
                 <div>
                   <h4 className="font-bold text-xl text-surface-950">{area.name}</h4>
                   <p className="text-sm font-black text-primary-600 mt-2">رسوم التوصيل: {Number(area.deliveryFee)}</p>

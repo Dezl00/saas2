@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect, notFound } from "next/navigation";
-import { ClientOrderMasterDetail } from "./ClientOrderMasterDetail";
+import { OrderMasterDetail } from "../components/OrderMasterDetail";
 
 export const metadata = {
   title: "تفاصيل الطلب | لوحة التحكم",
@@ -45,7 +45,7 @@ export default async function OrderDetailsPage(props: { params: Promise<{ orderI
   }
 
   return (
-    <ClientOrderMasterDetail 
+    <OrderMasterDetail 
       orders={orders as any} 
       selectedOrder={selectedOrder as any} 
       currency={store.currency || "SAR"} 

@@ -11,9 +11,9 @@ function StatsSkeleton() {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
       {[...Array(4)].map((_, i) => (
-        <div key={i} className="bg-surface-50 rounded-2xl p-6 h-36 animate-pulse">
+        <div key={i} className="bg-surface-50 rounded-[24px] p-6 h-36 animate-pulse">
           <div className="flex justify-between items-start mb-4">
-            <div className="w-12 h-12 bg-surface-200 rounded-xl"></div>
+            <div className="w-12 h-12 bg-surface-200 rounded-[24px]"></div>
             <div className="h-6 bg-surface-200 rounded w-12"></div>
           </div>
           <div className="h-6 bg-surface-200 rounded w-1/2 mt-auto"></div>
@@ -25,7 +25,7 @@ function StatsSkeleton() {
 
 function OrdersSkeleton() {
   return (
-    <div className="bg-white rounded-2xl overflow-hidden animate-pulse">
+    <div className="bg-white rounded-[24px] overflow-hidden animate-pulse">
       <div className="p-6 border-b border-surface-100 flex justify-between items-center">
         <div className="h-6 bg-surface-200 rounded w-32"></div>
       </div>
@@ -44,7 +44,7 @@ export default async function DashboardPage() {
 
   if (!storeId) {
     return (
-      <div className="text-center py-20 bg-white rounded-3xl">
+      <div className="text-center py-20 bg-white rounded-[24px]">
         <h2 className="text-xl font-bold text-surface-950">لا يوجد متجر مرتبط بحسابك</h2>
       </div>
     );
@@ -73,7 +73,7 @@ export default async function DashboardPage() {
             <Link
               href={store.domains?.[0]?.name ? `https://${store.domains[0].name}` : `https://${store.subdomain}.menura.site`}
               target="_blank"
-              className="flex-1 sm:flex-none px-6 py-3 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700 transition-colors text-center"
+              className="flex-1 sm:flex-none px-6 py-3 bg-primary-600 text-white font-bold rounded-[24px] hover:bg-primary-700 transition-colors text-center"
             >
               زيارة المتجر
             </Link>

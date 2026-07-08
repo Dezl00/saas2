@@ -15,10 +15,10 @@ interface StatsCardProps {
 
 export function StatsCard({ title, value, icon: Icon, trend, cardClasses, iconClasses, labelClasses }: StatsCardProps) {
   return (
-    <div className={`rounded-2xl p-4 sm:p-6 transition-colors ${cardClasses}`}>
+    <div className={`rounded-[24px] p-4 sm:p-6 transition-colors ${cardClasses}`}>
       <div className="flex items-center justify-between mb-3 sm:mb-4">
         <div
-          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shrink-0 ${iconClasses}`}
+          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-[24px] flex items-center justify-center shrink-0 ${iconClasses}`}
         >
           <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
         </div>

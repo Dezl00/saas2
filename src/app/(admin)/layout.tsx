@@ -22,6 +22,8 @@ import { connection } from "next/server";
 
 import { prisma } from "@/lib/prisma";
 
+import { AdminNav, AdminMobileNav } from "@/components/admin/AdminNav";
+
 export default async function AdminLayout({
   children,
 }: {
@@ -75,7 +77,7 @@ export default async function AdminLayout({
       <aside className="hidden md:flex md:flex-col fixed inset-y-0 right-0 w-64 bg-white border-l border-surface-200 z-30">
         <div className="p-6 border-b border-surface-100 flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary-100 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-[24px] bg-primary-100 flex items-center justify-center">
               <LayoutDashboard className="w-5 h-5 text-primary-600" />
             </div>
             <div>
@@ -85,36 +87,16 @@ export default async function AdminLayout({
           </div>
         </div>
 
-        <nav className="flex-1 overflow-y-auto p-4 space-y-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              prefetch={true}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl text-surface-800/70 hover:bg-surface-50 hover:text-surface-950 transition-all group"
-            >
-              <item.icon className="w-5 h-5 group-hover:text-primary-500 transition-colors" />
-              <span className="font-medium">{item.label}</span>
-            </Link>
-          ))}
-        </nav>
+        <AdminNav navItems={navItems} />
 
         <div className="p-4 border-t border-surface-100 flex-shrink-0">
-          <form
-            action={async () => {
-              "use server";
-              const { signOut } = await import("@/lib/auth");
-              await signOut({ redirectTo: "/login" });
-            }}
+          <Link
+            href="/api/auth/signout"
+            className="flex items-center gap-3 w-full px-4 py-3 rounded-[24px] text-error-500 hover:bg-red-50 transition-all"
           >
-            <button
-              type="submit"
-              className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-error-500 hover:bg-red-50 transition-all"
-            >
-              <LogOut className="w-5 h-5" />
-              <span className="font-medium">تسجيل الخروج</span>
-            </button>
-          </form>
+            <LogOut className="w-5 h-5" />
+            <span className="font-medium">تسجيل الخروج</span>
+          </Link>
         </div>
       </aside>
 
@@ -136,38 +118,7 @@ export default async function AdminLayout({
         </main>
       </div>
 
-      {/* Bottom Navigation (Mobile) */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-surface-200 flex items-center justify-around p-2 pb-safe z-50">
-        {navItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="flex flex-col items-center gap-1 p-2 text-surface-500 hover:text-primary-600 active:text-primary-600 transition-colors"
-          >
-            {item.href === "/admin" ? (
-              <Home className="w-5 h-5" />
-            ) : (
-              <item.icon className="w-5 h-5" />
-            )}
-            <span className="text-[10px] font-medium">{item.label}</span>
-          </Link>
-        ))}
-        <form
-          action={async () => {
-            "use server";
-            const { signOut } = await import("@/lib/auth");
-            await signOut({ redirectTo: "/login" });
-          }}
-        >
-          <button
-            type="submit"
-            className="flex flex-col items-center gap-1 p-2 text-error-500 hover:text-error-600 transition-colors"
-          >
-            <LogOut className="w-5 h-5" />
-            <span className="text-[10px] font-medium">خروج</span>
-          </button>
-        </form>
-      </nav>
+      <AdminMobileNav navItems={navItems} />
     </div>
   );
 }

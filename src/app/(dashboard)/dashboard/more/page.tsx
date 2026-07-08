@@ -31,7 +31,7 @@ export default async function MorePage() {
       <Breadcrumb title="المزيد" />
       
       <div className="mt-6">
-        <div className="bg-white rounded-2xl border border-surface-200 overflow-hidden divide-y divide-surface-100">
+        <div className="bg-white rounded-[24px] border border-surface-200 overflow-hidden divide-y divide-surface-100">
           {moreItems.map((item, i) => (
             <Link
               key={i}
@@ -39,7 +39,7 @@ export default async function MorePage() {
               className="flex items-center justify-between p-4 bg-white hover:bg-surface-50 transition-colors"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-surface-100 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-[24px] bg-surface-100 flex items-center justify-center">
                   <item.icon className="w-5 h-5 text-surface-600" />
                 </div>
                 <span className="font-bold text-surface-950">{item.label}</span>
@@ -49,13 +49,13 @@ export default async function MorePage() {
           ))}
         </div>
 
-        <div className="mt-6 bg-white rounded-2xl border border-surface-200 overflow-hidden">
+        <div className="mt-6 bg-white rounded-[24px] border border-surface-200 overflow-hidden">
           <Link
             href="/api/auth/signout"
             className="flex items-center justify-between p-4 bg-white hover:bg-error-50 transition-colors group"
           >
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-error-50 group-hover:bg-error-100 flex items-center justify-center transition-colors">
+              <div className="w-10 h-10 rounded-[24px] bg-error-50 group-hover:bg-error-100 flex items-center justify-center transition-colors">
                 <LogOut className="w-5 h-5 text-error-600" />
               </div>
               <span className="font-bold text-error-600">تسجيل الخروج</span>
