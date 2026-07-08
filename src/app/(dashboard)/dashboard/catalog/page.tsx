@@ -4,6 +4,7 @@ import { Plus } from "lucide-react";
 import { MenuItemForm } from "@/components/dashboard/MenuItemForm";
 import { AIMenuScanner } from "@/components/dashboard/AIMenuScanner";
 import { MenuItemsGrid } from "@/components/dashboard/MenuItemsGrid";
+import { ImportExportButtons } from "@/components/dashboard/ImportExportButtons";
 import { Pagination } from "@/components/ui/Pagination";
 import { notFound } from "next/navigation";
 
@@ -55,7 +56,8 @@ export default async function MenuPage(props: { searchParams: Promise<{ page?: s
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-2">
+        <ImportExportButtons />
         <AIMenuScanner />
       </div>
       

@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     }
 
     const store = await prisma.store.findUnique({
-      where: { userId: session.user.id }
+      where: { id: session.user.storeId as string }
     });
 
     if (!store) {
@@ -92,6 +92,30 @@ export async function POST(req: Request) {
 
         if (!category) continue; // Skip if category is invalid
 
+        // Parse Sizes
+        const parsedSizes = [];
+        if (row.Sizes) {
+          const sizeParts = row.Sizes.toString().split('|');
+          for (const p of sizeParts) {
+            const [name, price] = p.split(':');
+            if (name && price) {
+              parsedSizes.push({ name: name.trim(), price: parseFloat(price.trim()) || 0 });
+            }
+          }
+        }
+
+        // Parse Addons
+        const parsedAddons = [];
+        if (row.Addons) {
+          const addonParts = row.Addons.toString().split('|');
+          for (const p of addonParts) {
+            const [name, price] = p.split(':');
+            if (name && price) {
+              parsedAddons.push({ name: name.trim(), price: parseFloat(price.trim()) || 0 });
+            }
+          }
+        }
+
         await prisma.menuItem.upsert({
           where: { id: row.ID || "new-temp-id" },
           update: {
@@ -103,6 +127,9 @@ export async function POST(req: Request) {
             sortOrder: parseInt(row.SortOrder) || 0,
             categoryId: category.id,
             storeId: store.id,
+            // Sizes and Addons update: first delete old, then create new
+            sizes: { deleteMany: {}, create: parsedSizes },
+            addons: { deleteMany: {}, create: parsedAddons }
           },
           create: {
             id: row.ID || undefined,
@@ -114,6 +141,8 @@ export async function POST(req: Request) {
             sortOrder: parseInt(row.SortOrder) || 0,
             categoryId: category.id,
             storeId: store.id,
+            sizes: { create: parsedSizes },
+            addons: { create: parsedAddons }
           }
         }).catch(e => console.error("Product Import Error for row", row, e));
         importedCount++;
