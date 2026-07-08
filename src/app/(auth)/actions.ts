@@ -1,12 +1,85 @@
 "use server";
 
 import { signIn, auth } from "@/lib/auth";
+import { cookies } from "next/headers";
+import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
 import { loginSchema, registerSchema } from "@/lib/validations";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { sendOTP } from "@/lib/email";
+
+const SECRET_KEY = process.env.NEXTAUTH_SECRET || "default_secret_key_32_chars_min!";
+const ALGORITHM = 'aes-256-cbc';
+
+function encryptData(data: any): string {
+  const iv = crypto.randomBytes(16);
+  const key = crypto.createHash('sha256').update(String(SECRET_KEY)).digest('base64').substring(0, 32);
+  const cipher = crypto.createCipheriv(ALGORITHM, key, iv);
+  let encrypted = cipher.update(JSON.stringify(data), 'utf8', 'hex');
+  encrypted += cipher.final('hex');
+  return iv.toString('hex') + ':' + encrypted;
+}
+
+function decryptData(text: string): any {
+  try {
+    const textParts = text.split(':');
+    const iv = Buffer.from(textParts.shift()!, 'hex');
+    const encryptedText = Buffer.from(textParts.join(':'), 'hex');
+    const key = crypto.createHash('sha256').update(String(SECRET_KEY)).digest('base64').substring(0, 32);
+    const decipher = crypto.createDecipheriv(ALGORITHM, key, iv);
+    let decrypted = decipher.update(encryptedText);
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+    return JSON.parse(decrypted.toString());
+  } catch (e) {
+    return null;
+  }
+}
+
+async function createUserWithStore(userData: any, isVerified: boolean, otpMethod?: 'EMAIL' | 'PHONE' | null) {
+  const hashedPassword = await bcrypt.hash(userData.password, 10);
+  const user = await prisma.user.create({
+    data: {
+      name: userData.name,
+      email: userData.email,
+      password: hashedPassword,
+      phone: userData.phone || null,
+      role: "OWNER",
+      isVerified,
+      otpCode: null,
+      otpExpiry: null,
+    },
+  });
+
+  await prisma.store.create({
+    data: {
+      name: "متجر جديد",
+      type: "RESTAURANT",
+      userId: user.id,
+    },
+  });
+
+  try {
+    const msg = otpMethod === 'EMAIL' 
+      ? `سجل ${user.name} حساباً جديداً بالمنصة (مفعل بالبريد).`
+      : otpMethod === 'PHONE'
+      ? `سجل ${user.name} حساباً جديداً بالمنصة وتم تفعيل رقمه ${user.phone}.`
+      : `سجل ${user.name} حساباً جديداً بالمنصة (بدون تحقق).`;
+      
+    await prisma.adminNotification.create({
+      data: {
+        title: "مستخدم جديد",
+        message: msg,
+        type: "NEW_USER",
+        link: `/admin/users`
+      }
+    });
+  } catch (e) {
+    console.error("Failed to notify admin", e);
+  }
+  return user;
+}
 
 export async function loginAction(prevState: any, formData: FormData) {
   try {
@@ -105,62 +178,34 @@ export async function registerAction(prevState: any, formData: FormData) {
     const otpExpiry = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
 
     if (existingUser) {
-      if (existingUser.isVerified) {
-        return { error: "البريد الإلكتروني مستخدم بالفعل", values: rawData };
-      }
-      if (requiresOtp === 'EMAIL') {
-        await prisma.user.update({
-          where: { email: validatedData.email },
-          data: { otpCode, otpExpiry }
-        });
-      }
-    } else {
-      const hashedPassword = await bcrypt.hash(validatedData.password, 10);
-
-      const user = await prisma.user.create({
-        data: {
-          name: validatedData.name,
-          email: validatedData.email,
-          password: hashedPassword,
-          phone: rawData.phone as string,
-          role: "OWNER",
-          isVerified,
-          otpCode: requiresOtp === 'EMAIL' ? otpCode : null,
-          otpExpiry: requiresOtp === 'EMAIL' ? otpExpiry : null,
-        },
-      });
-
-      // Create an empty store to be filled in onboarding
-      await prisma.store.create({
-        data: {
-          name: "متجر جديد",
-          type: "RESTAURANT",
-          userId: user.id,
-        },
-      });
-      
-      // If automatically verified (both OTPs disabled), notify admin immediately
-      if (isVerified) {
-        try {
-          await prisma.adminNotification.create({
-            data: {
-              title: "مستخدم جديد",
-              message: `سجل ${user.name} حساباً جديداً بالمنصة (بدون تحقق).`,
-              type: "NEW_USER",
-              link: `/admin/users`
-            }
-          });
-        } catch (e) {
-          console.error("Failed to notify admin", e);
-        }
-      }
+      return { error: "البريد الإلكتروني مستخدم بالفعل", values: rawData };
     }
 
-    if (requiresOtp === 'EMAIL') {
-      const sent = await sendOTP(validatedData.email, otpCode);
-      if (!sent) {
-        return { error: "حدث خطأ أثناء إرسال كود التحقق. يرجى المحاولة لاحقاً.", values: rawData };
+    if (requiresOtp === 'EMAIL' || requiresOtp === 'PHONE') {
+      const pendingData = {
+        name: validatedData.name,
+        email: validatedData.email,
+        password: validatedData.password,
+        phone: rawData.phone,
+        otpCode,
+        otpExpiry: otpExpiry.getTime(),
+      };
+      const cookieStore = await cookies();
+      cookieStore.set("pending_registration", encryptData(pendingData), {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 15 * 60, // 15 mins
+      });
+
+      if (requiresOtp === 'EMAIL') {
+        const sent = await sendOTP(validatedData.email, otpCode);
+        if (!sent) {
+          return { error: "حدث خطأ أثناء إرسال كود التحقق. يرجى المحاولة لاحقاً.", values: rawData };
+        }
       }
+    } else {
+      await createUserWithStore(validatedData, true, null);
     }
 
     return { requiresOtp, email: validatedData.email, phone: rawData.phone as string, values: rawData };
@@ -179,34 +224,25 @@ export async function registerAction(prevState: any, formData: FormData) {
 
 export async function verifyOtpAction(email: string, otp: string) {
   try {
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) return { error: "المستخدم غير موجود" };
-    if (user.isVerified) return { error: "الحساب مفعل مسبقاً" };
-    
-    if (user.otpCode !== otp) return { error: "الكود غير صحيح" };
-    if (user.otpExpiry && user.otpExpiry < new Date()) return { error: "الكود منتهي الصلاحية" };
+    const cookieStore = await cookies();
+    const pendingCookie = cookieStore.get("pending_registration");
+    if (!pendingCookie?.value) return { error: "انتهت صلاحية الجلسة، يرجى التسجيل من جديد" };
 
-    await prisma.user.update({
-      where: { email },
-      data: { isVerified: true, otpCode: null, otpExpiry: null }
-    });
+    const pendingData = decryptData(pendingCookie.value);
+    if (!pendingData || pendingData.email !== email) return { error: "بيانات الجلسة غير صالحة" };
 
-    // Notify Admins
-    try {
-      await prisma.adminNotification.create({
-        data: {
-          title: "مستخدم جديد",
-          message: `سجل ${user.name} حساباً جديداً بالمنصة (مفعل بالبريد).`,
-          type: "NEW_USER",
-          link: `/admin/users`
-        }
-      });
-    } catch (e) {
-      console.error("Failed to notify admin", e);
-    }
+    if (pendingData.otpCode !== otp) return { error: "الكود غير صحيح" };
+    if (pendingData.otpExpiry && pendingData.otpExpiry < Date.now()) return { error: "الكود منتهي الصلاحية" };
+
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) return { error: "تم التسجيل مسبقاً" };
+
+    await createUserWithStore(pendingData, true, 'EMAIL');
+    cookieStore.delete("pending_registration");
 
     return { success: true };
   } catch (error) {
+    console.error("OTP VERIFY ERROR:", error);
     return { error: "حدث خطأ أثناء التحقق من الكود" };
   }
 }
@@ -220,32 +256,18 @@ export async function verifyFirebaseTokenAction(email: string, idToken: string) 
       return { error: "لم يتم العثور على رقم هاتف في التوثيق" };
     }
 
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) return { error: "المستخدم غير موجود" };
-    if (user.isVerified) return { error: "الحساب مفعل مسبقاً" };
+    const cookieStore = await cookies();
+    const pendingCookie = cookieStore.get("pending_registration");
+    if (!pendingCookie?.value) return { error: "انتهت صلاحية الجلسة، يرجى التسجيل من جديد" };
 
-    // You could optionally verify that decodedToken.phone_number matches user.phone
-    // Note: Firebase formats phones with + country code, so direct string match might fail if user didn't type it exactly.
-    // For now, we trust the Firebase token generated from the client.
+    const pendingData = decryptData(pendingCookie.value);
+    if (!pendingData || pendingData.email !== email) return { error: "بيانات الجلسة غير صالحة" };
 
-    await prisma.user.update({
-      where: { email },
-      data: { isVerified: true, otpCode: null, otpExpiry: null }
-    });
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) return { error: "تم التسجيل مسبقاً" };
 
-    // Notify Admins
-    try {
-      await prisma.adminNotification.create({
-        data: {
-          title: "مستخدم جديد",
-          message: `سجل ${user.name} حساباً جديداً بالمنصة وتم تفعيل رقمه ${decodedToken.phone_number}.`,
-          type: "NEW_USER",
-          link: `/admin/users`
-        }
-      });
-    } catch (e) {
-      console.error("Failed to notify admin", e);
-    }
+    await createUserWithStore(pendingData, true, 'PHONE');
+    cookieStore.delete("pending_registration");
 
     return { success: true };
   } catch (error) {

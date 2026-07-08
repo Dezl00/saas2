@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useTransition } from "react";
 import { submitStep1, submitStep2, finishOnboarding } from "./actions";
 import { Loader2, ArrowLeft, Check, Store, Phone, ExternalLink, CloudUpload, ArrowRight, Rocket, Sparkles, CheckCircle2 } from "lucide-react";
 import confetti from "canvas-confetti";
@@ -23,6 +23,7 @@ export function OnboardingClient({
   onPreviewPrev?: () => void;
 }) {
   const [isPending, setIsPending] = useState(false);
+  const [isTransitionPending, startTransition] = useTransition();
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -352,10 +353,11 @@ export function OnboardingClient({
               </a>
               <button 
                 type="button"
-                onClick={isPreview ? onPreviewNext : () => finishOnboarding()} 
-                className="w-full bg-surface-50 border border-surface-200 hover:bg-surface-100 text-surface-900 py-3.5 rounded-xl font-medium transition-colors flex items-center justify-center text-sm gap-2"
+                onClick={isPreview ? onPreviewNext : () => startTransition(() => { finishOnboarding(); })} 
+                disabled={isTransitionPending}
+                className="w-full bg-surface-50 border border-surface-200 hover:bg-surface-100 text-surface-900 py-3.5 rounded-xl font-medium transition-colors flex items-center justify-center text-sm gap-2 disabled:opacity-50"
               >
-                <ArrowRight className="w-4 h-4 rtl:-scale-x-100" />
+                {isTransitionPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4 rtl:-scale-x-100" />}
                 الانتقال للوحة التحكم
               </button>
             </div>
