@@ -46,10 +46,26 @@ export async function updateStoreAppearance(formData: FormData) {
       landingHeroImage,
       landingHeroOverlayOpacity
     },
+    select: {
+      subdomain: true,
+      domains: { select: { name: true } }
+    }
   });
 
   // Type assertion for next/cache revalidateTag
   (revalidateTag as any)(`store-info-${session.user.storeId}`, "default");
+  if (store.subdomain) {
+    (revalidateTag as any)(`store-${store.subdomain}`, "default");
+    revalidatePath(`store-${store.subdomain}`);
+  }
+  if (store.domains) {
+    for (const d of store.domains) {
+      (revalidateTag as any)(`store-${d.name}`, "default");
+      revalidatePath(`store-${d.name}`);
+    }
+  }
+
+  revalidatePath("/", "layout");
   revalidatePath("/dashboard/appearance");
   
   return { success: true };

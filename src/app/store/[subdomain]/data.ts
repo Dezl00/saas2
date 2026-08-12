@@ -43,6 +43,11 @@ export async function getStoreInfo(subdomain: string) {
       mapLongitude: true,
       hideProductDescription: true,
       hideProductAddButton: true,
+      enableLandingPage: true,
+      landingHeroTitle: true,
+      landingHeroDescription: true,
+      landingHeroImage: true,
+      landingHeroOverlayOpacity: true,
       branches: { 
         where: { isActive: true },
         select: { id: true, name: true, address: true }
