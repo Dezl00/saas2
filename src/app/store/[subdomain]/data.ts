@@ -41,6 +41,8 @@ export async function getStoreInfo(subdomain: string) {
       workingHours: true,
       mapLatitude: true,
       mapLongitude: true,
+      hideProductDescription: true,
+      hideProductAddButton: true,
       branches: { 
         where: { isActive: true },
         select: { id: true, name: true, address: true }

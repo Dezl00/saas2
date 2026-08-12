@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 
 type Branch = { id: string; name: string; address: string | null };
 type DeliveryArea = { id: string; name: string; fee: number };
-type StoreData = { id: string; name: string; whatsappNumber: string | null; enableWhatsappOrders: boolean; currency: string; primaryColor?: string | null };
+type StoreData = { id: string; name: string; whatsappNumber: string | null; enableWhatsappOrders: boolean; currency: string; primaryColor?: string | null; theme?: string | null };
 
 export function CartSidebar({
   store,
@@ -30,6 +30,9 @@ export function CartSidebar({
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+
+  const isDarkSolid = store?.theme === "dark_solid";
+  const primaryColor = store?.primaryColor || "var(--color-primary-600)";
 
   useEffect(() => {
     const handlePopState = () => {
@@ -150,20 +153,20 @@ export function CartSidebar({
       />
 
       {/* Sidebar */}
-      <div className="fixed top-0 end-0 h-full w-full sm:w-[450px] bg-white z-50 flex flex-col animate-slide-in-right border-s border-surface-200">
+      <div className={`fixed top-0 end-0 h-full w-full sm:w-[450px] z-50 flex flex-col animate-slide-in-right border-s ${isDarkSolid ? 'bg-[#0a0a0a] border-[#222]' : 'bg-white border-surface-200'}`}>
         {/* Header */}
-        <div className="p-4 border-b border-surface-200 flex items-center justify-between bg-surface-50">
+        <div className={`p-4 border-b flex items-center justify-between ${isDarkSolid ? 'bg-[#111] border-[#222]' : 'bg-surface-50 border-surface-200'}`}>
           <div className="flex items-center gap-2">
-            <ShoppingBag className="w-6 h-6 text-primary-600" />
-            <h2 className="text-lg font-bold text-surface-950">
+            <ShoppingBag className="w-6 h-6" style={{ color: primaryColor }} />
+            <h2 className={`text-lg font-bold ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>
               {isCheckout ? "إتمام الطلب" : "سلة المشتريات"}
             </h2>
           </div>
           <button
             onClick={() => { setIsCartOpen(false); setIsCheckout(false); }}
-            className="w-10 h-10 bg-surface-100/50 rounded-full border-none flex items-center justify-center hover:bg-surface-200 transition-colors"
+            className={`w-10 h-10 rounded-full border-none flex items-center justify-center transition-colors ${isDarkSolid ? 'bg-white/10 hover:bg-white/20' : 'bg-surface-100/50 hover:bg-surface-200'}`}
           >
-            <X className="w-5 h-5 text-surface-600" />
+            <X className={`w-5 h-5 ${isDarkSolid ? 'text-surface-300' : 'text-surface-600'}`} />
           </button>
         </div>
 
@@ -177,7 +180,7 @@ export function CartSidebar({
           ) : (
             !isCheckout ? (
               items.map((item) => (
-                <div key={item.id} className="flex gap-4 bg-white border border-surface-100 rounded-3xl p-3 transition-all">
+                <div key={item.id} className={`flex gap-4 border rounded-3xl p-3 transition-all ${isDarkSolid ? 'bg-[#111] border-[#333]' : 'bg-white border-surface-100'}`}>
                   {item.image ? (
                     <Image
                       src={item.image}
@@ -187,39 +190,39 @@ export function CartSidebar({
                       className="w-20 h-20 object-cover rounded-2xl border-none"
                     />
                   ) : (
-                    <div className="w-20 h-20 bg-surface-100 flex items-center justify-center rounded-2xl border-none">
-                      <ShoppingBag className="w-8 h-8 text-surface-300" />
+                    <div className={`w-20 h-20 flex items-center justify-center rounded-2xl border-none ${isDarkSolid ? 'bg-[#222]' : 'bg-surface-100'}`}>
+                      <ShoppingBag className={`w-8 h-8 ${isDarkSolid ? 'text-surface-500' : 'text-surface-300'}`} />
                     </div>
                   )}
                   
                   <div className="flex-1 flex flex-col justify-between">
                     <div className="flex justify-between items-start">
-                      <h3 className="font-bold text-surface-950 line-clamp-2 text-sm leading-tight">{item.name}</h3>
+                      <h3 className={`font-bold line-clamp-2 text-sm leading-tight ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>{item.name}</h3>
                       <button
                         onClick={() => removeItem(item.id)}
-                        className="text-surface-400 hover:text-error-500 transition-colors"
+                        className={`transition-colors ${isDarkSolid ? 'text-surface-500 hover:text-error-400' : 'text-surface-400 hover:text-error-500'}`}
                       >
                         <X className="w-4 h-4" />
                       </button>
                     </div>
                     
                     <div className="flex items-center justify-between mt-2">
-                      <div className="font-black text-primary-600 text-sm">
+                      <div className="font-black text-sm" style={{ color: primaryColor }}>
                         {formatPrice(item.price, store?.currency)}
                       </div>
                       
                       {/* Quantity Controls */}
-                      <div className="flex items-center gap-1 border border-surface-200 rounded-lg p-1">
+                      <div className={`flex items-center gap-1 border rounded-lg p-1 ${isDarkSolid ? 'border-[#333]' : 'border-surface-200'}`}>
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="w-8 h-8 flex items-center justify-center bg-white border border-surface-200 rounded-lg text-surface-600 hover:bg-surface-50 transition-colors"
+                          className={`w-8 h-8 flex items-center justify-center border rounded-lg transition-colors ${isDarkSolid ? 'bg-[#222] border-[#444] text-surface-300 hover:bg-[#333]' : 'bg-white border-surface-200 text-surface-600 hover:bg-surface-50'}`}
                         >
                           <Minus className="w-3.5 h-3.5" />
                         </button>
-                        <span className="font-bold text-sm w-6 text-center text-surface-900">{item.quantity}</span>
+                        <span className={`font-bold text-sm w-6 text-center ${isDarkSolid ? 'text-white' : 'text-surface-900'}`}>{item.quantity}</span>
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="w-8 h-8 flex items-center justify-center bg-white border border-surface-200 rounded-lg text-surface-600 hover:bg-surface-50 transition-colors"
+                          className={`w-8 h-8 flex items-center justify-center border rounded-lg transition-colors ${isDarkSolid ? 'bg-[#222] border-[#444] text-surface-300 hover:bg-[#333]' : 'bg-white border-surface-200 text-surface-600 hover:bg-surface-50'}`}
                         >
                           <Plus className="w-3.5 h-3.5" />
                         </button>
@@ -233,36 +236,43 @@ export function CartSidebar({
               <form id="checkout-form" onSubmit={handleSubmitOrder} noValidate className="space-y-6 animate-fade-in pb-10">
 
                 {/* Toggle Delivery / Pickup */}
-                <div className="flex bg-surface-100 p-1.5 rounded-2xl">
+                <div className={`flex p-1.5 rounded-2xl ${isDarkSolid ? 'bg-[#111]' : 'bg-surface-100'}`}>
                   <button
                     type="button"
                     onClick={() => { setDeliveryType("DELIVERY"); setValidationErrors({}); }}
                     className={`flex-1 flex justify-center items-center gap-2 py-3 text-sm font-bold transition-all rounded-xl ${
-                      deliveryType === "DELIVERY" ? "bg-primary-500 text-white" : "text-surface-500 hover:text-surface-950 hover:bg-surface-200/50"
+                      deliveryType === "DELIVERY" 
+                        ? (isDarkSolid ? "text-black" : "text-white") 
+                        : (isDarkSolid ? "text-surface-400 hover:text-white hover:bg-white/5" : "text-surface-500 hover:text-surface-950 hover:bg-surface-200/50")
                     }`}
+                    style={deliveryType === "DELIVERY" ? { backgroundColor: primaryColor } : undefined}
                   >
-                    <Truck className={`w-4 h-4 ${deliveryType === "DELIVERY" ? "text-white" : ""}`} />
+                    <Truck className={`w-4 h-4`} />
                     توصيل للمنزل
                   </button>
                   <button
                     type="button"
                     onClick={() => { setDeliveryType("PICKUP"); setValidationErrors({}); }}
                     className={`flex-1 flex justify-center items-center gap-2 py-3 text-sm font-bold transition-all rounded-xl ${
-                      deliveryType === "PICKUP" ? "bg-primary-500 text-white" : "text-surface-500 hover:text-surface-950 hover:bg-surface-200/50"
+                      deliveryType === "PICKUP" 
+                        ? (isDarkSolid ? "text-black" : "text-white") 
+                        : (isDarkSolid ? "text-surface-400 hover:text-white hover:bg-white/5" : "text-surface-500 hover:text-surface-950 hover:bg-surface-200/50")
                     }`}
+                    style={deliveryType === "PICKUP" ? { backgroundColor: primaryColor } : undefined}
                   >
-                    <StoreIcon className={`w-4 h-4 ${deliveryType === "PICKUP" ? "text-white" : ""}`} />
+                    <StoreIcon className={`w-4 h-4`} />
                     استلام من الفرع
                   </button>
                 </div>
 
                 {deliveryType === "DELIVERY" && deliveryAreas && deliveryAreas.length > 0 && (
                   <div className="space-y-1">
-                    <label className="text-sm font-bold text-surface-950">اختر منطقة التوصيل *</label>
+                    <label className={`text-sm font-bold ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>اختر منطقة التوصيل *</label>
                     <select
                       value={selectedArea}
                       onChange={(e) => setSelectedArea(e.target.value)}
-                      className="w-full p-3 bg-white border border-surface-200 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
+                      className={`w-full p-3 border rounded-xl outline-none transition-colors ${isDarkSolid ? 'bg-[#111] border-[#333] text-white focus:border-primary-500' : 'bg-white border-surface-200 focus:border-primary-500 text-surface-900'}`}
+                      style={{ outlineColor: primaryColor }}
                       required
                     >
                       <option value="">-- اختر منطقتك --</option>
@@ -277,11 +287,12 @@ export function CartSidebar({
 
                 {deliveryType === "PICKUP" && branches && branches.length > 0 && (
                   <div className="space-y-1">
-                    <label className="text-sm font-bold text-surface-950">اختر الفرع للاستلام *</label>
+                    <label className={`text-sm font-bold ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>اختر الفرع للاستلام *</label>
                     <select
                       value={selectedBranch}
                       onChange={(e) => setSelectedBranch(e.target.value)}
-                      className="w-full p-3 bg-white border border-surface-200 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
+                      className={`w-full p-3 border rounded-xl outline-none transition-colors ${isDarkSolid ? 'bg-[#111] border-[#333] text-white focus:border-primary-500' : 'bg-white border-surface-200 focus:border-primary-500 text-surface-900'}`}
+                      style={{ outlineColor: primaryColor }}
                       required
                     >
                       <option value="">-- اختر الفرع الأقرب لك --</option>
@@ -296,27 +307,27 @@ export function CartSidebar({
 
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm font-bold text-surface-950 mb-1 block">الاسم كامل *</label>
-                    <input name="customerName" className={`w-full p-3 bg-white border rounded-xl outline-none transition-colors ${validationErrors.customerName ? 'border-error-500 focus:border-error-500 bg-error-50' : 'border-surface-200 focus:border-primary-500'}`} placeholder="اكتب اسمك كامل" />
+                    <label className={`text-sm font-bold mb-1 block ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>الاسم كامل *</label>
+                    <input name="customerName" className={`w-full p-3 border rounded-xl outline-none transition-colors ${validationErrors.customerName ? (isDarkSolid ? 'border-error-500 focus:border-error-500 bg-error-950/20 text-white' : 'border-error-500 focus:border-error-500 bg-error-50 text-surface-900') : (isDarkSolid ? 'bg-[#111] border-[#333] text-white focus:border-primary-500' : 'bg-white border-surface-200 focus:border-primary-500 text-surface-900')}`} placeholder="اكتب اسمك كامل" />
                     {validationErrors.customerName && <p className="text-error-500 text-xs mt-1 font-bold">{validationErrors.customerName}</p>}
                   </div>
                   <div>
-                    <label className="text-sm font-bold text-surface-950 mb-1 block">رقم الهاتف *</label>
-                    <input name="customerPhone" type="tel" dir="ltr" className={`w-full p-3 bg-white border rounded-xl outline-none text-end transition-colors ${validationErrors.customerPhone ? 'border-error-500 focus:border-error-500 bg-error-50' : 'border-surface-200 focus:border-primary-500'}`} placeholder="01xxxxxxxxx" />
+                    <label className={`text-sm font-bold mb-1 block ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>رقم الهاتف *</label>
+                    <input name="customerPhone" type="tel" dir="ltr" className={`w-full p-3 border rounded-xl outline-none text-end transition-colors ${validationErrors.customerPhone ? (isDarkSolid ? 'border-error-500 focus:border-error-500 bg-error-950/20 text-white' : 'border-error-500 focus:border-error-500 bg-error-50 text-surface-900') : (isDarkSolid ? 'bg-[#111] border-[#333] text-white focus:border-primary-500' : 'bg-white border-surface-200 focus:border-primary-500 text-surface-900')}`} placeholder="01xxxxxxxxx" />
                     {validationErrors.customerPhone && <p className="text-error-500 text-xs mt-1 font-bold">{validationErrors.customerPhone}</p>}
                   </div>
                   
                   {deliveryType === "DELIVERY" && (
                     <div>
-                      <label className="text-sm font-bold text-surface-950 mb-1 block">العنوان التفصيلي *</label>
-                      <textarea name="customerAddress" rows={2} className={`w-full p-3 bg-white border rounded-xl outline-none transition-colors ${validationErrors.customerAddress ? 'border-error-500 focus:border-error-500 bg-error-50' : 'border-surface-200 focus:border-primary-500'}`} placeholder="الشارع، العمارة، الدور، الشقة..." />
+                      <label className={`text-sm font-bold mb-1 block ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>العنوان التفصيلي *</label>
+                      <textarea name="customerAddress" rows={2} className={`w-full p-3 border rounded-xl outline-none transition-colors ${validationErrors.customerAddress ? (isDarkSolid ? 'border-error-500 focus:border-error-500 bg-error-950/20 text-white' : 'border-error-500 focus:border-error-500 bg-error-50 text-surface-900') : (isDarkSolid ? 'bg-[#111] border-[#333] text-white focus:border-primary-500' : 'bg-white border-surface-200 focus:border-primary-500 text-surface-900')}`} placeholder="الشارع، العمارة، الدور، الشقة..." />
                       {validationErrors.customerAddress && <p className="text-error-500 text-xs mt-1 font-bold">{validationErrors.customerAddress}</p>}
                     </div>
                   )}
 
                   <div>
-                    <label className="text-sm font-bold text-surface-950 mb-1 block">ملاحظات إضافية (اختياري)</label>
-                    <textarea name="notes" rows={2} className="w-full p-3 bg-white border border-surface-200 rounded-xl focus:border-primary-500 outline-none transition-colors" placeholder="أي تفاصيل إضافية للطلب..." />
+                    <label className={`text-sm font-bold mb-1 block ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>ملاحظات إضافية (اختياري)</label>
+                    <textarea name="notes" rows={2} className={`w-full p-3 border rounded-xl outline-none transition-colors ${isDarkSolid ? 'bg-[#111] border-[#333] text-white focus:border-primary-500' : 'bg-white border-surface-200 focus:border-primary-500 text-surface-900'}`} placeholder="أي تفاصيل إضافية للطلب..." />
                   </div>
                 </div>
 
@@ -327,29 +338,30 @@ export function CartSidebar({
 
         {/* Footer */}
         {items.length > 0 && (
-          <div className="p-4 bg-surface-50 border-t border-surface-200 space-y-4">
+          <div className={`p-4 border-t space-y-4 ${isDarkSolid ? 'bg-[#111] border-[#222]' : 'bg-surface-50 border-surface-200'}`}>
             
             <div className="space-y-2">
-              <div className="flex justify-between text-sm text-surface-600">
+              <div className={`flex justify-between text-sm ${isDarkSolid ? 'text-surface-400' : 'text-surface-600'}`}>
                 <span>المجموع</span>
                 <span>{formatPrice(total, store?.currency)}</span>
               </div>
               {deliveryType === "DELIVERY" && selectedArea && (
-                <div className="flex justify-between text-sm text-surface-600">
+                <div className={`flex justify-between text-sm ${isDarkSolid ? 'text-surface-400' : 'text-surface-600'}`}>
                   <span>رسوم التوصيل</span>
                   <span>{formatPrice(deliveryFee, store?.currency)}</span>
                 </div>
               )}
-              <div className="flex justify-between font-bold text-lg text-surface-950 pt-2 border-t border-surface-200">
+              <div className={`flex justify-between font-bold text-lg pt-2 border-t ${isDarkSolid ? 'border-[#333] text-white' : 'border-surface-200 text-surface-950'}`}>
                 <span>الإجمالي النهائي</span>
-                <span className="text-primary-600">{formatPrice(finalTotal, store?.currency)}</span>
+                <span style={{ color: primaryColor }}>{formatPrice(finalTotal, store?.currency)}</span>
               </div>
             </div>
 
             {!isCheckout ? (
               <button 
                 onClick={() => setIsCheckout(true)}
-                className="w-full py-4 text-white font-bold rounded-2xl transition-colors flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600"
+                className={`w-full py-4 font-bold rounded-2xl transition-colors flex items-center justify-center gap-2 hover:opacity-90 ${isDarkSolid ? 'text-black' : 'text-white'}`}
+                style={{ backgroundColor: primaryColor }}
               >
                 <ShoppingBag className="w-5 h-5" />
                 المتابعة لإتمام الطلب
@@ -359,7 +371,7 @@ export function CartSidebar({
                 <button 
                   type="button"
                   onClick={() => setIsCheckout(false)}
-                  className="px-6 py-4 bg-surface-200 hover:bg-surface-300 text-surface-700 font-bold rounded-2xl transition-colors"
+                  className={`px-6 py-4 font-bold rounded-2xl transition-colors ${isDarkSolid ? 'bg-[#222] hover:bg-[#333] text-white' : 'bg-surface-200 hover:bg-surface-300 text-surface-700'}`}
                 >
                   رجوع
                 </button>
@@ -367,7 +379,8 @@ export function CartSidebar({
                   type="submit"
                   form="checkout-form"
                   disabled={isSubmitting}
-                  className="flex-1 py-4 text-white font-bold rounded-2xl transition-colors flex items-center justify-center gap-2 disabled:opacity-50 bg-primary-500 hover:bg-primary-600"
+                  className={`flex-1 py-4 font-bold rounded-2xl transition-colors flex items-center justify-center gap-2 disabled:opacity-50 hover:opacity-90 ${isDarkSolid ? 'text-black' : 'text-white'}`}
+                  style={{ backgroundColor: primaryColor }}
                 >
                   {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Check className="w-5 h-5" />}
                   {isSubmitting ? "جاري الإرسال..." : "تأكيد وإرسال الطلب"}

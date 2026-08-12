@@ -142,6 +142,8 @@ model Store {
   snapchatUrl          String?
   showSnapchat         Boolean @default(true)
   showDefaultProducts  Boolean @default(true)
+  hideProductDescription Boolean @default(false)
+  hideProductAddButton   Boolean @default(false)
   fontFamily           String  @default("Tajawal")
   theme                String  @default("classic")
 

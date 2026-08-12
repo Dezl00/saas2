@@ -19,7 +19,7 @@ type MenuItem = {
   addons: Addon[];
 };
 type Category = { id: string; name: string };
-type Store = { name: string; currency: string; primaryColor?: string | null; secondaryColor?: string | null; logo?: string | null; theme?: string | null; };
+type Store = { name: string; currency: string; primaryColor?: string | null; secondaryColor?: string | null; logo?: string | null; theme?: string | null; hideProductDescription?: boolean; hideProductAddButton?: boolean; };
 
 export function StorefrontView({
   store,
@@ -266,12 +266,16 @@ export function StorefrontView({
                     activeTab === cat.id
                       ? isDarkSolid ? "text-black border-transparent" : "text-white border-transparent"
                       : isDarkSolid 
-                        ? "bg-transparent text-white border-surface-500/50" 
+                        ? "bg-transparent text-white border-transparent" 
                         : "bg-surface-50 text-surface-600 border-transparent hover:bg-surface-100"
                   }`}
-                  style={activeTab === cat.id ? { 
-                    backgroundColor: primaryColor,
-                  } : undefined}
+                  style={
+                    activeTab === cat.id 
+                      ? { backgroundColor: primaryColor } 
+                      : isDarkSolid 
+                        ? { borderColor: primaryColor, borderWidth: '1px' } 
+                        : undefined
+                  }
                 >
                   {cat.name}
                 </button>
@@ -332,7 +336,7 @@ export function StorefrontView({
                   >
                     {/* Image */}
                     {item.image || store.logo ? (
-                      <div className={`relative w-full aspect-square shrink-0 overflow-hidden border-b ${isDarkSolid ? 'bg-[#111] border-[#222]' : 'bg-surface-50 border-surface-50'}`}>
+                      <div className={`relative w-full aspect-[5/4] shrink-0 overflow-hidden border-b ${isDarkSolid ? 'bg-[#111] border-[#222]' : 'bg-surface-50 border-surface-50'}`}>
                         <Image 
                           src={item.image || store.logo!} 
                           alt={item.name}
@@ -343,16 +347,16 @@ export function StorefrontView({
                         />
                       </div>
                     ) : (
-                      <div className={`w-full aspect-square shrink-0 flex items-center justify-center border-b ${isDarkSolid ? 'bg-[#111] border-[#222]' : 'bg-surface-50 border-surface-50'}`}>
+                      <div className={`w-full aspect-[5/4] shrink-0 flex items-center justify-center border-b ${isDarkSolid ? 'bg-[#111] border-[#222]' : 'bg-surface-50 border-surface-50'}`}>
                         <ShoppingBag className={`w-8 h-8 ${isDarkSolid ? 'text-[#333]' : 'text-surface-200'}`} />
                       </div>
                     )}
 
                     {/* Text content */}
-                    <div className="p-3 sm:p-4 flex flex-col flex-1 justify-between min-w-0">
+                    <div className={`p-3 sm:p-4 flex flex-col flex-1 justify-between min-w-0 ${isDarkSolid ? 'bg-black' : ''}`}>
                       <div>
                         <h3 className={`font-bold text-[13px] sm:text-sm leading-tight mb-1 line-clamp-2 ${isDarkSolid ? 'text-white' : 'text-surface-900'}`}>{item.name}</h3>
-                        {item.description && (
+                        {!store.hideProductDescription && item.description && (
                           <p className={`text-[11px] sm:text-xs line-clamp-2 leading-relaxed ${isDarkSolid ? 'text-surface-400' : 'text-surface-400'}`}>
                             {item.description}
                           </p>
@@ -368,12 +372,14 @@ export function StorefrontView({
                             : formatPrice(item.price, store.currency)
                           }
                         </span>
-                        <span 
-                          className={`w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center transition-transform active:scale-95 ${isDarkSolid ? 'text-black' : 'text-white'}`}
-                          style={{ backgroundColor: primaryColor }}
-                        >
-                          <Plus className="w-4 h-4 sm:w-4 sm:h-4" />
-                        </span>
+                        {!store.hideProductAddButton && (
+                          <span 
+                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center transition-transform active:scale-95 ${isDarkSolid ? 'text-black' : 'text-white'}`}
+                            style={{ backgroundColor: primaryColor }}
+                          >
+                            <Plus className="w-4 h-4 sm:w-4 sm:h-4" />
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
