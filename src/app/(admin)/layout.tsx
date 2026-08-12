@@ -2,18 +2,8 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
 import {
-  LayoutDashboard,
-  Users,
-  Store,
   LogOut,
-  Settings,
-  Home,
-  Search,
-  PackageSearch,
-  Crown,
-  CreditCard,
-  Receipt,
-  Palette,
+  LayoutDashboard
 } from "lucide-react";
 import { GlobalSearch } from "@/components/admin/GlobalSearch";
 import { AdminHeaderNotifications } from "@/components/admin/AdminHeaderNotifications";
@@ -41,18 +31,6 @@ export default async function AdminLayout({
     dashboardFont: "cairo",
     dashboardCustomColor: null,
   };
-
-  const navItems = [
-    { href: "/admin", icon: LayoutDashboard, label: "الرئيسية" },
-    { href: "/admin/users", icon: Users, label: "المستخدمين" },
-    { href: "/admin/stores", icon: Store, label: "المتاجر" },
-    { href: "/admin/plans", icon: Crown, label: "الباقات" },
-    { href: "/admin/payment-methods", icon: CreditCard, label: "طرق الدفع" },
-    { href: "/admin/payment-requests", icon: Receipt, label: "طلبات الدفع" },
-    { href: "/admin/default-products", icon: PackageSearch, label: "المنتجات الافتراضية" },
-    { href: "/admin/appearance", icon: Palette, label: "المظهر العام" },
-    { href: "/admin/settings", icon: Settings, label: "إعدادات المنصة" },
-  ];
 
   const customColorStyles = platformSetting.dashboardTheme === "custom" && platformSetting.dashboardCustomColor ? {
     "--color-primary-50": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 10%, white)`,
@@ -87,7 +65,7 @@ export default async function AdminLayout({
           </div>
         </div>
 
-        <AdminNav navItems={navItems} />
+        <AdminNav />
 
         <div className="p-4 border-t border-surface-100 flex-shrink-0">
           <Link
@@ -118,7 +96,7 @@ export default async function AdminLayout({
         </main>
       </div>
 
-      <AdminMobileNav navItems={navItems} />
+      <AdminMobileNav />
     </div>
   );
 }

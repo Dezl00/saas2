@@ -3,15 +3,33 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LogOut, Home } from "lucide-react";
+import { 
+  LayoutDashboard, 
+  Users, 
+  Store, 
+  Crown, 
+  CreditCard, 
+  Receipt, 
+  PackageSearch, 
+  Palette, 
+  Settings,
+  LogOut, 
+  Home 
+} from "lucide-react";
 
-type NavItem = {
-  href: string;
-  icon: any;
-  label: string;
-};
+const navItems = [
+  { href: "/admin", icon: LayoutDashboard, label: "الرئيسية" },
+  { href: "/admin/users", icon: Users, label: "المستخدمين" },
+  { href: "/admin/stores", icon: Store, label: "المتاجر" },
+  { href: "/admin/plans", icon: Crown, label: "الباقات" },
+  { href: "/admin/payment-methods", icon: CreditCard, label: "طرق الدفع" },
+  { href: "/admin/payment-requests", icon: Receipt, label: "طلبات الدفع" },
+  { href: "/admin/default-products", icon: PackageSearch, label: "المنتجات الافتراضية" },
+  { href: "/admin/appearance", icon: Palette, label: "المظهر العام" },
+  { href: "/admin/settings", icon: Settings, label: "إعدادات المنصة" },
+];
 
-export function AdminNav({ navItems }: { navItems: NavItem[] }) {
+export function AdminNav() {
   const pathname = usePathname();
 
   return (
@@ -42,7 +60,7 @@ export function AdminNav({ navItems }: { navItems: NavItem[] }) {
   );
 }
 
-export function AdminMobileNav({ navItems }: { navItems: NavItem[] }) {
+export function AdminMobileNav() {
   const pathname = usePathname();
 
   return (
