@@ -314,45 +314,45 @@ export function StorefrontView({
                 {category.name}
               </h2>
               
-              {/* Cards — horizontal layout for mobile-first like Menuo */}
-              <div className="flex flex-col gap-3">
+              {/* Cards — Grid layout */}
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                 {items.map((item) => (
                   <div 
                     key={item.id} 
                     onClick={() => handleOpenProduct(item)}
-                    className="bg-white border border-surface-100 rounded-2xl overflow-hidden flex flex-row cursor-pointer transition-all group hover:border-surface-200"
+                    className="bg-white border border-surface-100 rounded-2xl overflow-hidden flex flex-col cursor-pointer transition-all group hover:border-surface-200 hover:shadow-sm"
                   >
                     {/* Image */}
                     {item.image || store.logo ? (
-                      <div className="relative w-28 h-28 sm:w-32 sm:h-32 shrink-0 overflow-hidden bg-surface-50">
+                      <div className="relative w-full aspect-square shrink-0 overflow-hidden bg-surface-50 border-b border-surface-50">
                         <Image 
                           src={item.image || store.logo!} 
                           alt={item.name}
                           fill
-                          sizes="128px"
-                          className={`object-cover transition-opacity duration-300 ${!item.image ? 'opacity-50 p-2' : ''}`}
+                          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                          className={`object-cover transition-opacity duration-300 group-hover:scale-105 ${!item.image ? 'opacity-50 p-6 object-contain' : ''}`}
                           loading="lazy"
                         />
                       </div>
                     ) : (
-                      <div className="w-28 h-28 sm:w-32 sm:h-32 shrink-0 bg-surface-50 flex items-center justify-center">
-                        <ShoppingBag className="w-6 h-6 text-surface-200" />
+                      <div className="w-full aspect-square shrink-0 bg-surface-50 flex items-center justify-center border-b border-surface-50">
+                        <ShoppingBag className="w-8 h-8 text-surface-200" />
                       </div>
                     )}
 
                     {/* Text content */}
-                    <div className="p-3.5 flex flex-col flex-1 justify-between min-w-0">
+                    <div className="p-3 sm:p-4 flex flex-col flex-1 justify-between min-w-0">
                       <div>
-                        <h3 className="font-bold text-surface-900 text-sm leading-tight mb-1">{item.name}</h3>
+                        <h3 className="font-bold text-surface-900 text-[13px] sm:text-sm leading-tight mb-1 line-clamp-2">{item.name}</h3>
                         {item.description && (
-                          <p className="text-xs text-surface-400 line-clamp-2 leading-relaxed">
+                          <p className="text-[11px] sm:text-xs text-surface-400 line-clamp-2 leading-relaxed">
                             {item.description}
                           </p>
                         )}
                       </div>
-                      <div className="flex items-center justify-between mt-2.5">
+                      <div className="flex items-center justify-between mt-3 pt-2">
                         <span 
-                          className="font-black text-sm"
+                          className="font-black text-[13px] sm:text-sm"
                           style={{ color: store.primaryColor || 'var(--color-primary-600)' }}
                         >
                           {item.sizes.length > 0 
@@ -361,10 +361,10 @@ export function StorefrontView({
                           }
                         </span>
                         <span 
-                          className="w-8 h-8 rounded-full flex items-center justify-center text-white transition-colors"
+                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center text-white transition-transform active:scale-95"
                           style={{ backgroundColor: store.primaryColor || 'var(--color-primary-600)' }}
                         >
-                          <Plus className="w-4 h-4" />
+                          <Plus className="w-4 h-4 sm:w-4 sm:h-4" />
                         </span>
                       </div>
                     </div>
