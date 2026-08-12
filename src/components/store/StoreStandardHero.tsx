@@ -49,9 +49,9 @@ export function StoreStandardHero({ store, banners }: { store: any; banners: any
   const isDarkSolid = store.theme === "dark_solid";
 
   return (
-    <section className="relative bg-surface-950">
-      <div className="p-4 sm:p-6 w-full max-w-7xl mx-auto pb-0">
-      <div className="h-44 sm:h-52 w-full relative bg-surface-100 overflow-hidden rounded-[32px] sm:rounded-[48px] shadow-lg">
+    <section className={`relative ${isDarkSolid ? 'bg-black' : 'bg-white'}`}>
+      <div className="p-2 sm:p-4 w-full max-w-7xl mx-auto pb-0">
+      <div className="h-44 sm:h-52 w-full relative bg-surface-100 overflow-hidden rounded-[24px] sm:rounded-[32px] shadow-lg">
         {banners && banners.length > 0 ? (
           <StoreBannersCarousel banners={banners} />
         ) : store.cover ? (

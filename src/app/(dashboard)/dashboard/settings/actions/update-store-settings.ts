@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { revalidatePath, revalidateTag as _revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function updateStoreSettings(formData: FormData) {
   const session = await auth();
@@ -34,18 +34,16 @@ export async function updateStoreSettings(formData: FormData) {
         select: { subdomain: true, domains: { select: { name: true } } }
       });
 
-      revalidatePath("/", "layout");
+      revalidatePath("/dashboard/settings");
       if (updatedStore.subdomain) {
-// @ts-ignore
-        revalidatePath(`store-${updatedStore.subdomain}`);
+        (revalidateTag as any)(`store-${updatedStore.subdomain}`, "default");
       }
-      if (updatedStore.domains) {
-        for (const d of updatedStore.domains) {
-  // @ts-ignore
-        revalidatePath(`store-${d.name}`);
-        }
+      if (updatedStore.domains && updatedStore.domains.length > 0) {
+        updatedStore.domains.forEach(d => {
+          (revalidateTag as any)(`store-${d.name}`, "default");
+        });
       }
-      return { success: "تم حفظ مواعيد العمل بنجاح" };
+      return { success: "تم تحديث مواعيد العمل بنجاح" };
     } catch (error) {
       console.error("Update Working Hours Error:", error);
       return { error: "حدث خطأ أثناء حفظ مواعيد العمل" };

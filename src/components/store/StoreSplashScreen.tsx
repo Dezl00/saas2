@@ -8,9 +8,10 @@ type Props = {
   logo: string | null;
   storeName: string;
   primaryColor?: string | null;
+  theme?: string | null;
 };
 
-export function StoreSplashScreen({ logo, storeName, primaryColor }: Props) {
+export function StoreSplashScreen({ logo, storeName, primaryColor, theme }: Props) {
   const [isVisible, setIsVisible] = useState(true);
   const [isFadingOut, setIsFadingOut] = useState(false);
 
@@ -26,9 +27,11 @@ export function StoreSplashScreen({ logo, storeName, primaryColor }: Props) {
 
   const color = primaryColor || "#E74C3C";
 
+  const isDarkSolid = theme === "dark_solid";
+
   return (
     <div
-      className={`fixed inset-0 z-[100] flex items-center justify-center bg-white ${isFadingOut ? "animate-splash-fade-out" : ""}`}
+      className={`fixed inset-0 z-[100] flex items-center justify-center ${isDarkSolid ? 'bg-black' : 'bg-white'} ${isFadingOut ? "animate-splash-fade-out" : ""}`}
     >
       <div className="flex flex-col items-center justify-center px-6">
         {/* Logo without border/circle */}
@@ -53,16 +56,12 @@ export function StoreSplashScreen({ logo, storeName, primaryColor }: Props) {
             )}
           </div>
 
-          {/* Animated rings */}
-          <div className="absolute -inset-6">
-            <div
-              className="absolute inset-0 rounded-full border-2 animate-splash-ring-ping"
-              style={{ borderColor: `${color}33` }}
-            />
-            <div
-              className="absolute inset-3 rounded-full border animate-splash-ring-pulse"
-              style={{ borderColor: `${color}22` }}
-            />
+          {/* Animated Loader Ring */}
+          <div className="absolute -inset-4 flex items-center justify-center">
+            <svg className="animate-spin w-full h-full" style={{ color }} viewBox="0 0 50 50">
+              <circle className="opacity-25" cx="25" cy="25" r="20" fill="none" stroke="currentColor" strokeWidth="2"></circle>
+              <path className="opacity-75" fill="currentColor" d="M25 5a20 20 0 0 1 20 20h-4a16 16 0 0 0-16-16V5z"></path>
+            </svg>
           </div>
         </div>
       </div>

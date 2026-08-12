@@ -215,84 +215,67 @@ export function StorefrontView({
         </div>
       )}
 
-      {/* Toolbar: Tabs + Search */}
-      <div className={`sticky top-14 z-20 py-2.5 flex items-center gap-2 border-b ${isDarkSolid ? 'bg-black border-[#222]' : 'bg-white border-surface-100'}`}>
-        {/* Search mode: show search input */}
-        {isSearchOpen ? (
-          <div className="flex-1 flex items-center gap-2 animate-search-expand">
-            <div className={`flex-1 flex items-center gap-2 rounded-full px-4 py-2 border ${isDarkSolid ? 'bg-[#111] border-[#333]' : 'bg-surface-50 border-surface-100'}`}>
-              <Search className="w-5 h-5 text-surface-400 shrink-0" />
+      {/* Toolbar: Search + Tabs */}
+      <div className={`sticky top-14 z-20 flex flex-col ${isDarkSolid ? 'bg-black border-[#222]' : 'bg-white border-surface-100'} border-b`}>
+        {/* Search Bar */}
+        <div className={`px-4 py-3 flex items-center ${isDarkSolid ? 'border-[#222]' : 'border-surface-100'} border-b`}>
+          <div className="flex-1 flex items-center gap-2">
+            <div className={`flex-1 flex items-center gap-2 rounded-full px-4 py-2 border ${isDarkSolid ? 'bg-[#111] border-[#333]' : 'bg-surface-50 border-surface-200'}`}>
+              <Search className={`w-5 h-5 shrink-0 ${isDarkSolid ? 'text-surface-400' : 'text-surface-400'}`} />
               <input
-                ref={searchInputRef}
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="ابحث عن صنف..."
                 className={`flex-1 bg-transparent text-sm outline-none placeholder:text-surface-400 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-900'}`}
-                autoFocus
               />
-              {searchQuery && (
-                <button onClick={() => setSearchQuery("")} className="text-surface-400 hover:text-surface-600">
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              )}
             </div>
-            <button
-              onClick={() => { setIsSearchOpen(false); setSearchQuery(""); }}
-              className={`w-9 h-9 flex items-center justify-center rounded-full transition-colors shrink-0 ${isDarkSolid ? 'bg-[#111] text-surface-400 hover:bg-[#222]' : 'bg-surface-100 text-surface-600 hover:bg-surface-200'}`}
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        ) : (
-          <>
-            {/* Categories Tabs - Scrollable */}
-            <div className="flex-1 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] flex items-center gap-2 pb-0.5">
-              {categories.filter(cat => menuItems.some(item => item.categoryId === cat.id)).map((cat) => (
-                <button
-                  key={cat.id}
-                  id={`tab-${cat.id}`}
-                  onClick={() => {
-                    isManualScrolling.current = true;
-                    setActiveTab(cat.id);
-                    document.getElementById(`category-${cat.id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
-                    
-                    if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-                    scrollTimeout.current = setTimeout(() => {
-                      isManualScrolling.current = false;
-                    }, 1000);
-                  }}
-                  className={`whitespace-nowrap px-4 py-2 font-semibold text-sm transition-all rounded-full border ${
-                    activeTab === cat.id
-                      ? isDarkSolid ? "text-black border-transparent" : "text-white border-transparent"
-                      : isDarkSolid 
-                        ? "bg-transparent text-white border-transparent" 
-                        : "bg-surface-50 text-surface-600 border-transparent hover:bg-surface-100"
-                  }`}
-                  style={
-                    activeTab === cat.id 
-                      ? { backgroundColor: primaryColor } 
-                      : isDarkSolid 
-                        ? { borderColor: primaryColor, borderWidth: '1px' } 
-                        : undefined
-                  }
-                >
-                  {cat.name}
-                </button>
-              ))}
-            </div>
-
-            {/* Search button */}
-            <div className={`flex items-center border-s ps-2 ${isDarkSolid ? 'border-[#333]' : 'border-surface-100'}`}>
-              <button 
-                onClick={() => { setIsSearchOpen(true); setTimeout(() => searchInputRef.current?.focus(), 100); }}
-                className={`w-11 h-11 border flex items-center justify-center transition-all rounded-full ${isDarkSolid ? 'bg-transparent border-surface-500/50 text-white hover:bg-white/10' : 'bg-surface-50 border-surface-100 text-surface-500 hover:bg-surface-100'}`}
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className={`w-9 h-9 flex items-center justify-center rounded-full transition-colors shrink-0 ${isDarkSolid ? 'bg-[#111] text-surface-400 hover:bg-[#222]' : 'bg-surface-100 text-surface-600 hover:bg-surface-200'}`}
               >
-                <Search className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
-            </div>
-          </>
-        )}
+            )}
+          </div>
+        </div>
+
+        {/* Categories Tabs - Scrollable */}
+        <div className="px-4 py-2.5 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] flex items-center gap-2">
+          {categories.filter(cat => menuItems.some(item => item.categoryId === cat.id)).map((cat) => (
+            <button
+              key={cat.id}
+              id={`tab-${cat.name.replace(/\s+/g, '-')}`}
+              onClick={() => {
+                isManualScrolling.current = true;
+                setActiveTab(cat.id);
+                document.getElementById(`category-${cat.name.replace(/\s+/g, '-')}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                
+                if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+                scrollTimeout.current = setTimeout(() => {
+                  isManualScrolling.current = false;
+                }, 1000);
+              }}
+              className={`whitespace-nowrap px-4 py-2 font-semibold text-sm transition-all rounded-full border ${
+                activeTab === cat.id
+                  ? isDarkSolid ? "text-black border-transparent" : "text-white border-transparent"
+                  : isDarkSolid 
+                    ? "bg-transparent text-white border-transparent" 
+                    : "bg-surface-50 text-surface-600 border-transparent hover:bg-surface-100"
+              }`}
+              style={
+                activeTab === cat.id 
+                  ? { backgroundColor: primaryColor } 
+                  : isDarkSolid 
+                    ? { borderColor: primaryColor, borderWidth: '1px' } 
+                    : undefined
+              }
+            >
+              {cat.name}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Menu Items — Matching Menuo card style */}
@@ -312,7 +295,7 @@ export function StorefrontView({
           if (items.length === 0) return null;
 
           return (
-            <div key={category.id} id={`category-${category.id}`} className="scroll-mt-28">
+            <div key={category.id} id={`category-${category.name.replace(/\s+/g, '-')}`} className="scroll-mt-36">
               <h2 
                 className={`text-2xl p-2 text-center font-bold mb-6 flex items-center justify-center gap-3 ${isDarkSolid ? 'text-[#fff5e5]' : 'rounded-xl'}`}
                 style={isDarkSolid ? {} : { 

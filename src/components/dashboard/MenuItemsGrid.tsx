@@ -141,7 +141,7 @@ export function MenuItemsGrid({
                 onClick={() => toggleSelectRow(item.id)}
               >
                 {/* Image */}
-                <div className="relative w-24 h-24 shrink-0 rounded-[24px] overflow-hidden bg-surface-100">
+                <div className="relative w-20 h-20 sm:w-24 sm:h-24 shrink-0 rounded-[24px] overflow-hidden bg-surface-100">
                   {item.image ? (
                     <Image src={item.image} alt={item.name} fill className="object-cover" />
                   ) : (
@@ -160,8 +160,8 @@ export function MenuItemsGrid({
                 <div className="flex flex-col flex-grow justify-between py-1 min-w-0">
                   <div className="min-w-0">
                     <div className="flex justify-between items-start gap-2 mb-1">
-                      <h4 className="font-bold text-surface-950 text-lg leading-tight line-clamp-1 break-words">{item.name}</h4>
-                      <span className="font-black text-primary-600 shrink-0">{Number(item.price).toFixed(2)}</span>
+                      <h4 className="font-bold text-surface-950 text-base sm:text-lg leading-tight line-clamp-1 break-words">{item.name}</h4>
+                      <span className="font-black text-primary-600 shrink-0 text-sm sm:text-base">{Number(item.price).toFixed(2)}</span>
                     </div>
                     <span className="inline-block px-2.5 py-1 bg-surface-100 text-surface-600 text-xs font-bold rounded-lg mb-2 max-w-full truncate">
                       {item.category.name}
@@ -172,11 +172,11 @@ export function MenuItemsGrid({
                   </div>
 
                   {/* Actions */}
-                  <div className="flex items-center justify-between mt-3 pt-3 border-t-2 border-surface-100/50" onClick={e => e.stopPropagation()}>
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t-2 border-surface-100/50 flex-wrap gap-2" onClick={e => e.stopPropagation()}>
                     <form action={toggleMenuItemStatus.bind(null, item.id, item.isAvailable, storeId) as any}>
                       <button
                         type="submit"
-                        className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none ${
+                        className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors focus:outline-none ${
                           item.isAvailable ? 'bg-success-500' : 'bg-surface-300'
                         }`}
                       >
@@ -188,7 +188,7 @@ export function MenuItemsGrid({
                       </button>
                     </form>
 
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1 shrink-0">
                       <GenerateImageButton itemId={item.id} hasImage={!!item.image} />
                       <MenuItemEditButton itemId={item.id} />
                       <DeleteConfirmButton action={deleteMenuItem.bind(null, item.id, storeId) as any} />

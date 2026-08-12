@@ -76,6 +76,7 @@ type Props = {
   workingHours?: WorkingHoursData | null;
   mapLatitude?: string | null;
   mapLongitude?: string | null;
+  hasLandingPage?: boolean;
 };
 
 const DAY_NAMES: Record<string, string> = {
@@ -96,7 +97,7 @@ function getCurrentDayKey(): string {
   return mapping[dayIndex];
 }
 
-export function StoreHeader({ logo, storeName, primaryColor, theme, socialLinks, workingHours, mapLatitude, mapLongitude }: Props) {
+export function StoreHeader({ logo, storeName, primaryColor, theme, socialLinks, workingHours, mapLatitude, mapLongitude, hasLandingPage }: Props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isWorkingHoursOpen, setIsWorkingHoursOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -188,6 +189,17 @@ export function StoreHeader({ logo, storeName, primaryColor, theme, socialLinks,
               <div className={`absolute top-14 start-0 end-0 border-b z-50 animate-slide-in-menu ${isDarkSolid ? 'bg-[#0a0a0a] border-[#222]' : 'bg-white border-surface-100'}`}>
                 <div className="max-w-5xl mx-auto">
                   <div className="flex flex-col">
+                    {/* Home link if landing page is enabled */}
+                    {hasLandingPage && (
+                      <a
+                        href="/"
+                        className={`flex items-center gap-3 px-5 py-4 transition-colors border-b ${isDarkSolid ? 'text-white border-[#222] hover:bg-white/5' : 'text-surface-700 hover:bg-surface-50 border-surface-50'}`}
+                      >
+                        <MapPin className="w-5 h-5 opacity-0" style={{ display: 'none' }} />
+                        <span className="font-bold text-base w-full text-center" style={{ color }}>الرئيسية</span>
+                      </a>
+                    )}
+
                     {/* Share menu */}
                     <button
                       onClick={() => { handleShare(); setIsMenuOpen(false); }}
@@ -265,9 +277,9 @@ export function StoreHeader({ logo, storeName, primaryColor, theme, socialLinks,
           {/* Center: Logo */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none">
             {logo && (
-              <div className="w-12 h-12 overflow-hidden flex items-center justify-center shrink-0 pointer-events-auto">
-                <Image src={logo} alt={storeName} width={48} height={48} className="w-full h-full object-contain" />
-              </div>
+              <a href={hasLandingPage ? "/" : "/menu"} className="h-16 flex items-center justify-center shrink-0 pointer-events-auto py-1">
+                <Image src={logo} alt={storeName} width={80} height={80} className="max-h-full w-auto object-contain" priority />
+              </a>
             )}
           </div>
 

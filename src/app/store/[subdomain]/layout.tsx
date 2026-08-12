@@ -161,6 +161,7 @@ export default async function StoreLayout({
           logo={store.logo}
           storeName={store.name}
           primaryColor={store.primaryColor}
+          theme={store.theme}
         />
 
         {/* Header — New client component with hamburger menu */}
