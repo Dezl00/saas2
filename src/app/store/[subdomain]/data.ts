@@ -68,7 +68,7 @@ export async function getStoreCatalog(storeId: string, showDefaultProducts: bool
   let categories = await prisma.category.findMany({
     where: { storeId: targetStoreId, isActive: true },
     orderBy: { sortOrder: 'asc' },
-    select: { id: true, name: true }
+    select: { id: true, name: true, image: true }
   });
 
   if (categories.length === 0 && showDefaultProducts) {
@@ -77,7 +77,7 @@ export async function getStoreCatalog(storeId: string, showDefaultProducts: bool
     categories = await prisma.category.findMany({
       where: { storeId: targetStoreId, isActive: true },
       orderBy: { sortOrder: 'asc' },
-      select: { id: true, name: true }
+      select: { id: true, name: true, image: true }
     });
   }
 
