@@ -12,8 +12,7 @@ import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import { cn } from "@/lib/utils";
 import { Trash2, Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
-import { ImageUpload } from "@/components/dashboard/ImageUpload";
-import { updateCategoryImage } from "../actions/update-category-image";
+import { updateCategoryImage, uploadCategoryImage } from "../actions/update-category-image";
 
 interface Category {
   id: string;
@@ -105,27 +104,16 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
   const handleImageUpload = (id: string, file: File) => {
     // We upload immediately when a file is selected
     startTransition(async () => {
-      const { uploadImageToCloudinary } = await import("@/lib/upload");
-      let imageUrl = null;
-      try {
-        imageUrl = await uploadImageToCloudinary(file) as string;
-      } catch (e) {
-        toast.error("فشل رفع الصورة");
-        return;
-      }
+      const formData = new FormData();
+      formData.append("file", file);
       
-      const oldImage = categories.find(c => c.id === id)?.image || null;
-      setCategories(prev => 
-        prev.map(c => c.id === id ? { ...c, image: imageUrl } : c)
-      );
-
-      const result = await updateCategoryImage(id, imageUrl);
+      const result = await uploadCategoryImage(id, formData);
       if (result?.error) {
         toast.error(result.error);
+      } else if (result?.imageUrl) {
         setCategories(prev => 
-          prev.map(c => c.id === id ? { ...c, image: oldImage } : c)
+          prev.map(c => c.id === id ? { ...c, image: result.imageUrl! } : c)
         );
-      } else {
         toast.success("تم تحديث صورة القسم");
       }
     });
