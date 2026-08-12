@@ -293,7 +293,7 @@ export function CartSidebar({
                         <button
                           key={branch.id}
                           type="button"
-                          onClick={() => { setSelectedBranch(branch.id); setValidationErrors(prev => ({...prev, branch: undefined})); }}
+                          onClick={() => { setSelectedBranch(branch.id); setValidationErrors(prev => ({...prev, branch: ""})); }}
                           className={`text-start p-4 border rounded-xl transition-all ${
                             selectedBranch === branch.id
                               ? (isDarkSolid ? 'bg-primary-900/20 border-primary-500' : 'bg-primary-50 border-primary-500')
