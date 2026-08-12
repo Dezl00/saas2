@@ -29,7 +29,12 @@ export function AppearanceClient({
   currentFont, 
   currentTheme,
   currentHideDescription = false,
-  currentHideAddButton = false
+  currentHideAddButton = false,
+  currentEnableLandingPage = false,
+  currentLandingHeroTitle = "",
+  currentLandingHeroDescription = "",
+  currentLandingHeroImage = "",
+  currentLandingHeroOverlayOpacity = 50
 }: { 
   currentFont: string, 
   currentTheme: string,
