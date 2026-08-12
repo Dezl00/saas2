@@ -76,15 +76,9 @@ export async function generateMetadata(props: { params: Promise<{ subdomain: str
     title: store.name,
     description: description,
     icons: {
-      icon: [
-        { url: icon, href: icon },
-      ],
-      shortcut: [
-        { url: icon, href: icon },
-      ],
-      apple: [
-        { url: icon, href: icon },
-      ],
+      icon: icon,
+      shortcut: icon,
+      apple: icon,
     },
     openGraph: {
       title: store.name,

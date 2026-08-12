@@ -28,15 +28,9 @@ export async function generateMetadata(): Promise<Metadata> {
     title: title,
     description: description,
     icons: {
-      icon: [
-        { url: icon, href: icon },
-      ],
-      shortcut: [
-        { url: icon, href: icon },
-      ],
-      apple: [
-        { url: icon, href: icon },
-      ],
+      icon: icon,
+      shortcut: icon,
+      apple: icon,
     },
     openGraph: {
       title: title,
