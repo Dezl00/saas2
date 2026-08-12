@@ -53,20 +53,13 @@ export function StoreLandingView({ store, categories, subdomain }: { store: Stor
 
           <Link 
             href="menu"
-            className="flex items-center gap-3 px-8 sm:px-10 py-3 sm:py-3.5 rounded-2xl font-bold transition-all hover:scale-105 active:scale-95 text-base sm:text-lg border-2"
+            className="flex items-center gap-3 px-8 sm:px-10 py-3 sm:py-3.5 rounded-2xl font-bold transition-all hover:scale-105 active:scale-95 text-base sm:text-lg border-2 landing-hero-btn hover:bg-[var(--btn-primary)] hover:text-white"
             style={{ 
               borderColor: primaryColor, 
               color: primaryColor,
-              backgroundColor: 'transparent'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = primaryColor;
-              e.currentTarget.style.color = '#fff';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = primaryColor;
-            }}
+              backgroundColor: 'transparent',
+              '--btn-primary': primaryColor,
+            } as React.CSSProperties}
           >
             <span>استكشف المنيو</span>
             <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6" />
