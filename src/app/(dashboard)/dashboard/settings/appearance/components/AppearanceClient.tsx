@@ -179,7 +179,6 @@ export function AppearanceClient({
             {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Check className="w-5 h-5" />}
             حفظ إعدادات المظهر
           </button>
-        </div>
       </div>
     </div>
   );
