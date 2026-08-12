@@ -26,6 +26,7 @@ export default async function StorePage(props: { params: Promise<{ subdomain: st
     image: item.image,
     categoryId: item.categoryId,
     isFeatured: item.isFeatured,
+    isAvailable: item.isAvailable,
     sizes: item.sizes.map(size => ({ id: size.id, name: size.name, price: Number(size.price) })),
     addons: item.addons.map(addon => ({ id: addon.id, name: addon.name, price: Number(addon.price) }))
   }));

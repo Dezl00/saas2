@@ -328,7 +328,7 @@ export function StorefrontView({
                       key={item.id} 
                       onClick={() => handleOpenProduct(item)}
                       className={`border rounded-2xl overflow-hidden cursor-pointer transition-all group hover:shadow-sm ${
-                        isFeatured ? 'col-span-2 md:col-span-3 lg:col-span-4 flex' : 'flex flex-col'
+                        isFeatured ? 'col-span-2 md:col-span-2 lg:col-span-2 flex' : 'flex flex-col'
                       } ${
                         isDarkSolid ? 'bg-[#0a0a0a]' : 'bg-white border-surface-100 hover:border-surface-200'
                       }`}
