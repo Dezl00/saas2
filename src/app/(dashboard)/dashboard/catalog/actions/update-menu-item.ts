@@ -87,7 +87,8 @@ export async function updateMenuItem(menuItemId: string, formData: FormData) {
     } else {
       revalidatePath("/dashboard/menu");
     }
-    revalidateTag(`store-${storeIdToUse}`, "default");
+    revalidateTag(`store-${storeIdToUse}`);
+    revalidateTag(`store-catalog-v2-${storeIdToUse}`);
     return { success: "تم تحديث الصنف بنجاح" };
   } catch (error: any) {
     console.error("Update Menu Item Error:", error);

@@ -34,7 +34,8 @@ export async function toggleMenuItemStatus(menuItemId: string, currentStatus: bo
     } else {
       revalidatePath("/dashboard/menu");
     }
-    revalidateTag(`store-${storeIdToUse}`, "default");
+    revalidateTag(`store-${storeIdToUse}`);
+    revalidateTag(`store-catalog-v2-${storeIdToUse}`);
     return { success: "تم تحديث حالة الصنف" };
   } catch (error) {
     console.error("Toggle Menu Item Error:", error);
