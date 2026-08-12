@@ -4,6 +4,7 @@ import { Plus, LayoutGrid } from "lucide-react";
 import { createCategory } from "./actions/create-category";
 import { SubmitButton } from "@/components/dashboard/SubmitButton";
 import { CategoriesClient } from "./components/CategoriesClient";
+import { ImageUpload } from "@/components/dashboard/ImageUpload";
 
 export const metadata = {
   title: "إدارة الأقسام | لوحة التحكم",
@@ -51,6 +52,15 @@ export default async function CategoriesPage() {
                   placeholder="مثال: مقبلات، مشويات"
                   className="w-full px-4 py-3 bg-white border-2 border-surface-200 rounded-[24px] text-surface-950 focus:border-primary-500 focus:outline-none transition-colors font-medium"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-surface-950 mb-2">
+                  صورة القسم
+                </label>
+                <div className="bg-white border-2 border-surface-200 rounded-[24px] overflow-hidden p-4">
+                  <ImageUpload name="imageFile" label="اختر صورة للقسم" />
+                </div>
               </div>
 
               <div>

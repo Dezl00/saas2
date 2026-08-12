@@ -18,11 +18,24 @@ export async function createCategory(formData: FormData) {
     return { error: "اسم القسم مطلوب" };
   }
 
+  let image = null;
+  const imageFile = formData.get("imageFile") as File | null;
+  if (imageFile && imageFile.size > 0) {
+    const { uploadImageToCloudinary } = await import("@/lib/upload");
+    try {
+      image = await uploadImageToCloudinary(imageFile) as string;
+    } catch (e) {
+      console.error("Upload error", e);
+      return { error: "فشل رفع الصورة" };
+    }
+  }
+
   try {
     await prisma.category.create({
       data: {
         name,
         description,
+        image,
         sortOrder,
         storeId: session.user.storeId,
       },
@@ -30,7 +43,8 @@ export async function createCategory(formData: FormData) {
 
     revalidatePath("/dashboard/catalog/categories");
     revalidatePath("/dashboard/catalog");
-    // 
+    (revalidateTag as any)(`store-catalog-${session.user.storeId}`, "default");
+    
     return { success: "تم إضافة القسم بنجاح" };
   } catch (error) {
     console.error("Create Category Error:", error);

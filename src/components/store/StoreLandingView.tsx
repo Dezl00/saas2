@@ -22,7 +22,8 @@ export function StoreLandingView({ store, categories, subdomain }: { store: Stor
     <div className={`flex flex-col min-h-screen ${isDarkSolid ? 'bg-black text-white' : 'bg-white text-surface-950'}`}>
       
       {/* Hero Section */}
-      <section className="relative h-[60vh] sm:h-[70vh] w-full flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+      <div className="p-4 sm:p-6 w-full max-w-7xl mx-auto">
+        <section className="relative h-64 sm:h-96 md:h-[450px] w-full flex flex-col items-center justify-center text-center px-4 overflow-hidden rounded-[32px] sm:rounded-[48px] shadow-lg">
         {store.landingHeroImage ? (
           <>
             <div 
@@ -40,26 +41,39 @@ export function StoreLandingView({ store, categories, subdomain }: { store: Stor
 
         <div className="relative z-10 max-w-2xl mx-auto flex flex-col items-center">
           {store.landingHeroTitle && (
-            <h1 className="text-3xl sm:text-5xl font-black text-white mb-4 leading-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-4 sm:mb-6 leading-tight drop-shadow-md px-2">
               {store.landingHeroTitle}
             </h1>
           )}
           {store.landingHeroDescription && (
-            <p className="text-base sm:text-lg text-white/90 mb-8 max-w-lg leading-relaxed">
+            <p className="text-lg sm:text-xl md:text-2xl text-white/95 mb-8 sm:mb-10 max-w-2xl leading-relaxed drop-shadow px-4">
               {store.landingHeroDescription}
             </p>
           )}
 
           <Link 
-            href={`/store/${subdomain}/menu`}
-            className="flex items-center gap-3 px-8 py-3.5 rounded-2xl font-bold text-white transition-transform hover:scale-105 active:scale-95 text-lg"
-            style={{ backgroundColor: primaryColor }}
+            href="menu"
+            className="flex items-center gap-3 px-8 sm:px-10 py-3 sm:py-3.5 rounded-2xl font-bold transition-all hover:scale-105 active:scale-95 text-base sm:text-lg border-2"
+            style={{ 
+              borderColor: primaryColor, 
+              color: primaryColor,
+              backgroundColor: 'transparent'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = primaryColor;
+              e.currentTarget.style.color = '#fff';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = primaryColor;
+            }}
           >
             <span>استكشف المنيو</span>
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6" />
           </Link>
         </div>
       </section>
+      </div>
 
       {/* Categories Grid */}
       <section className="flex-1 py-12 px-4 max-w-5xl mx-auto w-full">
@@ -67,11 +81,12 @@ export function StoreLandingView({ store, categories, subdomain }: { store: Stor
           {categories.map((cat) => (
             <Link 
               key={cat.id} 
-              href={`/store/${subdomain}/menu#category-${cat.id}`}
-              className="flex flex-col items-center group"
+              href={`menu#category-${cat.id}`}
+              className="flex flex-col items-center group p-4 sm:p-6 rounded-[32px] border-2 transition-all hover:shadow-md"
+              style={{ borderColor: primaryColor }}
             >
               <div 
-                className={`w-32 h-32 sm:w-40 sm:h-40 rounded-full mb-4 border-[3px] overflow-hidden relative flex items-center justify-center transition-transform group-hover:scale-105 shadow-sm ${isDarkSolid ? 'bg-[#111]' : 'bg-surface-50'}`}
+                className={`w-28 h-28 sm:w-36 sm:h-36 rounded-full mb-4 sm:mb-5 overflow-hidden relative flex items-center justify-center transition-transform group-hover:scale-105 shadow-sm ${isDarkSolid ? 'bg-[#111]' : 'bg-surface-50'}`}
                 style={{ borderColor: primaryColor }}
               >
                 {cat.image ? (

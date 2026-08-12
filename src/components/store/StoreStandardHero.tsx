@@ -50,7 +50,8 @@ export function StoreStandardHero({ store, banners }: { store: any; banners: any
 
   return (
     <section className="relative bg-surface-950">
-      <div className="h-44 sm:h-52 w-full relative bg-surface-100 overflow-hidden">
+      <div className="p-4 sm:p-6 w-full max-w-7xl mx-auto pb-0">
+      <div className="h-44 sm:h-52 w-full relative bg-surface-100 overflow-hidden rounded-[32px] sm:rounded-[48px] shadow-lg">
         {banners && banners.length > 0 ? (
           <StoreBannersCarousel banners={banners} />
         ) : store.cover ? (
@@ -73,6 +74,7 @@ export function StoreStandardHero({ store, banners }: { store: any; banners: any
             style={{ backgroundColor: store.primaryColor || '#1a1a2e' }}
           />
         )}
+      </div>
       </div>
 
       {/* Logo circle overlapping cover */}
