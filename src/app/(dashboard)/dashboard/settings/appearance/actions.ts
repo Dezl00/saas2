@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath, revalidateTag } from "next/cache";
 
-export async function updateStoreFont(fontFamily: string) {
+export async function updateStoreAppearance(fontFamily: string, theme: string) {
   const session = await auth();
   if (!session?.user?.storeId) {
     throw new Error("Unauthorized");
@@ -12,7 +12,7 @@ export async function updateStoreFont(fontFamily: string) {
 
   const store = await prisma.store.update({
     where: { id: session.user.storeId },
-    data: { fontFamily },
+    data: { fontFamily, theme },
   });
 
   // Type assertion for next/cache revalidateTag

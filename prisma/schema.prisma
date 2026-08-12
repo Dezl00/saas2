@@ -143,6 +143,7 @@ model Store {
   showSnapchat         Boolean @default(true)
   showDefaultProducts  Boolean @default(true)
   fontFamily           String  @default("Tajawal")
+  theme                String  @default("classic")
 
   // Working Hours & Map
   workingHours  Json?

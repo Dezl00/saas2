@@ -19,7 +19,7 @@ type MenuItem = {
   addons: Addon[];
 };
 type Category = { id: string; name: string };
-type Store = { name: string; currency: string; primaryColor?: string | null; secondaryColor?: string | null; logo?: string | null; };
+type Store = { name: string; currency: string; primaryColor?: string | null; secondaryColor?: string | null; logo?: string | null; theme?: string | null; };
 
 export function StorefrontView({
   store,
@@ -33,6 +33,9 @@ export function StorefrontView({
   const [activeTab, setActiveTab] = useState(categories[0]?.id || "");
   const isManualScrolling = useRef(false);
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const isDarkSolid = store.theme === "dark_solid";
+  const primaryColor = store.primaryColor || 'var(--color-primary-600)';
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -166,14 +169,14 @@ export function StorefrontView({
 
   if (categories.length === 0) {
     return (
-      <div className="text-center py-20 bg-white">
-        <h2 className="text-2xl font-bold text-surface-950">المنيو قيد التجهيز</h2>
+      <div className={`text-center py-20 ${isDarkSolid ? 'bg-black' : 'bg-white'}`}>
+        <h2 className={`text-2xl font-bold ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>المنيو قيد التجهيز</h2>
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
+    <div className={`space-y-4 ${isDarkSolid ? 'bg-black' : ''}`}>
       
       {/* Toast Notification */}
       {toastItem && (
@@ -198,7 +201,7 @@ export function StorefrontView({
             <button 
               onClick={() => { setToastItem(null); setIsCartOpen(true); }}
               className="flex-1 py-2 text-white font-bold text-sm rounded-xl transition-colors"
-              style={{ backgroundColor: store.primaryColor || 'var(--color-primary-600)' }}
+              style={{ backgroundColor: primaryColor }}
             >
               عرض السلة
             </button>
@@ -213,11 +216,11 @@ export function StorefrontView({
       )}
 
       {/* Toolbar: Tabs + Search */}
-      <div className="sticky top-14 z-20 bg-white py-2.5 flex items-center gap-2 border-b border-surface-100">
+      <div className={`sticky top-14 z-20 py-2.5 flex items-center gap-2 border-b ${isDarkSolid ? 'bg-black border-[#222]' : 'bg-white border-surface-100'}`}>
         {/* Search mode: show search input */}
         {isSearchOpen ? (
           <div className="flex-1 flex items-center gap-2 animate-search-expand">
-            <div className="flex-1 flex items-center gap-2 bg-surface-50 rounded-full px-4 py-2 border border-surface-100">
+            <div className={`flex-1 flex items-center gap-2 rounded-full px-4 py-2 border ${isDarkSolid ? 'bg-[#111] border-[#333]' : 'bg-surface-50 border-surface-100'}`}>
               <Search className="w-5 h-5 text-surface-400 shrink-0" />
               <input
                 ref={searchInputRef}
@@ -225,7 +228,7 @@ export function StorefrontView({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="ابحث عن صنف..."
-                className="flex-1 bg-transparent text-sm text-surface-900 outline-none placeholder:text-surface-400"
+                className={`flex-1 bg-transparent text-sm outline-none placeholder:text-surface-400 ${isDarkSolid ? 'text-white' : 'text-surface-900'}`}
                 autoFocus
               />
               {searchQuery && (
@@ -236,7 +239,7 @@ export function StorefrontView({
             </div>
             <button
               onClick={() => { setIsSearchOpen(false); setSearchQuery(""); }}
-              className="w-9 h-9 flex items-center justify-center rounded-full bg-surface-100 text-surface-600 hover:bg-surface-200 transition-colors shrink-0"
+              className={`w-9 h-9 flex items-center justify-center rounded-full transition-colors shrink-0 ${isDarkSolid ? 'bg-[#111] text-surface-400 hover:bg-[#222]' : 'bg-surface-100 text-surface-600 hover:bg-surface-200'}`}
             >
               <X className="w-4 h-4" />
             </button>
@@ -259,13 +262,15 @@ export function StorefrontView({
                       isManualScrolling.current = false;
                     }, 1000);
                   }}
-                  className={`whitespace-nowrap px-4 py-2 font-semibold text-sm transition-all rounded-full ${
+                  className={`whitespace-nowrap px-4 py-2 font-semibold text-sm transition-all rounded-full border ${
                     activeTab === cat.id
-                      ? "text-white"
-                      : "bg-surface-50 text-surface-600 hover:bg-surface-100"
+                      ? isDarkSolid ? "text-black border-transparent" : "text-white border-transparent"
+                      : isDarkSolid 
+                        ? "bg-transparent text-white border-surface-500/50" 
+                        : "bg-surface-50 text-surface-600 border-transparent hover:bg-surface-100"
                   }`}
                   style={activeTab === cat.id ? { 
-                    backgroundColor: store.primaryColor || 'var(--color-primary-500)',
+                    backgroundColor: primaryColor,
                   } : undefined}
                 >
                   {cat.name}
@@ -274,10 +279,10 @@ export function StorefrontView({
             </div>
 
             {/* Search button */}
-            <div className="flex items-center border-s border-surface-100 ps-2">
+            <div className={`flex items-center border-s ps-2 ${isDarkSolid ? 'border-[#333]' : 'border-surface-100'}`}>
               <button 
                 onClick={() => { setIsSearchOpen(true); setTimeout(() => searchInputRef.current?.focus(), 100); }}
-                className="w-11 h-11 border flex items-center justify-center transition-all rounded-full bg-surface-50 border-surface-100 text-surface-500 hover:bg-surface-100"
+                className={`w-11 h-11 border flex items-center justify-center transition-all rounded-full ${isDarkSolid ? 'bg-transparent border-surface-500/50 text-white hover:bg-white/10' : 'bg-surface-50 border-surface-100 text-surface-500 hover:bg-surface-100'}`}
               >
                 <Search className="w-5 h-5" />
               </button>
@@ -305,13 +310,13 @@ export function StorefrontView({
           return (
             <div key={category.id} id={`category-${category.id}`} className="scroll-mt-28">
               <h2 
-                className="text-lg rounded-xl p-2 text-center font-semibold mb-4"
-                style={{ 
+                className={`text-lg p-2 text-center font-semibold mb-4 ${isDarkSolid ? 'text-white' : 'rounded-xl'}`}
+                style={isDarkSolid ? {} : { 
                   backgroundColor: store.primaryColor ? `${store.primaryColor}1a` : 'var(--color-primary-50)',
                   color: store.primaryColor || 'var(--color-primary-600)' 
                 }}
               >
-                {category.name}
+                {isDarkSolid ? `- ${category.name} -` : category.name}
               </h2>
               
               {/* Cards — Grid layout */}
@@ -320,11 +325,14 @@ export function StorefrontView({
                   <div 
                     key={item.id} 
                     onClick={() => handleOpenProduct(item)}
-                    className="bg-white border border-surface-100 rounded-2xl overflow-hidden flex flex-col cursor-pointer transition-all group hover:border-surface-200 hover:shadow-sm"
+                    className={`border rounded-2xl overflow-hidden flex flex-col cursor-pointer transition-all group hover:shadow-sm ${
+                      isDarkSolid ? 'bg-[#0a0a0a]' : 'bg-white border-surface-100 hover:border-surface-200'
+                    }`}
+                    style={isDarkSolid ? { borderColor: primaryColor } : undefined}
                   >
                     {/* Image */}
                     {item.image || store.logo ? (
-                      <div className="relative w-full aspect-square shrink-0 overflow-hidden bg-surface-50 border-b border-surface-50">
+                      <div className={`relative w-full aspect-square shrink-0 overflow-hidden border-b ${isDarkSolid ? 'bg-[#111] border-[#222]' : 'bg-surface-50 border-surface-50'}`}>
                         <Image 
                           src={item.image || store.logo!} 
                           alt={item.name}
@@ -335,17 +343,17 @@ export function StorefrontView({
                         />
                       </div>
                     ) : (
-                      <div className="w-full aspect-square shrink-0 bg-surface-50 flex items-center justify-center border-b border-surface-50">
-                        <ShoppingBag className="w-8 h-8 text-surface-200" />
+                      <div className={`w-full aspect-square shrink-0 flex items-center justify-center border-b ${isDarkSolid ? 'bg-[#111] border-[#222]' : 'bg-surface-50 border-surface-50'}`}>
+                        <ShoppingBag className={`w-8 h-8 ${isDarkSolid ? 'text-[#333]' : 'text-surface-200'}`} />
                       </div>
                     )}
 
                     {/* Text content */}
                     <div className="p-3 sm:p-4 flex flex-col flex-1 justify-between min-w-0">
                       <div>
-                        <h3 className="font-bold text-surface-900 text-[13px] sm:text-sm leading-tight mb-1 line-clamp-2">{item.name}</h3>
+                        <h3 className={`font-bold text-[13px] sm:text-sm leading-tight mb-1 line-clamp-2 ${isDarkSolid ? 'text-white' : 'text-surface-900'}`}>{item.name}</h3>
                         {item.description && (
-                          <p className="text-[11px] sm:text-xs text-surface-400 line-clamp-2 leading-relaxed">
+                          <p className={`text-[11px] sm:text-xs line-clamp-2 leading-relaxed ${isDarkSolid ? 'text-surface-400' : 'text-surface-400'}`}>
                             {item.description}
                           </p>
                         )}
@@ -353,7 +361,7 @@ export function StorefrontView({
                       <div className="flex items-center justify-between mt-3 pt-2">
                         <span 
                           className="font-black text-[13px] sm:text-sm"
-                          style={{ color: store.primaryColor || 'var(--color-primary-600)' }}
+                          style={{ color: primaryColor }}
                         >
                           {item.sizes.length > 0 
                             ? `${formatPrice(Math.min(...item.sizes.map(s => s.price)), store.currency)}`
@@ -361,8 +369,8 @@ export function StorefrontView({
                           }
                         </span>
                         <span 
-                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center text-white transition-transform active:scale-95"
-                          style={{ backgroundColor: store.primaryColor || 'var(--color-primary-600)' }}
+                          className={`w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center transition-transform active:scale-95 ${isDarkSolid ? 'text-black' : 'text-white'}`}
+                          style={{ backgroundColor: primaryColor }}
                         >
                           <Plus className="w-4 h-4 sm:w-4 sm:h-4" />
                         </span>
@@ -385,7 +393,7 @@ export function StorefrontView({
           }}
         >
           <div 
-            className="bg-white w-full sm:max-w-md sm:max-h-[85vh] max-h-[90vh] flex flex-col animate-slide-in-up sm:animate-zoom-in overflow-hidden sm:rounded-2xl rounded-t-3xl"
+            className={`w-full sm:max-w-md sm:max-h-[85vh] max-h-[90vh] flex flex-col animate-slide-in-up sm:animate-zoom-in overflow-hidden sm:rounded-2xl rounded-t-3xl ${isDarkSolid ? 'bg-[#0a0a0a]' : 'bg-white'}`}
             onTouchStart={(e) => {
               const touch = e.touches[0];
               const el = e.currentTarget;
@@ -418,11 +426,11 @@ export function StorefrontView({
             }}
           >
             {/* Modal Header Image */}
-            <div className="relative h-48 sm:h-52 bg-surface-50 shrink-0">
+            <div className={`relative h-48 sm:h-52 shrink-0 ${isDarkSolid ? 'bg-[#111]' : 'bg-surface-50'}`}>
               {selectedProduct.image ? (
                 <Image src={selectedProduct.image} alt={selectedProduct.name} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center"><ShoppingBag className="w-10 h-10 text-surface-200" /></div>
+                <div className="w-full h-full flex items-center justify-center"><ShoppingBag className={`w-10 h-10 ${isDarkSolid ? 'text-[#333]' : 'text-surface-200'}`} /></div>
               )}
               <button 
                 onClick={closeProductModal}
@@ -437,13 +445,13 @@ export function StorefrontView({
             {/* Modal Content */}
             <div className="p-5 flex-1 overflow-y-auto space-y-5">
               <div>
-                <h2 className="text-lg font-bold text-surface-900">{selectedProduct.name}</h2>
+                <h2 className={`text-lg font-bold ${isDarkSolid ? 'text-white' : 'text-surface-900'}`}>{selectedProduct.name}</h2>
                 {selectedProduct.description && (
                   <p className="text-surface-400 text-sm mt-1.5 leading-relaxed">{selectedProduct.description}</p>
                 )}
                 <div 
                   className="mt-2 font-bold text-lg"
-                  style={{ color: store.primaryColor || 'var(--color-primary-600)' }}
+                  style={{ color: primaryColor }}
                 >
                   {formatPrice(selectedProduct.price, store.currency)}
                 </div>
@@ -451,19 +459,19 @@ export function StorefrontView({
 
               {selectedProduct.sizes && selectedProduct.sizes.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-surface-900 mb-2.5 text-sm bg-surface-50 rounded-xl p-2.5">اختر الحجم (إجباري)</h3>
+                  <h3 className={`font-semibold mb-2.5 text-sm rounded-xl p-2.5 ${isDarkSolid ? 'bg-[#111] text-white' : 'bg-surface-50 text-surface-900'}`}>اختر الحجم (إجباري)</h3>
                   <div className="space-y-2">
                     {selectedProduct.sizes.map(size => (
-                      <label key={size.id} onClick={() => setSelectedSize(size)} className={`flex items-center justify-between p-3 border rounded-xl cursor-pointer transition-all ${selectedSize?.id === size.id ? 'border-primary-500 bg-primary-50' : 'border-surface-100 hover:bg-surface-50'}`}>
+                      <label key={size.id} onClick={() => setSelectedSize(size)} className={`flex items-center justify-between p-3 border rounded-xl cursor-pointer transition-all ${selectedSize?.id === size.id ? isDarkSolid ? 'border-primary-500 bg-primary-500/10' : 'border-primary-500 bg-primary-50' : isDarkSolid ? 'border-[#333] hover:bg-[#111]' : 'border-surface-100 hover:bg-surface-50'}`}>
                         <div className="flex items-center gap-3">
-                          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${selectedSize?.id === size.id ? 'border-primary-500' : 'border-surface-300'}`}>
+                          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${selectedSize?.id === size.id ? 'border-primary-500' : isDarkSolid ? 'border-surface-600' : 'border-surface-300'}`}>
                             {selectedSize?.id === size.id && (
                               <div className="w-2 h-2 rounded-full bg-primary-500" />
                             )}
                           </div>
-                          <span className="text-sm text-surface-800">{size.name}</span>
+                          <span className={`text-sm ${isDarkSolid ? 'text-surface-200' : 'text-surface-800'}`}>{size.name}</span>
                         </div>
-                        <span className="font-semibold text-sm text-surface-900">{formatPrice(size.price, store.currency)}</span>
+                        <span className={`font-semibold text-sm ${isDarkSolid ? 'text-white' : 'text-surface-900'}`}>{formatPrice(size.price, store.currency)}</span>
                       </label>
                     ))}
                   </div>
@@ -473,7 +481,7 @@ export function StorefrontView({
               {/* Addons */}
               {selectedProduct.addons && selectedProduct.addons.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-surface-900 mb-2.5 text-sm bg-surface-50 rounded-xl p-2.5">إضافات (اختياري)</h3>
+                  <h3 className={`font-semibold mb-2.5 text-sm rounded-xl p-2.5 ${isDarkSolid ? 'bg-[#111] text-white' : 'bg-surface-50 text-surface-900'}`}>إضافات (اختياري)</h3>
                   <div className="space-y-2">
                     {selectedProduct.addons.map(addon => {
                       const isSelected = selectedAddons.some(a => a.id === addon.id);
@@ -484,12 +492,12 @@ export function StorefrontView({
                           } else {
                             setSelectedAddons(prev => [...prev, addon]);
                           }
-                        }} className={`flex items-center justify-between p-3 border rounded-xl cursor-pointer transition-all ${isSelected ? 'border-primary-500 bg-primary-50' : 'border-surface-100 hover:bg-surface-50'}`}>
+                        }} className={`flex items-center justify-between p-3 border rounded-xl cursor-pointer transition-all ${isSelected ? isDarkSolid ? 'border-primary-500 bg-primary-500/10' : 'border-primary-500 bg-primary-50' : isDarkSolid ? 'border-[#333] hover:bg-[#111]' : 'border-surface-100 hover:bg-surface-50'}`}>
                           <div className="flex items-center gap-3">
-                            <div className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-colors ${isSelected ? 'border-primary-500 bg-primary-500' : 'border-surface-300'}`}>
+                            <div className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-colors ${isSelected ? 'border-primary-500 bg-primary-500' : isDarkSolid ? 'border-surface-600' : 'border-surface-300'}`}>
                               {isSelected && <Check className="w-2.5 h-2.5 text-white" />}
                             </div>
-                            <span className="text-sm text-surface-800">{addon.name}</span>
+                            <span className={`text-sm ${isDarkSolid ? 'text-surface-200' : 'text-surface-800'}`}>{addon.name}</span>
                           </div>
                           <span className="font-semibold text-sm text-surface-400">+{formatPrice(addon.price, store.currency)}</span>
                         </label>
@@ -501,18 +509,18 @@ export function StorefrontView({
             </div>
 
             {/* Modal Footer (Quantity + Add to Cart) */}
-            <div className="p-4 border-t border-surface-100 bg-white flex items-center gap-3">
-              <div className="flex items-center bg-surface-50 rounded-xl p-1 h-11 border border-surface-100">
+            <div className={`p-4 border-t flex items-center gap-3 ${isDarkSolid ? 'bg-[#0a0a0a] border-[#222]' : 'bg-white border-surface-100'}`}>
+              <div className={`flex items-center rounded-xl p-1 h-11 border ${isDarkSolid ? 'bg-[#111] border-[#333]' : 'bg-surface-50 border-surface-100'}`}>
                 <button 
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-9 h-full flex items-center justify-center bg-white rounded-lg text-surface-600 hover:bg-surface-100 transition-colors"
+                  className={`w-9 h-full flex items-center justify-center rounded-lg transition-colors ${isDarkSolid ? 'bg-[#222] text-surface-300 hover:bg-[#333]' : 'bg-white text-surface-600 hover:bg-surface-100'}`}
                 >
                   <Minus className="w-3.5 h-3.5" />
                 </button>
-                <span className="font-bold text-base w-8 text-center text-surface-900">{quantity}</span>
+                <span className={`font-bold text-base w-8 text-center ${isDarkSolid ? 'text-white' : 'text-surface-900'}`}>{quantity}</span>
                 <button 
                   onClick={() => setQuantity(quantity + 1)}
-                  className="w-9 h-full flex items-center justify-center bg-white rounded-lg text-surface-600 hover:bg-surface-100 transition-colors"
+                  className={`w-9 h-full flex items-center justify-center rounded-lg transition-colors ${isDarkSolid ? 'bg-[#222] text-surface-300 hover:bg-[#333]' : 'bg-white text-surface-600 hover:bg-surface-100'}`}
                 >
                   <Plus className="w-3.5 h-3.5" />
                 </button>
@@ -521,9 +529,9 @@ export function StorefrontView({
               <button 
                 onClick={handleAddToCart}
                 disabled={isAddingToCart}
-                className="flex-[2] h-11 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 px-4 disabled:opacity-80 text-sm"
+                className={`flex-[2] h-11 font-bold rounded-xl transition-all flex items-center justify-center gap-2 px-4 disabled:opacity-80 text-sm ${isDarkSolid ? 'text-black' : 'text-white'}`}
                 style={{ 
-                  backgroundColor: store.primaryColor || 'var(--color-primary-600)'
+                  backgroundColor: primaryColor
                 }}
               >
                 {isAddingToCart ? (
@@ -531,7 +539,7 @@ export function StorefrontView({
                 ) : (
                   <>
                     <span>إضافة</span>
-                    <span className="text-white/50">|</span>
+                    <span className={isDarkSolid ? "text-black/50" : "text-white/50"}>|</span>
                     <span>{formatPrice(calculateModalTotal(), store.currency)}</span>
                   </>
                 )}

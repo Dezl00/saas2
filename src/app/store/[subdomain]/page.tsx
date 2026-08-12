@@ -36,7 +36,7 @@ export default async function StorePage(props: { params: Promise<{ subdomain: st
       )}
 
       <StorefrontView 
-        store={{ name: store.name, currency: store.currency, primaryColor: store.primaryColor, logo: store.logo }}
+        store={{ name: store.name, currency: store.currency, primaryColor: store.primaryColor, logo: store.logo, theme: store.theme }}
         categories={categoriesToDisplay.map(c => ({ id: c.id, name: c.name }))}
         menuItems={serializedMenuItems}
       />

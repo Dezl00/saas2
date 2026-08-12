@@ -138,11 +138,13 @@ export default async function StoreLayout({
   const fontName = store.fontFamily || "Tajawal";
   const googleFontUrl = `https://fonts.googleapis.com/css2?family=${fontName.replace(/ /g, "+")}&:wght@400;500;600;700;800;900&display=swap`;
 
+  const isDarkSolid = store.theme === "dark_solid";
+
   return (
     <CartProvider>
       <link href={googleFontUrl} rel="stylesheet" />
       <div 
-        className="min-h-screen bg-white pb-0 flex flex-col"
+        className={`min-h-screen pb-0 flex flex-col ${isDarkSolid ? 'bg-black text-white' : 'bg-white text-surface-950'}`}
         style={{
           fontFamily: `"${fontName}", sans-serif`,
           ...(store.primaryColor ? {
@@ -166,6 +168,7 @@ export default async function StoreLayout({
           logo={store.logo}
           storeName={store.name}
           primaryColor={store.primaryColor}
+          theme={store.theme}
           socialLinks={{
             showFacebook: store.showFacebook,
             facebookUrl: store.facebookUrl,
@@ -231,10 +234,10 @@ export default async function StoreLayout({
           </div>
 
           {/* Store info below cover */}
-          <div className="bg-white pt-16 pb-5 text-center">
-            <h1 className="text-2xl sm:text-3xl font-bold text-surface-950 mb-1">{store.name}</h1>
+          <div className={`${isDarkSolid ? 'bg-black' : 'bg-white'} pt-16 pb-5 text-center`}>
+            <h1 className={`text-2xl sm:text-3xl font-bold mb-1 ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>{store.name}</h1>
             {store.description && (
-              <p className="text-surface-500 text-sm max-w-md mx-auto px-4">{store.description}</p>
+              <p className={`text-sm max-w-md mx-auto px-4 ${isDarkSolid ? 'text-surface-300' : 'text-surface-500'}`}>{store.description}</p>
             )}
 
             {/* Social Media Icons — Filled with brand color, white icons */}
@@ -280,7 +283,7 @@ export default async function StoreLayout({
         </section>
 
         {/* Main Content */}
-        <main className="max-w-5xl mx-auto px-4 py-5 flex-1 w-full bg-white">
+        <main className={`max-w-5xl mx-auto px-4 py-5 flex-1 w-full ${isDarkSolid ? 'bg-black' : 'bg-white'}`}>
           {children}
         </main>
 
@@ -298,18 +301,18 @@ export default async function StoreLayout({
         </div>
 
         {/* Footer */}
-        <footer id="store-footer-contact" className="bg-surface-50 border-t border-surface-100 mt-12 py-10">
+        <footer id="store-footer-contact" className={`border-t mt-12 py-10 ${isDarkSolid ? 'bg-[#0a0a0a] border-[#222]' : 'bg-surface-50 border-surface-100'}`}>
           <div className="max-w-5xl mx-auto px-4 text-center space-y-4">
-            <div className="w-20 h-20 mx-auto flex items-center justify-center mb-4 relative rounded-full overflow-hidden bg-white border border-surface-100">
+            <div className={`w-20 h-20 mx-auto flex items-center justify-center mb-4 relative rounded-full overflow-hidden border ${isDarkSolid ? 'bg-black border-[#333]' : 'bg-white border-surface-100'}`}>
               {store.logo ? (
                 <Image src={store.logo} alt={store.name} fill className="object-cover" sizes="80px" />
               ) : (
-                <StoreIcon className="w-8 h-8 text-surface-400" />
+                <StoreIcon className={`w-8 h-8 ${isDarkSolid ? 'text-surface-600' : 'text-surface-400'}`} />
               )}
             </div>
-            <h2 className="font-bold text-lg text-surface-950">{store.name}</h2>
+            <h2 className={`font-bold text-lg ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>{store.name}</h2>
             {store.description && (
-              <p className="text-surface-500 text-sm max-w-md mx-auto leading-relaxed">{store.description}</p>
+              <p className={`text-sm max-w-md mx-auto leading-relaxed ${isDarkSolid ? 'text-surface-400' : 'text-surface-500'}`}>{store.description}</p>
             )}
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-surface-600 text-sm mt-6">
@@ -356,8 +359,8 @@ export default async function StoreLayout({
               )}
             </div>
             
-            <div className="text-xs text-surface-400 mt-10 pt-6 border-t border-surface-100 flex items-center justify-center gap-2">
-              مدعوم بواسطة <a href="https://menura.site" target="_blank" className="font-bold text-surface-950 hover:text-surface-700">{platformName}</a> &copy; {new Date().getFullYear()}
+            <div className={`text-xs mt-10 pt-6 border-t flex items-center justify-center gap-2 ${isDarkSolid ? 'text-surface-500 border-[#222]' : 'text-surface-400 border-surface-100'}`}>
+              مدعوم بواسطة <a href="https://menura.site" target="_blank" className={`font-bold ${isDarkSolid ? 'text-white hover:text-surface-300' : 'text-surface-950 hover:text-surface-700'}`}>{platformName}</a> &copy; {new Date().getFullYear()}
             </div>
           </div>
         </footer>
@@ -391,6 +394,7 @@ export default async function StoreLayout({
         <FloatingCartButton 
           currency={store.currency}
           primaryColor={store.primaryColor}
+          theme={store.theme}
         />
 
           {/* Global Cart Sidebar */}

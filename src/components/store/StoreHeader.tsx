@@ -71,6 +71,7 @@ type Props = {
   logo: string | null;
   storeName: string;
   primaryColor?: string | null;
+  theme?: string | null;
   socialLinks: SocialLinks;
   workingHours?: WorkingHoursData | null;
   mapLatitude?: string | null;
@@ -95,11 +96,12 @@ function getCurrentDayKey(): string {
   return mapping[dayIndex];
 }
 
-export function StoreHeader({ logo, storeName, primaryColor, socialLinks, workingHours, mapLatitude, mapLongitude }: Props) {
+export function StoreHeader({ logo, storeName, primaryColor, theme, socialLinks, workingHours, mapLatitude, mapLongitude }: Props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isWorkingHoursOpen, setIsWorkingHoursOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const color = primaryColor || "var(--color-primary-600)";
+  const isDarkSolid = theme === "dark_solid";
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -165,31 +167,31 @@ export function StoreHeader({ logo, storeName, primaryColor, socialLinks, workin
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-surface-100">
+      <header className={`sticky top-0 z-50 backdrop-blur-md border-b ${isDarkSolid ? 'bg-black/95 border-[#222]' : 'bg-white/95 border-surface-100'}`}>
         <div className="max-w-5xl mx-auto px-4 h-14 relative flex items-center justify-between">
           {/* Right side: Hamburger */}
           <div className="flex items-center" ref={menuRef}>
             {/* Hamburger toggle */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="w-9 h-9 flex items-center justify-center rounded-xl transition-colors hover:bg-surface-50 z-10 relative"
+              className={`w-9 h-9 flex items-center justify-center rounded-xl transition-colors z-10 relative ${isDarkSolid ? 'hover:bg-white/10' : 'hover:bg-surface-50'}`}
             >
               {isMenuOpen ? (
-                <X className="w-5 h-5 text-surface-700" />
+                <X className="w-5 h-5" style={isDarkSolid ? { color } : { color: 'var(--color-surface-700)' }} />
               ) : (
-                <Menu className="w-5 h-5 text-surface-700" />
+                <Menu className="w-5 h-5" style={isDarkSolid ? { color } : { color: 'var(--color-surface-700)' }} />
               )}
             </button>
 
             {/* Dropdown menu */}
             {isMenuOpen && (
-              <div className="absolute top-14 start-0 end-0 bg-white border-b border-surface-100 z-50 animate-slide-in-menu">
+              <div className={`absolute top-14 start-0 end-0 border-b z-50 animate-slide-in-menu ${isDarkSolid ? 'bg-[#0a0a0a] border-[#222]' : 'bg-white border-surface-100'}`}>
                 <div className="max-w-5xl mx-auto">
                   <div className="flex flex-col">
                     {/* Share menu */}
                     <button
                       onClick={() => { handleShare(); setIsMenuOpen(false); }}
-                      className="flex items-center gap-3 px-5 py-4 text-surface-700 hover:bg-surface-50 transition-colors border-b border-surface-50"
+                      className={`flex items-center gap-3 px-5 py-4 transition-colors border-b ${isDarkSolid ? 'text-white border-[#222] hover:bg-white/5' : 'text-surface-700 hover:bg-surface-50 border-surface-50'}`}
                     >
                       <Share2 className="w-5 h-5" style={{ color }} />
                       <span className="font-semibold text-sm">ارسال المنيو لصديق</span>
@@ -198,7 +200,7 @@ export function StoreHeader({ logo, storeName, primaryColor, socialLinks, workin
                     {/* Working hours */}
                     <button
                       onClick={() => { setIsWorkingHoursOpen(true); setIsMenuOpen(false); }}
-                      className="flex items-center gap-3 px-5 py-4 text-surface-700 hover:bg-surface-50 transition-colors border-b border-surface-50"
+                      className={`flex items-center gap-3 px-5 py-4 transition-colors border-b ${isDarkSolid ? 'text-white border-[#222] hover:bg-white/5' : 'text-surface-700 hover:bg-surface-50 border-surface-50'}`}
                     >
                       <Clock className="w-5 h-5" style={{ color }} />
                       <span className="font-semibold text-sm">مواعيد العمل</span>
@@ -208,7 +210,7 @@ export function StoreHeader({ logo, storeName, primaryColor, socialLinks, workin
                     {mapLatitude && mapLongitude && (
                       <button
                         onClick={handleOpenMap}
-                        className="flex items-center gap-3 px-5 py-4 text-surface-700 hover:bg-surface-50 transition-colors border-b border-surface-50"
+                        className={`flex items-center gap-3 px-5 py-4 transition-colors border-b ${isDarkSolid ? 'text-white border-[#222] hover:bg-white/5' : 'text-surface-700 hover:bg-surface-50 border-surface-50'}`}
                       >
                         <MapPin className="w-5 h-5" style={{ color }} />
                         <span className="font-semibold text-sm">فتح العنوان على الخريطة</span>
@@ -218,7 +220,7 @@ export function StoreHeader({ logo, storeName, primaryColor, socialLinks, workin
                     {/* Contact us */}
                     <button
                       onClick={handleScrollToFooter}
-                      className="flex items-center gap-3 px-5 py-4 text-surface-700 hover:bg-surface-50 transition-colors border-b border-surface-50"
+                      className={`flex items-center gap-3 px-5 py-4 transition-colors border-b ${isDarkSolid ? 'text-white border-[#222] hover:bg-white/5' : 'text-surface-700 hover:bg-surface-50 border-surface-50'}`}
                     >
                       <MessageCircle className="w-5 h-5" style={{ color }} />
                       <span className="font-semibold text-sm">تواصل معنا</span>
@@ -262,18 +264,16 @@ export function StoreHeader({ logo, storeName, primaryColor, socialLinks, workin
 
           {/* Center: Logo */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none">
-            <div className="w-9 h-9 overflow-hidden flex items-center justify-center shrink-0 pointer-events-auto">
-              {logo ? (
-                <Image src={logo} alt={storeName} width={36} height={36} className="w-full h-full object-contain" />
-              ) : (
-                <span className="text-lg font-bold" style={{ color }}>{storeName.charAt(0)}</span>
-              )}
-            </div>
+            {logo && (
+              <div className="w-12 h-12 overflow-hidden flex items-center justify-center shrink-0 pointer-events-auto">
+                <Image src={logo} alt={storeName} width={48} height={48} className="w-full h-full object-contain" />
+              </div>
+            )}
           </div>
 
           {/* Left side: Cart */}
           <div className="flex items-center z-10 relative">
-            <CartHeaderButton />
+            <CartHeaderButton theme={theme} color={color} />
           </div>
         </div>
       </header>
@@ -284,15 +284,15 @@ export function StoreHeader({ logo, storeName, primaryColor, socialLinks, workin
           className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 animate-fade-in"
           onClick={(e) => { if (e.target === e.currentTarget) setIsWorkingHoursOpen(false); }}
         >
-          <div className="bg-white w-[90%] max-w-md rounded-2xl overflow-hidden animate-zoom-in">
+          <div className={`w-[90%] max-w-md rounded-2xl overflow-hidden animate-zoom-in ${isDarkSolid ? 'bg-[#0a0a0a]' : 'bg-white'}`}>
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-5 border-b border-surface-100">
-              <h3 className="text-lg font-bold text-surface-950">مواعيد العمل</h3>
+            <div className={`flex items-center justify-between p-5 border-b ${isDarkSolid ? 'border-[#222]' : 'border-surface-100'}`}>
+              <h3 className={`text-lg font-bold ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>مواعيد العمل</h3>
               <button
                 onClick={() => setIsWorkingHoursOpen(false)}
-                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-50 transition-colors"
+                className={`w-8 h-8 flex items-center justify-center rounded-full transition-colors ${isDarkSolid ? 'hover:bg-white/10' : 'hover:bg-surface-50'}`}
               >
-                <X className="w-5 h-5 text-surface-500" />
+                <X className={`w-5 h-5 ${isDarkSolid ? 'text-surface-400' : 'text-surface-500'}`} />
               </button>
             </div>
 
@@ -311,15 +311,15 @@ export function StoreHeader({ logo, storeName, primaryColor, socialLinks, workin
                     key={dayKey}
                     className={`flex items-center justify-between px-4 py-3.5 rounded-xl border transition-colors ${
                       isToday
-                        ? "border-primary-200 bg-primary-50/50"
-                        : "border-surface-100 bg-surface-50/50"
+                        ? isDarkSolid ? "border-primary-500 bg-primary-500/10" : "border-primary-200 bg-primary-50/50"
+                        : isDarkSolid ? "border-[#222] bg-[#111]" : "border-surface-100 bg-surface-50/50"
                     }`}
-                    style={isToday ? { borderColor: `${color}33`, backgroundColor: `${color}0d` } : undefined}
+                    style={isToday ? { borderColor: isDarkSolid ? color : `${color}33`, backgroundColor: isDarkSolid ? `${color}1a` : `${color}0d` } : undefined}
                   >
-                    <span className={`font-bold text-sm ${isToday ? "" : "text-surface-600"}`} style={isToday ? { color } : undefined}>
+                    <span className={`font-bold text-sm ${isToday ? "" : isDarkSolid ? "text-surface-300" : "text-surface-600"}`} style={isToday ? { color } : undefined}>
                       {DAY_NAMES[dayKey]}
                     </span>
-                    <span className={`text-sm ${day?.enabled ? "text-surface-700" : "text-surface-400"}`}>
+                    <span className={`text-sm ${day?.enabled ? (isDarkSolid ? "text-surface-200" : "text-surface-700") : "text-surface-400"}`}>
                       {statusText}
                     </span>
                   </div>

@@ -23,6 +23,7 @@ export async function getStoreInfo(subdomain: string) {
       address: true,
       currency: true,
       primaryColor: true,
+      theme: true,
       whatsappNumber: true,
       enableWhatsappOrders: true,
       facebookUrl: true,
