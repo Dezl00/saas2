@@ -43,6 +43,7 @@ export async function getStoreInfo(subdomain: string) {
       mapLongitude: true,
       hideProductDescription: true,
       hideProductAddButton: true,
+      showFloatingIcons: true,
       enableLandingPage: true,
       landingHeroTitle: true,
       landingHeroDescription: true,

@@ -279,106 +279,124 @@ export function StorefrontView({
       </div>
 
       {/* Menu Items — Matching Menuo card style */}
-      <div className="space-y-8">
-        {categories.map((category) => {
-          let items = menuItems.filter((item) => item.categoryId === category.id);
-          
-          // Apply search filter
-          if (searchQuery.trim()) {
-            const q = searchQuery.trim().toLowerCase();
-            items = items.filter((item) => 
-              item.name.toLowerCase().includes(q) || 
-              (item.description && item.description.toLowerCase().includes(q))
-            );
-          }
-          
-          if (items.length === 0) return null;
+      <div className="space-y-8 min-h-[50vh]">
+        {(() => {
+          let hasAnyResults = false;
+          const content = categories.map((category) => {
+            let items = menuItems.filter((item) => item.categoryId === category.id);
+            
+            // Apply search filter
+            if (searchQuery.trim()) {
+              const q = searchQuery.trim().toLowerCase();
+              items = items.filter((item) => 
+                item.name.toLowerCase().includes(q) || 
+                (item.description && item.description.toLowerCase().includes(q))
+              );
+            }
+            
+            if (items.length === 0) return null;
+            hasAnyResults = true;
 
-          return (
-            <div key={category.id} id={`category-${category.name.replace(/\s+/g, '-')}`} className="scroll-mt-36">
-              <h2 
-                className={`text-2xl p-2 text-center font-bold mb-6 flex items-center justify-center gap-3 ${isDarkSolid ? 'text-[#fff5e5]' : 'rounded-xl'}`}
-                style={isDarkSolid ? {} : { 
-                  backgroundColor: store.primaryColor ? `${store.primaryColor}1a` : 'var(--color-primary-50)',
-                  color: store.primaryColor || 'var(--color-primary-600)' 
-                }}
-              >
-                {isDarkSolid ? (
-                  <>
-                    <span style={{ color: primaryColor }}>-</span>
-                    <span>{category.name}</span>
-                    <span style={{ color: primaryColor }}>-</span>
-                  </>
-                ) : (
-                  category.name
-                )}
-              </h2>
-              
-              {/* Cards — Grid layout */}
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-                {items.map((item) => (
-                  <div 
-                    key={item.id} 
-                    onClick={() => handleOpenProduct(item)}
-                    className={`border rounded-2xl overflow-hidden flex flex-col cursor-pointer transition-all group hover:shadow-sm ${
-                      isDarkSolid ? 'bg-[#0a0a0a]' : 'bg-white border-surface-100 hover:border-surface-200'
-                    }`}
-                    style={isDarkSolid ? { borderColor: primaryColor } : undefined}
-                  >
-                    {/* Image */}
-                    {item.image || store.logo ? (
-                      <div className={`relative w-full aspect-[5/4] shrink-0 overflow-hidden border-b ${isDarkSolid ? 'bg-[#111] border-[#222]' : 'bg-surface-50 border-surface-50'}`}>
-                        <Image 
-                          src={item.image || store.logo!} 
-                          alt={item.name}
-                          fill
-                          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                          className={`object-cover transition-opacity duration-300 group-hover:scale-105 ${!item.image ? 'opacity-50 p-6 object-contain' : ''}`}
-                          loading="lazy"
-                        />
-                      </div>
-                    ) : (
-                      <div className={`w-full aspect-[5/4] shrink-0 flex items-center justify-center border-b ${isDarkSolid ? 'bg-[#111] border-[#222]' : 'bg-surface-50 border-surface-50'}`}>
-                        <ShoppingBag className={`w-8 h-8 ${isDarkSolid ? 'text-[#333]' : 'text-surface-200'}`} />
-                      </div>
-                    )}
-
-                    {/* Text content */}
-                    <div className={`p-3 sm:p-4 flex flex-col flex-1 justify-between min-w-0 ${isDarkSolid ? 'bg-black' : ''}`}>
-                      <div>
-                        <h3 className={`font-bold text-[13px] sm:text-sm leading-tight mb-1 line-clamp-2 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-900'}`}>{item.name}</h3>
-                        {!store.hideProductDescription && item.description && (
-                          <p className={`text-[11px] sm:text-xs line-clamp-2 leading-relaxed ${isDarkSolid ? 'text-surface-400' : 'text-surface-400'}`}>
-                            {item.description}
-                          </p>
+            return (
+              <div key={category.id} id={`category-${category.name.replace(/\s+/g, '-')}`} className="scroll-mt-36">
+                <h2 
+                  className={`text-2xl p-2 text-center font-bold mb-6 flex items-center justify-center gap-3 ${isDarkSolid ? 'text-[#fff5e5]' : 'rounded-xl'}`}
+                  style={isDarkSolid ? {} : { 
+                    backgroundColor: store.primaryColor ? `${store.primaryColor}1a` : 'var(--color-primary-50)',
+                    color: store.primaryColor || 'var(--color-primary-600)' 
+                  }}
+                >
+                  {isDarkSolid ? (
+                    <>
+                      <span style={{ color: primaryColor }}>-</span>
+                      <span>{category.name}</span>
+                      <span style={{ color: primaryColor }}>-</span>
+                    </>
+                  ) : (
+                    category.name
+                  )}
+                </h2>
+                
+                {/* Cards — Grid layout */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+                  {items.map((item) => (
+                    <div 
+                      key={item.id} 
+                      onClick={() => handleOpenProduct(item)}
+                      className={`border rounded-2xl overflow-hidden flex flex-col cursor-pointer transition-all group hover:shadow-sm ${
+                        isDarkSolid ? 'bg-[#0a0a0a]' : 'bg-white border-surface-100 hover:border-surface-200'
+                      }`}
+                      style={isDarkSolid ? { borderColor: primaryColor } : undefined}
+                    >
+                      {/* Image */}
+                      <div className="relative w-full aspect-[4/3] bg-surface-100 overflow-hidden">
+                        {item.image ? (
+                          <Image src={item.image} alt={item.name} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-surface-400">
+                            <ShoppingBag className="w-10 h-10 opacity-20" />
+                          </div>
+                        )}
+                        {!item.isAvailable && (
+                          <div className="absolute inset-0 bg-white/70 backdrop-blur-[2px] flex items-center justify-center">
+                            <span className="bg-black text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm">نفدت الكمية</span>
+                          </div>
                         )}
                       </div>
-                      <div className="flex items-center justify-between mt-3 pt-2">
-                        <span 
-                          className="font-black text-[13px] sm:text-sm"
-                          style={{ color: primaryColor }}
-                        >
-                          {item.sizes.length > 0 
-                            ? `${formatPrice(Math.min(...item.sizes.map(s => s.price)), store.currency)}`
-                            : formatPrice(item.price, store.currency)
-                          }
-                        </span>
-                        {!store.hideProductAddButton && (
-                          <span 
-                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center transition-transform active:scale-95 ${isDarkSolid ? 'text-black' : 'text-white'}`}
-                            style={{ backgroundColor: primaryColor }}
-                          >
-                            <Plus className="w-4 h-4 sm:w-4 sm:h-4" />
+
+                      {/* Content */}
+                      <div className="p-3 sm:p-4 flex flex-col flex-grow">
+                        <div className="flex justify-between items-start gap-2 mb-1">
+                          <h3 className={`font-bold text-sm sm:text-base leading-tight line-clamp-2 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-950'}`}>{item.name}</h3>
+                        </div>
+                        {item.description && (
+                          <p className={`text-xs mt-1 line-clamp-2 ${isDarkSolid ? 'text-surface-400' : 'text-surface-500'}`}>{item.description}</p>
+                        )}
+                        <div className="mt-auto pt-3 flex items-center justify-between">
+                          <span className="font-black text-lg sm:text-xl" style={{ color: primaryColor }}>
+                            {item.sizes && item.sizes.length > 0 
+                              ? `${formatPrice(Math.min(...item.sizes.map((s: any) => s.price)), store.currency)}`
+                              : formatPrice(item.price, store.currency)
+                            }
                           </span>
-                        )}
+                          {!store.hideProductAddButton && (
+                            <button 
+                              className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-transform active:scale-95 ${
+                                item.isAvailable 
+                                  ? isDarkSolid ? 'bg-white text-black hover:scale-105' : 'bg-surface-100 hover:bg-surface-200 text-surface-900' 
+                                  : 'bg-surface-100 text-surface-400 cursor-not-allowed'
+                              }`}
+                              style={item.isAvailable && !isDarkSolid ? { backgroundColor: primaryColor, color: '#fff' } : undefined}
+                              disabled={!item.isAvailable}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if(item.isAvailable) handleOpenProduct(item);
+                              }}
+                            >
+                              <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          });
+
+          if (!hasAnyResults && searchQuery.trim()) {
+            return (
+              <div className="text-center py-24 px-4 flex flex-col items-center justify-center h-full">
+                <Search className={`w-16 h-16 mx-auto mb-4 ${isDarkSolid ? 'text-surface-600' : 'text-surface-300'}`} />
+                <h3 className={`text-xl font-bold mb-2 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-900'}`}>لا توجد نتائج لـ &quot;{searchQuery}&quot;</h3>
+                <p className={isDarkSolid ? 'text-surface-400' : 'text-surface-500'}>جرب البحث بكلمات مختلفة أو تصفح الأقسام</p>
+              </div>
+            );
+          }
+
+          return content;
+        })()}
       </div>
 
       {/* Product Modal — Bottom Sheet Style matching Menuo */}

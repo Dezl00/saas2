@@ -15,7 +15,7 @@ export default async function AppearancePage() {
 
   const store = await prisma.store.findUnique({
     where: { id: session.user.storeId },
-    select: { fontFamily: true, theme: true, hideProductDescription: true, hideProductAddButton: true },
+    select: { fontFamily: true, theme: true, hideProductDescription: true, hideProductAddButton: true, showFloatingIcons: true },
   });
 
   if (!store) {
@@ -29,6 +29,7 @@ export default async function AppearancePage() {
         currentTheme={store.theme} 
         currentHideDescription={store.hideProductDescription}
         currentHideAddButton={store.hideProductAddButton}
+        currentShowFloatingIcons={store.showFloatingIcons}
       />
     </div>
   );

@@ -44,13 +44,15 @@ export function AppearanceClient({
   currentLandingHeroTitle?: string | null,
   currentLandingHeroDescription?: string | null,
   currentLandingHeroImage?: string | null,
-  currentLandingHeroOverlayOpacity?: number
+  currentLandingHeroOverlayOpacity?: number,
+  currentShowFloatingIcons?: boolean
 }) {
   const [selectedFont, setSelectedFont] = useState(currentFont || "Tajawal");
   const [isFontDropdownOpen, setIsFontDropdownOpen] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState(currentTheme || "classic");
   const [hideDescription, setHideDescription] = useState(currentHideDescription || false);
   const [hideAddButton, setHideAddButton] = useState(currentHideAddButton || false);
+  const [showFloatingIcons, setShowFloatingIcons] = useState(currentShowFloatingIcons ?? true);
   
   // Landing Page State
   const [enableLandingPage, setEnableLandingPage] = useState(currentEnableLandingPage || false);
@@ -69,6 +71,7 @@ export function AppearanceClient({
       formData.append("theme", selectedTheme);
       formData.append("hideProductDescription", hideDescription.toString());
       formData.append("hideProductAddButton", hideAddButton.toString());
+      formData.append("showFloatingIcons", showFloatingIcons.toString());
       formData.append("enableLandingPage", enableLandingPage.toString());
       formData.append("landingHeroTitle", landingHeroTitle);
       formData.append("landingHeroDescription", landingHeroDescription);
@@ -96,6 +99,7 @@ export function AppearanceClient({
                      selectedTheme !== currentTheme || 
                      hideDescription !== (currentHideDescription || false) ||
                      hideAddButton !== (currentHideAddButton || false) ||
+                     showFloatingIcons !== (currentShowFloatingIcons ?? true) ||
                      enableLandingPage !== (currentEnableLandingPage || false) ||
                      landingHeroTitle !== (currentLandingHeroTitle || "") ||
                      landingHeroDescription !== (currentLandingHeroDescription || "") ||
@@ -226,6 +230,23 @@ export function AppearanceClient({
                 className="sr-only peer" 
                 checked={hideAddButton}
                 onChange={(e) => setHideAddButton(e.target.checked)}
+              />
+              <div className="w-14 h-7 bg-surface-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-500"></div>
+            </label>
+          </div>
+
+          {/* Toggle 3: Show Floating Icons */}
+          <div className="flex items-center justify-between p-4 rounded-2xl border border-surface-100 bg-surface-50">
+            <div>
+              <h4 className="font-bold text-surface-950">الأيقونات العائمة</h4>
+              <p className="text-sm text-surface-500">إظهار أيقونات الواتساب والهاتف العائمة في المتجر</p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input 
+                type="checkbox" 
+                className="sr-only peer" 
+                checked={showFloatingIcons}
+                onChange={(e) => setShowFloatingIcons(e.target.checked)}
               />
               <div className="w-14 h-7 bg-surface-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-500"></div>
             </label>

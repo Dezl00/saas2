@@ -273,29 +273,31 @@ export default async function StoreLayout({
         </footer>
 
         {/* Floating Action Buttons — WhatsApp + Phone (no shadows - flat) */}
-        <div className="fixed bottom-24 start-5 z-40 flex flex-col gap-3">
-          {store.whatsappNumber && (
-            <div className="relative group">
-              <div className="absolute inset-0 bg-[#25D366] rounded-full animate-ping opacity-75"></div>
+        {store.showFloatingIcons !== false && (
+          <div className="fixed bottom-24 start-5 z-40 flex flex-col gap-3">
+            {store.whatsappNumber && (
+              <div className="relative group">
+                <div className="absolute inset-0 bg-[#25D366] rounded-full animate-ping opacity-75"></div>
+                <a 
+                  href={`https://wa.me/${formatWhatsappNumber(store.whatsappNumber)}`} 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="relative w-12 h-12 bg-[#25D366] text-white rounded-full flex items-center justify-center hover:bg-[#20bd5a] transition-all hover:scale-110"
+                >
+                  <WhatsAppIcon className="w-6 h-6" />
+                </a>
+              </div>
+            )}
+            {store.phone && (
               <a 
-                href={`https://wa.me/${formatWhatsappNumber(store.whatsappNumber)}`} 
-                target="_blank" 
-                rel="noreferrer"
-                className="relative w-12 h-12 bg-[#25D366] text-white rounded-full flex items-center justify-center hover:bg-[#20bd5a] transition-all hover:scale-110"
+                href={`tel:${store.phone}`} 
+                className="w-12 h-12 bg-[#007AFF] text-white rounded-full flex items-center justify-center hover:bg-[#0062CC] transition-all hover:scale-110"
               >
-                <WhatsAppIcon className="w-6 h-6" />
+                <Phone className="w-5 h-5" />
               </a>
-            </div>
-          )}
-          {store.phone && (
-            <a 
-              href={`tel:${store.phone}`} 
-              className="w-12 h-12 bg-surface-900 text-white rounded-full flex items-center justify-center hover:bg-surface-800 transition-all hover:scale-110"
-            >
-              <Phone className="w-5 h-5" />
-            </a>
-          )}
-        </div>
+            )}
+          </div>
+        )}
 
         {/* Floating Cart Button */}
         <FloatingCartButton 

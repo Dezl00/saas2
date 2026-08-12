@@ -37,10 +37,7 @@ export function StoreSplashScreen({ logo, storeName, primaryColor, theme }: Prop
         {/* Logo without border/circle */}
         <div className="relative">
           <div
-            className="w-28 h-28 flex items-center justify-center overflow-hidden animate-splash-pulse"
-            style={{
-              "--splash-glow": `${color}66`,
-            } as React.CSSProperties}
+            className="w-28 h-28 flex items-center justify-center overflow-hidden"
           >
             {logo ? (
               <Image

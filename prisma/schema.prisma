@@ -144,6 +144,7 @@ model Store {
   showDefaultProducts  Boolean @default(true)
   hideProductDescription Boolean @default(false)
   hideProductAddButton   Boolean @default(false)
+  showFloatingIcons    Boolean @default(true)
   fontFamily           String  @default("Tajawal")
   theme                String  @default("classic")
 

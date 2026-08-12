@@ -14,6 +14,7 @@ export async function updateStoreAppearance(formData: FormData) {
   const theme = formData.get("theme") as string;
   const hideProductDescription = formData.get("hideProductDescription") === "true";
   const hideProductAddButton = formData.get("hideProductAddButton") === "true";
+  const showFloatingIcons = formData.get("showFloatingIcons") === "true";
   const enableLandingPage = formData.get("enableLandingPage") === "true";
   const landingHeroTitle = formData.get("landingHeroTitle") as string;
   const landingHeroDescription = formData.get("landingHeroDescription") as string;
@@ -40,6 +41,7 @@ export async function updateStoreAppearance(formData: FormData) {
       theme, 
       hideProductDescription, 
       hideProductAddButton,
+      showFloatingIcons,
       enableLandingPage,
       landingHeroTitle,
       landingHeroDescription,
