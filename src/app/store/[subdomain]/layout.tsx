@@ -68,11 +68,43 @@ export async function generateMetadata(props: { params: Promise<{ subdomain: str
 
   if (!store) return { title: "المتجر غير موجود" };
 
+  const description = store.description || `اطلب الآن من ${store.name}`;
+  const image = (store as any).cover || store.logo || "/favicon.ico";
+  const icon = store.favicon || store.logo || "/favicon.ico";
+
   return {
     title: store.name,
-    description: store.description || `اطلب الآن من ${store.name}`,
+    description: description,
     icons: {
-      icon: store.favicon || store.logo || "/favicon.ico",
+      icon: [
+        { url: icon, href: icon },
+      ],
+      shortcut: [
+        { url: icon, href: icon },
+      ],
+      apple: [
+        { url: icon, href: icon },
+      ],
+    },
+    openGraph: {
+      title: store.name,
+      description: description,
+      siteName: store.name,
+      images: [
+        {
+          url: image,
+          width: 1200,
+          height: 630,
+          alt: store.name,
+        }
+      ],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: store.name,
+      description: description,
+      images: [image],
     },
   };
 }

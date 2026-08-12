@@ -1,11 +1,65 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-export const metadata: Metadata = {
-  title: "منصتك - أنشئ متجرك الإلكتروني في دقائق",
-  description:
-    "منصة SaaS متكاملة لإنشاء متاجر إلكترونية للمطاعم والماركت والصيدليات. أنشئ متجرك واستقبل الطلبات برابط خاص بك.",
-};
+import { prisma } from "@/lib/prisma";
+
+export async function generateMetadata(): Promise<Metadata> {
+  let platformName = "منصتك";
+  let description = "منصة SaaS متكاملة لإنشاء متاجر إلكترونية للمطاعم والماركت والصيدليات. أنشئ متجرك واستقبل الطلبات برابط خاص بك.";
+  let icon = "/favicon.ico";
+  let image = "/favicon.ico";
+
+  try {
+    const settings = await prisma.platformSetting.findUnique({ where: { id: "1" } });
+    if (settings) {
+      if (settings.name) platformName = settings.name;
+      if (settings.logo) {
+        icon = settings.logo;
+        image = settings.logo;
+      }
+    }
+  } catch (e) {
+    // Fallback if DB is not migrated
+  }
+
+  const title = `${platformName} - أنشئ متجرك الإلكتروني في دقائق`;
+
+  return {
+    title: title,
+    description: description,
+    icons: {
+      icon: [
+        { url: icon, href: icon },
+      ],
+      shortcut: [
+        { url: icon, href: icon },
+      ],
+      apple: [
+        { url: icon, href: icon },
+      ],
+    },
+    openGraph: {
+      title: title,
+      description: description,
+      siteName: platformName,
+      images: [
+        {
+          url: image,
+          width: 1200,
+          height: 630,
+          alt: platformName,
+        }
+      ],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: title,
+      description: description,
+      images: [image],
+    },
+  };
+}
 
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
