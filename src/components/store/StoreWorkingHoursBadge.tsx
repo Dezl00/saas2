@@ -24,6 +24,7 @@ type WorkingHoursData = {
 type Props = {
   workingHours?: WorkingHoursData | null;
   primaryColor?: string | null;
+  theme?: string | null;
   className?: string;
 };
 
@@ -72,7 +73,7 @@ function checkIsOpen(workingHours?: WorkingHoursData | null): boolean {
   return false;
 }
 
-export function StoreWorkingHoursBadge({ workingHours, primaryColor, className }: Props) {
+export function StoreWorkingHoursBadge({ workingHours, primaryColor, theme, className }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -85,6 +86,7 @@ export function StoreWorkingHoursBadge({ workingHours, primaryColor, className }
   }, [workingHours]);
 
   const color = primaryColor || "var(--color-primary-600)";
+  const isDarkSolid = theme === "dark_solid";
   const currentDay = getCurrentDayKey();
 
   if (!mounted || !workingHours) return null;
@@ -107,14 +109,14 @@ export function StoreWorkingHoursBadge({ workingHours, primaryColor, className }
           className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 animate-fade-in"
           onClick={(e) => { if (e.target === e.currentTarget) setIsModalOpen(false); }}
         >
-          <div className="bg-white w-[90%] max-w-md rounded-2xl overflow-hidden animate-zoom-in text-start" dir="rtl">
-            <div className="flex items-center justify-between p-5 border-b border-surface-100">
-              <h3 className="text-lg font-bold text-surface-950">مواعيد العمل</h3>
+          <div className={`w-[90%] max-w-md rounded-2xl overflow-hidden animate-zoom-in text-start ${isDarkSolid ? 'bg-[#0a0a0a]' : 'bg-white'}`} dir="rtl">
+            <div className={`flex items-center justify-between p-5 border-b ${isDarkSolid ? 'border-[#222]' : 'border-surface-100'}`}>
+              <h3 className={`text-lg font-bold ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>مواعيد العمل</h3>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-50 transition-colors"
+                className={`w-8 h-8 flex items-center justify-center rounded-full transition-colors ${isDarkSolid ? 'hover:bg-white/10' : 'hover:bg-surface-50'}`}
               >
-                <X className="w-5 h-5 text-surface-500" />
+                <X className={`w-5 h-5 ${isDarkSolid ? 'text-surface-400' : 'text-surface-500'}`} />
               </button>
             </div>
 
@@ -132,15 +134,15 @@ export function StoreWorkingHoursBadge({ workingHours, primaryColor, className }
                     key={dayKey}
                     className={`flex items-center justify-between px-4 py-3.5 rounded-xl border transition-colors ${
                       isToday
-                        ? "border-primary-200 bg-primary-50/50"
-                        : "border-surface-100 bg-surface-50/50"
+                        ? isDarkSolid ? "border-primary-500 bg-primary-500/10" : "border-primary-200 bg-primary-50/50"
+                        : isDarkSolid ? "border-[#222] bg-[#111]" : "border-surface-100 bg-surface-50/50"
                     }`}
-                    style={isToday ? { borderColor: `${color}33`, backgroundColor: `${color}0d` } : undefined}
+                    style={isToday ? { borderColor: isDarkSolid ? color : `${color}33`, backgroundColor: isDarkSolid ? `${color}1a` : `${color}0d` } : undefined}
                   >
-                    <span className={`font-bold text-sm ${isToday ? "" : "text-surface-600"}`} style={isToday ? { color } : undefined}>
+                    <span className={`font-bold text-sm ${isToday ? "" : isDarkSolid ? "text-surface-300" : "text-surface-600"}`} style={isToday ? { color } : undefined}>
                       {DAY_NAMES[dayKey]}
                     </span>
-                    <span className={`text-sm ${day?.enabled ? "text-surface-700" : "text-surface-400"}`}>
+                    <span className={`text-sm ${day?.enabled ? (isDarkSolid ? "text-surface-200" : "text-surface-700") : "text-surface-400"}`}>
                       {statusText}
                     </span>
                   </div>

@@ -15,6 +15,8 @@ type MenuItem = {
   price: number;
   image: string | null;
   categoryId: string;
+  isFeatured?: boolean;
+  isAvailable?: boolean;
   sizes: Size[];
   addons: Addon[];
 };
@@ -319,67 +321,135 @@ export function StorefrontView({
                 
                 {/* Cards — Grid layout */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-                  {items.map((item) => (
+                  {items.map((item) => {
+                    const isFeatured = item.isFeatured;
+                    return (
                     <div 
                       key={item.id} 
                       onClick={() => handleOpenProduct(item)}
-                      className={`border rounded-2xl overflow-hidden flex flex-col cursor-pointer transition-all group hover:shadow-sm ${
+                      className={`border rounded-2xl overflow-hidden cursor-pointer transition-all group hover:shadow-sm ${
+                        isFeatured ? 'col-span-2 md:col-span-3 lg:col-span-4 flex' : 'flex flex-col'
+                      } ${
                         isDarkSolid ? 'bg-[#0a0a0a]' : 'bg-white border-surface-100 hover:border-surface-200'
                       }`}
                       style={isDarkSolid ? { borderColor: primaryColor } : undefined}
                     >
-                      {/* Image */}
-                      <div className="relative w-full aspect-[4/3] bg-surface-100 overflow-hidden">
-                        {item.image ? (
-                          <Image src={item.image} alt={item.name} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-surface-400">
-                            <ShoppingBag className="w-10 h-10 opacity-20" />
+                      {isFeatured ? (
+                        <>
+                          {/* Content (Right Side in RTL) */}
+                          <div className="p-3 sm:p-5 flex flex-col flex-grow w-2/3">
+                            <div className="flex justify-between items-start gap-2 mb-1">
+                              <h3 className={`font-bold text-sm sm:text-lg leading-tight line-clamp-2 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-950'}`}>{item.name}</h3>
+                            </div>
+                            {item.description && (
+                              <p className={`text-xs sm:text-sm mt-1 line-clamp-2 ${isDarkSolid ? 'text-surface-400' : 'text-surface-500'}`}>{item.description}</p>
+                            )}
+                            <div className="mt-auto pt-3 flex items-center justify-between">
+                              <span className="font-black text-lg sm:text-xl" style={{ color: primaryColor }}>
+                                {item.sizes && item.sizes.length > 0 
+                                  ? `${formatPrice(Math.min(...item.sizes.map((s: any) => s.price)), store.currency)}`
+                                  : formatPrice(item.price, store.currency)
+                                }
+                              </span>
+                              {!store.hideProductAddButton && (
+                                <button 
+                                  className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-transform active:scale-95 shrink-0 ${
+                                    item.isAvailable 
+                                      ? isDarkSolid ? 'bg-white text-black hover:scale-105' : 'bg-surface-100 hover:bg-surface-200 text-surface-900' 
+                                      : 'bg-surface-100 text-surface-400 cursor-not-allowed'
+                                  }`}
+                                  style={item.isAvailable && !isDarkSolid ? { backgroundColor: primaryColor, color: '#fff' } : undefined}
+                                  disabled={!item.isAvailable}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if(item.isAvailable) handleOpenProduct(item);
+                                  }}
+                                >
+                                  <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+                                </button>
+                              )}
+                            </div>
                           </div>
-                        )}
-                        {!item.isAvailable && (
-                          <div className="absolute inset-0 bg-white/70 backdrop-blur-[2px] flex items-center justify-center">
-                            <span className="bg-black text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm">نفدت الكمية</span>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Content */}
-                      <div className="p-3 sm:p-4 flex flex-col flex-grow">
-                        <div className="flex justify-between items-start gap-2 mb-1">
-                          <h3 className={`font-bold text-sm sm:text-base leading-tight line-clamp-2 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-950'}`}>{item.name}</h3>
-                        </div>
-                        {item.description && (
-                          <p className={`text-xs mt-1 line-clamp-2 ${isDarkSolid ? 'text-surface-400' : 'text-surface-500'}`}>{item.description}</p>
-                        )}
-                        <div className="mt-auto pt-3 flex items-center justify-between">
-                          <span className="font-black text-lg sm:text-xl" style={{ color: primaryColor }}>
-                            {item.sizes && item.sizes.length > 0 
-                              ? `${formatPrice(Math.min(...item.sizes.map((s: any) => s.price)), store.currency)}`
-                              : formatPrice(item.price, store.currency)
-                            }
-                          </span>
-                          {!store.hideProductAddButton && (
-                            <button 
-                              className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-transform active:scale-95 ${
-                                item.isAvailable 
-                                  ? isDarkSolid ? 'bg-white text-black hover:scale-105' : 'bg-surface-100 hover:bg-surface-200 text-surface-900' 
-                                  : 'bg-surface-100 text-surface-400 cursor-not-allowed'
-                              }`}
-                              style={item.isAvailable && !isDarkSolid ? { backgroundColor: primaryColor, color: '#fff' } : undefined}
-                              disabled={!item.isAvailable}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if(item.isAvailable) handleOpenProduct(item);
-                              }}
+                          
+                          {/* Image (Left Side in RTL) */}
+                          <div className="relative w-1/3 min-w-[120px] sm:min-w-[160px] bg-surface-100 overflow-hidden shrink-0">
+                            {item.image ? (
+                              <Image src={item.image} alt={item.name} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-surface-400">
+                                <ShoppingBag className="w-10 h-10 opacity-20" />
+                              </div>
+                            )}
+                            {!item.isAvailable && (
+                              <div className="absolute inset-0 bg-white/70 backdrop-blur-[2px] flex items-center justify-center">
+                                <span className="bg-black text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm">نفدت الكمية</span>
+                              </div>
+                            )}
+                            {/* Featured Badge */}
+                            <div 
+                              className="absolute top-0 right-0 px-2 sm:px-3 py-1 sm:py-1.5 rounded-bl-xl text-white text-[10px] sm:text-xs font-bold z-10 shadow-sm"
+                              style={{ backgroundColor: primaryColor }}
                             >
-                              <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
-                            </button>
-                          )}
-                        </div>
-                      </div>
+                              الأكثر مبيعاً
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          {/* Image (Top) */}
+                          <div className="relative w-full aspect-[4/3] bg-surface-100 overflow-hidden">
+                            {item.image ? (
+                              <Image src={item.image} alt={item.name} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-surface-400">
+                                <ShoppingBag className="w-10 h-10 opacity-20" />
+                              </div>
+                            )}
+                            {!item.isAvailable && (
+                              <div className="absolute inset-0 bg-white/70 backdrop-blur-[2px] flex items-center justify-center">
+                                <span className="bg-black text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm">نفدت الكمية</span>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Content (Bottom) */}
+                          <div className="p-3 sm:p-4 flex flex-col flex-grow">
+                            <div className="flex justify-between items-start gap-2 mb-1">
+                              <h3 className={`font-bold text-sm sm:text-base leading-tight line-clamp-2 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-950'}`}>{item.name}</h3>
+                            </div>
+                            {item.description && (
+                              <p className={`text-xs mt-1 line-clamp-2 ${isDarkSolid ? 'text-surface-400' : 'text-surface-500'}`}>{item.description}</p>
+                            )}
+                            <div className="mt-auto pt-3 flex items-center justify-between">
+                              <span className="font-black text-lg sm:text-xl" style={{ color: primaryColor }}>
+                                {item.sizes && item.sizes.length > 0 
+                                  ? `${formatPrice(Math.min(...item.sizes.map((s: any) => s.price)), store.currency)}`
+                                  : formatPrice(item.price, store.currency)
+                                }
+                              </span>
+                              {!store.hideProductAddButton && (
+                                <button 
+                                  className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-transform active:scale-95 shrink-0 ${
+                                    item.isAvailable 
+                                      ? isDarkSolid ? 'bg-white text-black hover:scale-105' : 'bg-surface-100 hover:bg-surface-200 text-surface-900' 
+                                      : 'bg-surface-100 text-surface-400 cursor-not-allowed'
+                                  }`}
+                                  style={item.isAvailable && !isDarkSolid ? { backgroundColor: primaryColor, color: '#fff' } : undefined}
+                                  disabled={!item.isAvailable}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if(item.isAvailable) handleOpenProduct(item);
+                                  }}
+                                >
+                                  <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
-                  ))}
+                  )})}
                 </div>
               </div>
             );

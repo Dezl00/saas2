@@ -279,6 +279,7 @@ model MenuItem {
   price       Decimal @db.Decimal(10, 2)
   image       String?
   isAvailable Boolean @default(true)
+  isFeatured  Boolean @default(false)
   sortOrder   Int     @default(0)
 
   categoryId String

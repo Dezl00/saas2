@@ -100,6 +100,7 @@ export async function getStoreCatalog(storeId: string, showDefaultProducts: bool
       price: true,
       image: true,
       categoryId: true,
+      isFeatured: true,
       sizes: { select: { id: true, name: true, price: true } },
       addons: { select: { id: true, name: true, price: true } }
     }

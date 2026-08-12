@@ -34,7 +34,8 @@ export function AppearanceClient({
   currentLandingHeroTitle = "",
   currentLandingHeroDescription = "",
   currentLandingHeroImage = "",
-  currentLandingHeroOverlayOpacity = 50
+  currentLandingHeroOverlayOpacity = 50,
+  currentShowFloatingIcons = true
 }: { 
   currentFont: string, 
   currentTheme: string,

@@ -210,19 +210,19 @@ export default async function StoreLayout({
         {/* Footer */}
         <footer id="store-footer-contact" className={`border-t mt-12 py-10 ${isDarkSolid ? 'bg-[#0a0a0a] border-[#222]' : 'bg-surface-50 border-surface-100'}`}>
           <div className="max-w-5xl mx-auto px-4 text-center space-y-4">
-            <div className={`w-20 h-20 mx-auto flex items-center justify-center mb-4 relative rounded-full overflow-hidden border ${isDarkSolid ? 'bg-black border-[#333]' : 'bg-white border-surface-100'}`}>
+            <div className="w-24 h-24 mx-auto flex items-center justify-center mb-4 relative">
               {store.logo ? (
-                <Image src={store.logo} alt={store.name} fill className="object-cover" sizes="80px" />
+                <Image src={store.logo} alt={store.name} fill className="object-contain" sizes="96px" />
               ) : (
                 <StoreIcon className={`w-8 h-8 ${isDarkSolid ? 'text-surface-600' : 'text-surface-400'}`} />
               )}
             </div>
             <h2 className={`font-bold text-lg ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>{store.name}</h2>
             {store.description && (
-              <p className={`text-sm max-w-md mx-auto leading-relaxed ${isDarkSolid ? 'text-surface-400' : 'text-surface-500'}`}>{store.description}</p>
+              <p className={`text-sm max-w-md mx-auto leading-relaxed ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-500'}`}>{store.description}</p>
             )}
             
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-surface-600 text-sm mt-6">
+            <div className={`flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm mt-6 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-600'}`}>
               {store.phone && (
                 <div className="flex items-center gap-2">
                   <Phone className="w-4 h-4 text-primary-500" />

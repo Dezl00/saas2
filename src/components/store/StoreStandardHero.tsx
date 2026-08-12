@@ -54,17 +54,17 @@ export function StoreStandardHero({ store, banners }: { store: any; banners: any
       <div className="h-44 sm:h-52 w-full relative bg-surface-100 overflow-hidden rounded-[24px] sm:rounded-[32px] shadow-lg">
         {banners && banners.length > 0 ? (
           <StoreBannersCarousel banners={banners} />
-        ) : store.cover ? (
+        ) : store.landingHeroImage || store.cover ? (
           <>
             <div 
               className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${store.cover})` }}
+              style={{ backgroundImage: `url(${store.landingHeroImage || store.cover})` }}
             />
             <div 
-              className="absolute inset-0"
+              className="absolute inset-0 mix-blend-multiply"
               style={{ 
-                backgroundColor: store.coverOverlayColor || '#000000',
-                opacity: (store.coverOverlayOpacity ?? 50) / 100 
+                backgroundColor: store.primaryColor || '#1a1a2e',
+                opacity: 0.85 
               }}
             />
           </>
@@ -82,7 +82,9 @@ export function StoreStandardHero({ store, banners }: { store: any; banners: any
         <div className="absolute -top-14 left-1/2 -translate-x-1/2 w-28 h-28 flex items-center justify-center">
           <div className="w-28 h-28 rounded-full bg-white border-4 border-white overflow-hidden flex items-center justify-center relative z-10">
             {store.logo ? (
-              <Image src={store.logo} alt={store.name} fill className="object-cover" sizes="112px" priority fetchPriority="high" />
+              <div className="relative w-20 h-20">
+                <Image src={store.logo} alt={store.name} fill className="object-contain" sizes="80px" priority fetchPriority="high" />
+              </div>
             ) : (
               <StoreIcon className="w-10 h-10" style={{ color: store.primaryColor || 'var(--color-primary-600)' }} />
             )}
@@ -91,7 +93,8 @@ export function StoreStandardHero({ store, banners }: { store: any; banners: any
         {store.workingHours && (
           <StoreWorkingHoursBadge 
             workingHours={store.workingHours} 
-            primaryColor={store.primaryColor} 
+            primaryColor={store.primaryColor}
+            theme={store.theme}
             className="absolute top-6 left-6"
           />
         )}

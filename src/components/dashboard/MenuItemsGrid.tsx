@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { ImageIcon, Trash2, CheckSquare, Square, Loader2, PackageOpen } from "lucide-react";
+import { ImageIcon, Trash2, CheckSquare, Square, Loader2, PackageOpen, Star } from "lucide-react";
 import { toggleMenuItemStatus } from "@/app/(dashboard)/dashboard/catalog/actions/toggle-menu-item-status";
+import { toggleFeaturedMenuItem } from "@/app/(dashboard)/dashboard/catalog/actions/toggle-featured-menu-item";
 import { deleteMenuItem } from "@/app/(dashboard)/dashboard/catalog/actions/delete-menu-item";
 import { bulkDeleteMenuItems } from "@/app/(dashboard)/dashboard/catalog/actions/bulk-delete-menu-items";
 import { MenuItemEditButton } from "@/components/dashboard/MenuItemEditButton";
@@ -19,6 +20,7 @@ type MenuItemType = {
   price: string | number | any;
   image: string | null;
   isAvailable: boolean;
+  isFeatured: boolean;
   sortOrder: number;
   categoryId: string;
   category: { id: string; name: string };
@@ -173,20 +175,37 @@ export function MenuItemsGrid({
 
                   {/* Actions */}
                   <div className="flex items-center justify-between mt-3 pt-3 border-t-2 border-surface-100/50 flex-wrap gap-2" onClick={e => e.stopPropagation()}>
-                    <form action={toggleMenuItemStatus.bind(null, item.id, item.isAvailable, storeId) as any}>
-                      <button
-                        type="submit"
-                        className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors focus:outline-none ${
-                          item.isAvailable ? 'bg-success-500' : 'bg-surface-300'
-                        }`}
-                      >
-                        <span
-                          className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
-                            item.isAvailable ? '-translate-x-6' : '-translate-x-1'
+                    <div className="flex items-center gap-2">
+                      <form action={toggleMenuItemStatus.bind(null, item.id, item.isAvailable, storeId) as any}>
+                        <button
+                          type="submit"
+                          title={item.isAvailable ? "متوفر" : "غير متوفر"}
+                          className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors focus:outline-none ${
+                            item.isAvailable ? 'bg-success-500' : 'bg-surface-300'
                           }`}
-                        />
-                      </button>
-                    </form>
+                        >
+                          <span
+                            className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
+                              item.isAvailable ? '-translate-x-6' : '-translate-x-1'
+                            }`}
+                          />
+                        </button>
+                      </form>
+
+                      <form action={toggleFeaturedMenuItem.bind(null, item.id, item.isFeatured, storeId) as any}>
+                        <button
+                          type="submit"
+                          title={item.isFeatured ? "إزالة من الأكثر مبيعاً" : "تعيين كـ الأكثر مبيعاً"}
+                          className={`flex items-center justify-center w-8 h-8 rounded-xl transition-colors border ${
+                            item.isFeatured 
+                              ? 'bg-yellow-50 border-yellow-200 text-yellow-500 hover:bg-yellow-100' 
+                              : 'bg-surface-50 border-surface-200 text-surface-400 hover:bg-surface-100 hover:text-yellow-500'
+                          }`}
+                        >
+                          <Star className={`w-4 h-4 ${item.isFeatured ? 'fill-current' : ''}`} />
+                        </button>
+                      </form>
+                    </div>
 
                     <div className="flex items-center gap-1 shrink-0">
                       <GenerateImageButton itemId={item.id} hasImage={!!item.image} />
