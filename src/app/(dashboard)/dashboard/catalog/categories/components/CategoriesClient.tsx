@@ -10,12 +10,16 @@ import { reorderCategories } from "../actions/reorder-categories";
 import { deleteCategory } from "../actions/delete-category";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import { cn } from "@/lib/utils";
-import { Trash2 } from "lucide-react";
+import { Trash2, Image as ImageIcon } from "lucide-react";
+import Image from "next/image";
+import { ImageUpload } from "@/components/dashboard/ImageUpload";
+import { updateCategoryImage } from "../actions/update-category-image";
 
 interface Category {
   id: string;
   name: string;
   description: string | null;
+  image: string | null;
   isActive: boolean;
   sortOrder: number;
   _count: { items: number };
@@ -98,6 +102,48 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
     });
   };
 
+  const handleImageUpload = (id: string, file: File) => {
+    // We upload immediately when a file is selected
+    startTransition(async () => {
+      const { uploadImageToCloudinary } = await import("@/lib/upload");
+      let imageUrl = null;
+      try {
+        imageUrl = await uploadImageToCloudinary(file) as string;
+      } catch (e) {
+        toast.error("فشل رفع الصورة");
+        return;
+      }
+      
+      const oldImage = categories.find(c => c.id === id)?.image || null;
+      setCategories(prev => 
+        prev.map(c => c.id === id ? { ...c, image: imageUrl } : c)
+      );
+
+      const result = await updateCategoryImage(id, imageUrl);
+      if (result?.error) {
+        toast.error(result.error);
+        setCategories(prev => 
+          prev.map(c => c.id === id ? { ...c, image: oldImage } : c)
+        );
+      } else {
+        toast.success("تم تحديث صورة القسم");
+      }
+    });
+  };
+
+  const handleImageRemove = (id: string) => {
+    startTransition(async () => {
+      const oldImage = categories.find(c => c.id === id)?.image || null;
+      setCategories(prev => prev.map(c => c.id === id ? { ...c, image: null } : c));
+
+      const result = await updateCategoryImage(id, null);
+      if (result?.error) {
+        toast.error(result.error);
+        setCategories(prev => prev.map(c => c.id === id ? { ...c, image: oldImage } : c));
+      }
+    });
+  };
+
   const handleDelete = async () => {
     if (!deleteId) return;
     const id = deleteId;
@@ -153,9 +199,45 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
                       </div>
 
                       <div className="flex items-start justify-between mb-4 pr-1 pl-10">
-                        <div className="flex-1 w-full max-w-full">
-                          {editingId === category.id ? (
-                            <div className="flex items-center gap-2 w-full">
+                        <div className="flex items-start gap-3 flex-1 min-w-0">
+                          {/* Image Thumbnail / Uploader */}
+                          <div className="shrink-0 relative group/img cursor-pointer w-16 h-16 rounded-full overflow-hidden border-2 border-surface-200 bg-surface-50 flex items-center justify-center">
+                            {category.image ? (
+                              <Image src={category.image} alt={category.name} fill className="object-cover" />
+                            ) : (
+                              <ImageIcon className="w-6 h-6 text-surface-300" />
+                            )}
+                            
+                            {/* Hover Overlay for uploading */}
+                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                              <label className="cursor-pointer w-full h-full flex items-center justify-center">
+                                <Edit2 className="w-4 h-4 text-white" />
+                                <input 
+                                  type="file" 
+                                  accept="image/*" 
+                                  className="hidden" 
+                                  onChange={(e) => {
+                                    if (e.target.files && e.target.files[0]) {
+                                      handleImageUpload(category.id, e.target.files[0]);
+                                    }
+                                  }} 
+                                />
+                              </label>
+                            </div>
+                            
+                            {category.image && (
+                              <button 
+                                onClick={(e) => { e.preventDefault(); handleImageRemove(category.id); }}
+                                className="absolute -top-1 -right-1 bg-error-500 text-white rounded-full p-0.5 opacity-0 group-hover/img:opacity-100 z-10"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            )}
+                          </div>
+
+                          <div className="flex-1 min-w-0 flex flex-col justify-center min-h-[64px]">
+                            {editingId === category.id ? (
+                              <div className="flex items-center gap-2 w-full">
                               <input
                                 autoFocus
                                 type="text"
@@ -197,9 +279,10 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
                             </div>
                           )}
                           
-                          {category.description && (
-                            <p className="text-sm text-surface-500 mt-1 line-clamp-2 font-medium">{category.description}</p>
-                          )}
+                            {category.description && (
+                              <p className="text-sm text-surface-500 mt-1 line-clamp-2 font-medium">{category.description}</p>
+                            )}
+                          </div>
                         </div>
                       </div>
                       

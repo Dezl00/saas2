@@ -1,39 +1,44 @@
 "use server";
 
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 import { revalidatePath, revalidateTag } from "next/cache";
 
-export async function toggleFeaturedMenuItem(id: string, currentStatus: boolean, storeId?: string) {
+export async function toggleFeaturedMenuItem(menuItemId: string, currentStatus: boolean, targetStoreId?: string) {
   const session = await auth();
-  
-  if (!session?.user?.storeId) {
-    return { error: "غير مصرح لك بالقيام بهذا الإجراء" };
+  if (!session?.user) return { error: "غير مصرح لك" };
+
+  let storeIdToUse = session.user.storeId;
+  if (targetStoreId === "DEFAULT_STORE" && session.user.role === "ADMIN") {
+    storeIdToUse = "DEFAULT_STORE";
+  } else if (!storeIdToUse) {
+    return { error: "غير مصرح لك" };
   }
 
-  // Ensure the user owns the menu item
-  const item = await prisma.menuItem.findUnique({
-    where: { 
-      id,
-      storeId: session.user.storeId
+  try {
+    const item = await prisma.menuItem.findUnique({
+      where: { id: menuItemId },
+    });
+
+    if (item?.storeId !== storeIdToUse) {
+      return { error: "غير مصرح لك بتعديل هذا الصنف" };
     }
-  });
 
-  if (!item) {
-    return { error: "الصنف غير موجود" };
+    await prisma.menuItem.update({
+      where: { id: menuItemId },
+      data: { isFeatured: !currentStatus },
+    });
+
+    if (storeIdToUse === "DEFAULT_STORE") {
+      revalidatePath("/admin/default-products");
+    } else {
+      revalidatePath("/dashboard/catalog");
+    }
+    (revalidateTag as any)(`store-${storeIdToUse}`, "default");
+    
+    return { success: "تم تحديث حالة الصنف" };
+  } catch (error) {
+    console.error("Toggle Featured Menu Item Error:", error);
+    return { error: "حدث خطأ أثناء تحديث الصنف" };
   }
-
-  await prisma.menuItem.update({
-    where: { id },
-    data: { isFeatured: !currentStatus }
-  });
-
-  revalidatePath("/dashboard/catalog");
-  
-  // Also revalidate the store front cache
-  if (storeId) {
-    (revalidateTag as any)(`store-${storeId}`, "default");
-  }
-
-  return { success: "تم تحديث حالة تمييز الصنف بنجاح" };
 }
