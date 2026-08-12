@@ -147,6 +147,13 @@ model Store {
   fontFamily           String  @default("Tajawal")
   theme                String  @default("classic")
 
+  // Landing Page Options
+  enableLandingPage         Boolean @default(false)
+  landingHeroTitle          String?
+  landingHeroDescription    String?
+  landingHeroImage          String?
+  landingHeroOverlayOpacity Int     @default(50)
+
   // Working Hours & Map
   workingHours  Json?
   mapLatitude   String?
@@ -250,6 +257,7 @@ model Category {
   id          String  @id @default(cuid())
   name        String
   description String?
+  image       String?
   sortOrder   Int     @default(0)
   isActive    Boolean @default(true)
 

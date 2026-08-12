@@ -4,7 +4,17 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath, revalidateTag } from "next/cache";
 
-export async function updateStoreAppearance(fontFamily: string, theme: string, hideProductDescription: boolean, hideProductAddButton: boolean) {
+export async function updateStoreAppearance(
+  fontFamily: string, 
+  theme: string, 
+  hideProductDescription: boolean, 
+  hideProductAddButton: boolean,
+  enableLandingPage: boolean,
+  landingHeroTitle: string,
+  landingHeroDescription: string,
+  landingHeroImage: string,
+  landingHeroOverlayOpacity: number
+) {
   const session = await auth();
   if (!session?.user?.storeId) {
     throw new Error("Unauthorized");
@@ -12,7 +22,17 @@ export async function updateStoreAppearance(fontFamily: string, theme: string, h
 
   const store = await prisma.store.update({
     where: { id: session.user.storeId },
-    data: { fontFamily, theme, hideProductDescription, hideProductAddButton },
+    data: { 
+      fontFamily, 
+      theme, 
+      hideProductDescription, 
+      hideProductAddButton,
+      enableLandingPage,
+      landingHeroTitle,
+      landingHeroDescription,
+      landingHeroImage,
+      landingHeroOverlayOpacity
+    },
   });
 
   // Type assertion for next/cache revalidateTag

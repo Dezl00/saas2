@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { updateStoreAppearance } from "../actions";
-import { Loader2, Check, Palette, Type, Settings } from "lucide-react";
+import { Loader2, Check, Palette, Type, Settings, Image as ImageIcon, LayoutTemplate } from "lucide-react";
 import toast from "react-hot-toast";
+import { CldUploadWidget } from "next-cloudinary";
+import Image from "next/image";
 
 const THEMES = [
   { id: "classic", name: "الثيم الكلاسيكي (الافتراضي)", description: "تصميم مشرق وبسيط" },
@@ -32,18 +34,42 @@ export function AppearanceClient({
   currentFont: string, 
   currentTheme: string,
   currentHideDescription?: boolean,
-  currentHideAddButton?: boolean
+  currentHideAddButton?: boolean,
+  currentEnableLandingPage?: boolean,
+  currentLandingHeroTitle?: string | null,
+  currentLandingHeroDescription?: string | null,
+  currentLandingHeroImage?: string | null,
+  currentLandingHeroOverlayOpacity?: number
 }) {
   const [selectedFont, setSelectedFont] = useState(currentFont || "Tajawal");
+  const [isFontDropdownOpen, setIsFontDropdownOpen] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState(currentTheme || "classic");
-  const [hideDescription, setHideDescription] = useState(currentHideDescription);
-  const [hideAddButton, setHideAddButton] = useState(currentHideAddButton);
+  const [hideDescription, setHideDescription] = useState(currentHideDescription || false);
+  const [hideAddButton, setHideAddButton] = useState(currentHideAddButton || false);
+  
+  // Landing Page State
+  const [enableLandingPage, setEnableLandingPage] = useState(currentEnableLandingPage || false);
+  const [landingHeroTitle, setLandingHeroTitle] = useState(currentLandingHeroTitle || "");
+  const [landingHeroDescription, setLandingHeroDescription] = useState(currentLandingHeroDescription || "");
+  const [landingHeroImage, setLandingHeroImage] = useState(currentLandingHeroImage || "");
+  const [landingHeroOverlayOpacity, setLandingHeroOverlayOpacity] = useState(currentLandingHeroOverlayOpacity ?? 50);
+
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      await updateStoreAppearance(selectedFont, selectedTheme, hideDescription, hideAddButton);
+      await updateStoreAppearance(
+        selectedFont, 
+        selectedTheme, 
+        hideDescription, 
+        hideAddButton,
+        enableLandingPage,
+        landingHeroTitle,
+        landingHeroDescription,
+        landingHeroImage,
+        landingHeroOverlayOpacity
+      );
       toast.success("تم تحديث المظهر بنجاح");
     } catch (error) {
       toast.error("حدث خطأ أثناء التحديث");
@@ -56,8 +82,13 @@ export function AppearanceClient({
 
   const hasChanges = selectedFont !== currentFont || 
                      selectedTheme !== currentTheme || 
-                     hideDescription !== currentHideDescription ||
-                     hideAddButton !== currentHideAddButton;
+                     hideDescription !== (currentHideDescription || false) ||
+                     hideAddButton !== (currentHideAddButton || false) ||
+                     enableLandingPage !== (currentEnableLandingPage || false) ||
+                     landingHeroTitle !== (currentLandingHeroTitle || "") ||
+                     landingHeroDescription !== (currentLandingHeroDescription || "") ||
+                     landingHeroImage !== (currentLandingHeroImage || "") ||
+                     landingHeroOverlayOpacity !== (currentLandingHeroOverlayOpacity ?? 50);
 
   return (
     <div className="space-y-6">
@@ -104,20 +135,40 @@ export function AppearanceClient({
         
         <div className="max-w-md">
           <label className="block text-sm font-semibold text-surface-700 mb-2">الخط الأساسي للمتجر</label>
-          <div className="relative">
-            <select
-              value={selectedFont}
-              onChange={(e) => setSelectedFont(e.target.value)}
-              className="w-full h-14 pl-4 pr-4 bg-surface-50 border border-surface-200 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 appearance-none text-surface-900 font-bold"
-              style={{ fontFamily: `"${selectedFont}", sans-serif` }}
-            >
-              {FONTS.map((font) => (
-                <option key={font.id} value={font.id} style={{ fontFamily: `"${font.id}", sans-serif` }}>
-                  {font.name}
-                </option>
-              ))}
-            </select>
-          </div>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setIsFontDropdownOpen(!isFontDropdownOpen)}
+                className="w-full h-14 px-4 bg-surface-50 border border-surface-200 rounded-2xl flex items-center justify-between text-surface-900 font-bold focus:outline-none focus:ring-2 focus:ring-primary-500"
+                style={{ fontFamily: `"${selectedFont}", sans-serif` }}
+              >
+                <span>{FONTS.find(f => f.id === selectedFont)?.name || "Tajawal"}</span>
+                <svg className={`w-5 h-5 text-surface-500 transition-transform ${isFontDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+              </button>
+              
+              {isFontDropdownOpen && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-surface-200 rounded-2xl shadow-xl z-50 max-h-60 overflow-y-auto">
+                  {FONTS.map((font) => (
+                    <button
+                      key={font.id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedFont(font.id);
+                        setIsFontDropdownOpen(false);
+                      }}
+                      className={`w-full text-start px-4 py-3 hover:bg-surface-50 transition-colors ${selectedFont === font.id ? 'bg-primary-50 text-primary-600' : 'text-surface-900'}`}
+                    >
+                      <div className="flex flex-col">
+                        <span className="font-bold text-sm mb-1">{font.name}</span>
+                        <span className="text-sm opacity-80" style={{ fontFamily: `"${font.id}", sans-serif` }}>
+                          أهلاً بك في متجرنا.
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           
           <div className="mt-4 p-5 rounded-2xl bg-surface-50 border border-surface-100">
             <p className="text-surface-900 font-bold mb-1" style={{ fontFamily: `"${selectedFont}", sans-serif` }}>معاينة الخط:</p>
@@ -167,6 +218,115 @@ export function AppearanceClient({
               <div className="w-14 h-7 bg-surface-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-500"></div>
             </label>
           </div>
+        </div>
+      </div>
+
+      {/* Landing Page Settings Section */}
+      <div className="bg-white border-2 border-surface-100 rounded-[32px] p-6 lg:p-8">
+        <h3 className="text-xl font-bold text-surface-950 mb-6 flex items-center gap-2">
+          <LayoutTemplate className="w-6 h-6 text-primary-500" />
+          الصفحة الرئيسية (صفحة الهبوط)
+        </h3>
+        
+        <div className="space-y-6 max-w-xl">
+          <div className="flex items-center justify-between p-4 rounded-2xl border border-surface-100 bg-surface-50">
+            <div>
+              <h4 className="font-bold text-surface-950">تفعيل صفحة الهبوط</h4>
+              <p className="text-sm text-surface-500">جعل الصفحة الرئيسية عبارة عن هيرو وكروت للأقسام</p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input 
+                type="checkbox" 
+                className="sr-only peer" 
+                checked={enableLandingPage}
+                onChange={(e) => setEnableLandingPage(e.target.checked)}
+              />
+              <div className="w-14 h-7 bg-surface-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-500"></div>
+            </label>
+          </div>
+
+          {enableLandingPage && (
+            <div className="space-y-4 pt-4 border-t border-surface-100">
+              <div>
+                <label className="block text-sm font-semibold text-surface-700 mb-2">عنوان الهيرو</label>
+                <input
+                  type="text"
+                  value={landingHeroTitle}
+                  onChange={(e) => setLandingHeroTitle(e.target.value)}
+                  className="w-full h-12 px-4 bg-surface-50 border border-surface-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+                  placeholder="مثال: أصالة الشام في كل طبق"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-surface-700 mb-2">وصف الهيرو</label>
+                <textarea
+                  value={landingHeroDescription}
+                  onChange={(e) => setLandingHeroDescription(e.target.value)}
+                  rows={3}
+                  className="w-full p-4 bg-surface-50 border border-surface-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+                  placeholder="مثال: نكهات شامية فاخرة..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-surface-700 mb-2">صورة خلفية الهيرو</label>
+                {landingHeroImage ? (
+                  <div className="relative w-full h-40 rounded-2xl overflow-hidden border-2 border-surface-200 mb-4 group">
+                    <Image src={landingHeroImage} alt="Hero" fill className="object-cover" />
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <button
+                        onClick={() => setLandingHeroImage("")}
+                        className="bg-white/20 hover:bg-white text-white hover:text-red-500 backdrop-blur-sm px-4 py-2 rounded-xl text-sm font-bold transition-colors"
+                      >
+                        حذف الصورة
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <CldUploadWidget
+                    uploadPreset="ml_default"
+                    options={{ maxFiles: 1, maxFileSize: 5000000, resourceType: "image" }}
+                    onSuccess={(result: any) => {
+                      if (result?.info?.secure_url) {
+                        setLandingHeroImage(result.info.secure_url);
+                      }
+                    }}
+                  >
+                    {({ open }) => (
+                      <button
+                        onClick={() => open()}
+                        className="w-full h-40 flex flex-col items-center justify-center gap-3 border-2 border-dashed border-surface-300 rounded-2xl bg-surface-50 hover:bg-surface-100 transition-colors text-surface-600"
+                      >
+                        <ImageIcon className="w-8 h-8 text-surface-400" />
+                        <div className="text-sm font-semibold">اضغط لرفع صورة الخلفية</div>
+                        <div className="text-xs text-surface-500">PNG, JPG حتى 5MB</div>
+                      </button>
+                    )}
+                  </CldUploadWidget>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-surface-700 mb-2">
+                  درجة التعتيم (Opacity): {landingHeroOverlayOpacity}%
+                </label>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value={landingHeroOverlayOpacity}
+                  onChange={(e) => setLandingHeroOverlayOpacity(Number(e.target.value))}
+                  className="w-full"
+                />
+                <div className="flex justify-between text-xs text-surface-500 mt-1">
+                  <span>شفاف 0%</span>
+                  <span>أسود 100%</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

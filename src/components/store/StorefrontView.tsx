@@ -170,7 +170,7 @@ export function StorefrontView({
   if (categories.length === 0) {
     return (
       <div className={`text-center py-20 ${isDarkSolid ? 'bg-black' : 'bg-white'}`}>
-        <h2 className={`text-2xl font-bold ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>المنيو قيد التجهيز</h2>
+        <h2 className={`text-2xl font-bold ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-950'}`}>المنيو قيد التجهيز</h2>
       </div>
     );
   }
@@ -228,7 +228,7 @@ export function StorefrontView({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="ابحث عن صنف..."
-                className={`flex-1 bg-transparent text-sm outline-none placeholder:text-surface-400 ${isDarkSolid ? 'text-white' : 'text-surface-900'}`}
+                className={`flex-1 bg-transparent text-sm outline-none placeholder:text-surface-400 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-900'}`}
                 autoFocus
               />
               {searchQuery && (
@@ -314,13 +314,21 @@ export function StorefrontView({
           return (
             <div key={category.id} id={`category-${category.id}`} className="scroll-mt-28">
               <h2 
-                className={`text-lg p-2 text-center font-semibold mb-4 ${isDarkSolid ? 'text-white' : 'rounded-xl'}`}
+                className={`text-2xl p-2 text-center font-bold mb-6 flex items-center justify-center gap-3 ${isDarkSolid ? 'text-[#fff5e5]' : 'rounded-xl'}`}
                 style={isDarkSolid ? {} : { 
                   backgroundColor: store.primaryColor ? `${store.primaryColor}1a` : 'var(--color-primary-50)',
                   color: store.primaryColor || 'var(--color-primary-600)' 
                 }}
               >
-                {isDarkSolid ? `- ${category.name} -` : category.name}
+                {isDarkSolid ? (
+                  <>
+                    <span style={{ color: primaryColor }}>-</span>
+                    <span>{category.name}</span>
+                    <span style={{ color: primaryColor }}>-</span>
+                  </>
+                ) : (
+                  category.name
+                )}
               </h2>
               
               {/* Cards — Grid layout */}
@@ -355,7 +363,7 @@ export function StorefrontView({
                     {/* Text content */}
                     <div className={`p-3 sm:p-4 flex flex-col flex-1 justify-between min-w-0 ${isDarkSolid ? 'bg-black' : ''}`}>
                       <div>
-                        <h3 className={`font-bold text-[13px] sm:text-sm leading-tight mb-1 line-clamp-2 ${isDarkSolid ? 'text-white' : 'text-surface-900'}`}>{item.name}</h3>
+                        <h3 className={`font-bold text-[13px] sm:text-sm leading-tight mb-1 line-clamp-2 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-900'}`}>{item.name}</h3>
                         {!store.hideProductDescription && item.description && (
                           <p className={`text-[11px] sm:text-xs line-clamp-2 leading-relaxed ${isDarkSolid ? 'text-surface-400' : 'text-surface-400'}`}>
                             {item.description}
@@ -451,7 +459,7 @@ export function StorefrontView({
             {/* Modal Content */}
             <div className="p-5 flex-1 overflow-y-auto space-y-5">
               <div>
-                <h2 className={`text-lg font-bold ${isDarkSolid ? 'text-white' : 'text-surface-900'}`}>{selectedProduct.name}</h2>
+                <h2 className={`text-lg font-bold ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-900'}`}>{selectedProduct.name}</h2>
                 {selectedProduct.description && (
                   <p className="text-surface-400 text-sm mt-1.5 leading-relaxed">{selectedProduct.description}</p>
                 )}
@@ -477,7 +485,7 @@ export function StorefrontView({
                           </div>
                           <span className={`text-sm ${isDarkSolid ? 'text-surface-200' : 'text-surface-800'}`}>{size.name}</span>
                         </div>
-                        <span className={`font-semibold text-sm ${isDarkSolid ? 'text-white' : 'text-surface-900'}`}>{formatPrice(size.price, store.currency)}</span>
+                        <span className={`font-semibold text-sm ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-900'}`}>{formatPrice(size.price, store.currency)}</span>
                       </label>
                     ))}
                   </div>
@@ -523,7 +531,7 @@ export function StorefrontView({
                 >
                   <Minus className="w-3.5 h-3.5" />
                 </button>
-                <span className={`font-bold text-base w-8 text-center ${isDarkSolid ? 'text-white' : 'text-surface-900'}`}>{quantity}</span>
+                <span className={`font-bold text-base w-8 text-center ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-900'}`}>{quantity}</span>
                 <button 
                   onClick={() => setQuantity(quantity + 1)}
                   className={`w-9 h-full flex items-center justify-center rounded-lg transition-colors ${isDarkSolid ? 'bg-[#222] text-surface-300 hover:bg-[#333]' : 'bg-white text-surface-600 hover:bg-surface-100'}`}

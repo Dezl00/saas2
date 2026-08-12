@@ -1,10 +1,9 @@
 import { notFound } from "next/navigation";
 import { StorefrontView } from "@/components/store/StorefrontView";
 import { StoreStandardHero } from "@/components/store/StoreStandardHero";
-import { StoreLandingView } from "@/components/store/StoreLandingView";
-import { getStoreInfo, getStoreCatalog, getStoreBanners } from "./data";
+import { getStoreInfo, getStoreCatalog, getStoreBanners } from "../data";
 
-export default async function StorePage(props: { params: Promise<{ subdomain: string }> }) {
+export default async function StoreMenuPage(props: { params: Promise<{ subdomain: string }> }) {
   const params = await props.params;
   
   const store = await getStoreInfo(params.subdomain);
@@ -28,16 +27,6 @@ export default async function StorePage(props: { params: Promise<{ subdomain: st
     sizes: item.sizes.map(size => ({ id: size.id, name: size.name, price: Number(size.price) })),
     addons: item.addons.map(addon => ({ id: addon.id, name: addon.name, price: Number(addon.price) }))
   }));
-
-  if ((store as any).enableLandingPage) {
-    return (
-      <StoreLandingView 
-        store={store as any} 
-        categories={categoriesToDisplay.map(c => ({ id: c.id, name: c.name, image: c.image }))} 
-        subdomain={params.subdomain}
-      />
-    );
-  }
 
   return (
     <div className="animate-fade-in">
