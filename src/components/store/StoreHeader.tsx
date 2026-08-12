@@ -166,13 +166,13 @@ export function StoreHeader({ logo, storeName, primaryColor, socialLinks, workin
   return (
     <>
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-surface-100">
-        <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
-          {/* Right side: Hamburger + Logo */}
-          <div className="flex items-center gap-2" ref={menuRef}>
+        <div className="max-w-5xl mx-auto px-4 h-14 relative flex items-center justify-between">
+          {/* Right side: Hamburger */}
+          <div className="flex items-center" ref={menuRef}>
             {/* Hamburger toggle */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="w-9 h-9 flex items-center justify-center rounded-xl transition-colors hover:bg-surface-50"
+              className="w-9 h-9 flex items-center justify-center rounded-xl transition-colors hover:bg-surface-50 z-10 relative"
             >
               {isMenuOpen ? (
                 <X className="w-5 h-5 text-surface-700" />
@@ -180,15 +180,6 @@ export function StoreHeader({ logo, storeName, primaryColor, socialLinks, workin
                 <Menu className="w-5 h-5 text-surface-700" />
               )}
             </button>
-
-            {/* Logo without circle/border */}
-            <div className="w-9 h-9 overflow-hidden flex items-center justify-center shrink-0">
-              {logo ? (
-                <Image src={logo} alt={storeName} width={36} height={36} className="w-full h-full object-contain" />
-              ) : (
-                <span className="text-lg font-bold" style={{ color }}>{storeName.charAt(0)}</span>
-              )}
-            </div>
 
             {/* Dropdown menu */}
             {isMenuOpen && (
@@ -269,14 +260,19 @@ export function StoreHeader({ logo, storeName, primaryColor, socialLinks, workin
             )}
           </div>
 
-          {/* Left side: Share + Cart */}
-          <div className="flex items-center gap-1">
-            <button
-              onClick={handleShare}
-              className="relative p-2 hover:opacity-80 transition-opacity flex items-center justify-center"
-            >
-              <Share2 className="w-5 h-5 text-surface-700" />
-            </button>
+          {/* Center: Logo */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none">
+            <div className="w-9 h-9 overflow-hidden flex items-center justify-center shrink-0 pointer-events-auto">
+              {logo ? (
+                <Image src={logo} alt={storeName} width={36} height={36} className="w-full h-full object-contain" />
+              ) : (
+                <span className="text-lg font-bold" style={{ color }}>{storeName.charAt(0)}</span>
+              )}
+            </div>
+          </div>
+
+          {/* Left side: Cart */}
+          <div className="flex items-center z-10 relative">
             <CartHeaderButton />
           </div>
         </div>
