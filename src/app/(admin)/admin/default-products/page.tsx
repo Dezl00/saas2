@@ -8,6 +8,7 @@ import { MenuItemsGrid } from "@/components/dashboard/MenuItemsGrid";
 import { SubmitButton } from "@/components/dashboard/SubmitButton";
 import { DeleteConfirmButton } from "@/components/dashboard/DeleteConfirmButton";
 import { createDefaultCategory, toggleDefaultCategoryStatus, deleteDefaultCategory } from "./actions";
+import { OptimisticToggle } from "@/components/dashboard/OptimisticToggle";
 import { DefaultProductsTabs } from "./DefaultProductsTabs";
 
 export const metadata = {
@@ -19,7 +20,7 @@ export const maxDuration = 60;
 import { connection } from "next/server";
 
 export default async function DefaultProductsPage(props: {
-  searchParams: Promise<{ tab?: string }>;
+  searchParams: Promise<{ tab?: string; edit?: string }>;
 }) {
   await connection();
   const searchParams = await props.searchParams;
@@ -56,6 +57,15 @@ export default async function DefaultProductsPage(props: {
   });
 
   const currentTab = searchParams.tab || 'menu';
+  const editId = searchParams.edit;
+
+  let editItem = null;
+  if (editId) {
+    editItem = await prisma.menuItem.findUnique({
+      where: { id: editId, storeId: 'DEFAULT_STORE' },
+      include: { sizes: true, addons: true }
+    });
+  }
 
   // Fetch DEFAULT_STORE data
   const [menuItems, categories, allStores] = await Promise.all([
@@ -109,7 +119,7 @@ export default async function DefaultProductsPage(props: {
               <div className="bg-surface-50 rounded-[32px] border-2 border-surface-100 p-6 sticky top-6 max-h-[calc(100vh-2rem)] overflow-y-auto scrollbar-hide">
                 <h3 className="text-xl font-black text-surface-950 mb-6 flex items-center gap-2">
                   <Plus className="w-6 h-6 text-primary-500" />
-                  إضافة صنف افتراضي
+                  {editItem ? "تعديل الصنف الافتراضي" : "إضافة صنف افتراضي"}
                 </h3>
                 
                 {categories.length === 0 ? (
@@ -121,6 +131,12 @@ export default async function DefaultProductsPage(props: {
                 <MenuItemForm 
                   storeId="DEFAULT_STORE"
                   categories={categories.map(c => ({ id: c.id, name: c.name }))} 
+                  initialData={editItem ? {
+                    ...editItem,
+                    price: editItem.price.toString(),
+                    sizes: editItem.sizes.map((s: any) => ({ ...s, price: s.price.toString() })),
+                    addons: editItem.addons.map((a: any) => ({ ...a, price: a.price.toString() }))
+                  } : undefined}
                 />
               </div>
             </div>
@@ -190,11 +206,13 @@ export default async function DefaultProductsPage(props: {
                           </td>
                           <td className="px-6 py-4"><span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-100 text-surface-800">{category._count?.items || 0} أصناف</span></td>
                           <td className="px-6 py-4">
-                            <form action={toggleDefaultCategoryStatus.bind(null, category.id, category.isActive) as any}>
-                                <button type="submit" className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${category.isActive ? 'bg-success-500' : 'bg-surface-300'}`}>
-                                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${category.isActive ? '-translate-x-6' : '-translate-x-1'}`} />
-                                </button>
-                            </form>
+                            <OptimisticToggle 
+                              initialStatus={category.isActive} 
+                              action={async (status) => {
+                                "use server";
+                                return await toggleDefaultCategoryStatus(category.id, !status) as any;
+                              }} 
+                            />
                           </td>
                           <td className="px-6 py-4">
                             <div className="flex items-center justify-end gap-2">
@@ -248,24 +266,14 @@ export default async function DefaultProductsPage(props: {
                       )}
                     </td>
                     <td className="px-6 py-4">
-                      <form action={async () => {
-                        "use server";
-                        const { toggleStoreDefaultProducts } = await import("./actions");
-                        await toggleStoreDefaultProducts(store.id, store.showDefaultProducts);
-                      }}>
-                        <button
-                          type="submit"
-                          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
-                            store.showDefaultProducts ? 'bg-success-500' : 'bg-surface-300'
-                          }`}
-                        >
-                          <span
-                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                              store.showDefaultProducts ? '-translate-x-6' : '-translate-x-1'
-                            }`}
-                          />
-                        </button>
-                      </form>
+                      <OptimisticToggle
+                        initialStatus={store.showDefaultProducts}
+                        action={async (status) => {
+                          "use server";
+                          const { toggleStoreDefaultProducts } = await import("./actions");
+                          return await toggleStoreDefaultProducts(store.id, !status) as any;
+                        }}
+                      />
                     </td>
                   </tr>
                 ))}

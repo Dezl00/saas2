@@ -287,21 +287,32 @@ export function CartSidebar({
 
                 {deliveryType === "PICKUP" && branches && branches.length > 0 && (
                   <div className="space-y-1">
-                    <label className={`text-sm font-bold ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>اختر الفرع للاستلام *</label>
-                    <select
-                      value={selectedBranch}
-                      onChange={(e) => setSelectedBranch(e.target.value)}
-                      className={`w-full p-3 border rounded-xl outline-none transition-colors ${isDarkSolid ? 'bg-[#111] border-[#333] text-white focus:border-primary-500' : 'bg-white border-surface-200 focus:border-primary-500 text-surface-900'}`}
-                      style={{ outlineColor: primaryColor }}
-                      required
-                    >
-                      <option value="">-- اختر الفرع الأقرب لك --</option>
+                    <label className={`text-sm font-bold mb-2 block ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>اختر الفرع للاستلام *</label>
+                    <div className="grid grid-cols-1 gap-3 max-h-[300px] overflow-y-auto scrollbar-hide">
                       {branches.map((branch) => (
-                        <option key={branch.id} value={branch.id}>
-                          {branch.name} {branch.address ? `(${branch.address})` : ''}
-                        </option>
+                        <button
+                          key={branch.id}
+                          type="button"
+                          onClick={() => { setSelectedBranch(branch.id); setValidationErrors(prev => ({...prev, branch: undefined})); }}
+                          className={`text-start p-4 border rounded-xl transition-all ${
+                            selectedBranch === branch.id
+                              ? (isDarkSolid ? 'bg-primary-900/20 border-primary-500' : 'bg-primary-50 border-primary-500')
+                              : (isDarkSolid ? 'bg-[#111] border-[#333] hover:border-surface-600' : 'bg-white border-surface-200 hover:border-surface-300')
+                          }`}
+                        >
+                          <div className="flex items-center gap-3 mb-1">
+                            <div className={`w-4 h-4 shrink-0 rounded-full border-2 flex items-center justify-center ${selectedBranch === branch.id ? 'border-primary-500' : (isDarkSolid ? 'border-surface-600' : 'border-surface-300')}`}>
+                              {selectedBranch === branch.id && <div className="w-2 h-2 rounded-full bg-primary-500" />}
+                            </div>
+                            <span className={`font-bold text-sm ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>{branch.name}</span>
+                          </div>
+                          {branch.address && (
+                            <p className={`text-xs mt-1 me-7 ${isDarkSolid ? 'text-surface-400' : 'text-surface-500'}`}>{branch.address}</p>
+                          )}
+                        </button>
                       ))}
-                    </select>
+                    </div>
+                    {validationErrors.branch && <p className="text-error-500 text-xs mt-1 font-bold">{validationErrors.branch}</p>}
                   </div>
                 )}
 

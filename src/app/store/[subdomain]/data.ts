@@ -88,7 +88,7 @@ export async function getStoreCatalog(storeId: string, showDefaultProducts: bool
   }
 
   const menuItems = await prisma.menuItem.findMany({
-    where: { storeId: targetStoreId, isAvailable: true },
+    where: { storeId: targetStoreId },
     orderBy: [
       { sortOrder: 'asc' },
       { id: 'asc' }
@@ -101,6 +101,7 @@ export async function getStoreCatalog(storeId: string, showDefaultProducts: bool
       image: true,
       categoryId: true,
       isFeatured: true,
+      isAvailable: true,
       sizes: { select: { id: true, name: true, price: true } },
       addons: { select: { id: true, name: true, price: true } }
     }

@@ -34,7 +34,7 @@ type CategoryType = {
 };
 
 export function MenuItemsGrid({ 
-  menuItems, 
+  menuItems: initialMenuItems, 
   categories,
   storeId
 }: { 
@@ -42,6 +42,15 @@ export function MenuItemsGrid({
   categories: CategoryType[],
   storeId?: string 
 }) {
+  const [menuItems, setMenuItems] = useState(initialMenuItems);
+  
+  // Sync state when props change
+  import("react").then(React => {
+    React.useEffect(() => {
+      setMenuItems(initialMenuItems);
+    }, [initialMenuItems]);
+  });
+
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [isDeletingBulk, setIsDeletingBulk] = useState(false);
 
@@ -79,6 +88,28 @@ export function MenuItemsGrid({
     }
     setIsDeletingBulk(false);
     setShowBulkConfirm(false);
+  };
+
+  const handleToggleAvailable = async (e: React.MouseEvent, id: string, currentStatus: boolean) => {
+    e.stopPropagation();
+    const prev = [...menuItems];
+    setMenuItems(menuItems.map(item => item.id === id ? { ...item, isAvailable: !currentStatus } : item));
+    const result = await toggleMenuItemStatus(id, currentStatus, storeId);
+    if (result?.error) {
+      toast.error(result.error);
+      setMenuItems(prev); // revert
+    }
+  };
+
+  const handleToggleFeatured = async (e: React.MouseEvent, id: string, currentStatus: boolean) => {
+    e.stopPropagation();
+    const prev = [...menuItems];
+    setMenuItems(menuItems.map(item => item.id === id ? { ...item, isFeatured: !currentStatus } : item));
+    const result = await toggleFeaturedMenuItem(id, currentStatus, storeId);
+    if (result?.error) {
+      toast.error(result.error);
+      setMenuItems(prev); // revert
+    }
   };
 
   return (
@@ -175,36 +206,34 @@ export function MenuItemsGrid({
 
                   {/* Actions */}
                   <div className="flex items-center justify-between mt-3 pt-3 border-t-2 border-surface-100/50 flex-wrap gap-2" onClick={e => e.stopPropagation()}>
-                    <div className="flex items-center gap-2">
-                      <form action={toggleMenuItemStatus.bind(null, item.id, item.isAvailable, storeId) as any}>
-                        <button
-                          type="submit"
-                          title={item.isAvailable ? "متوفر" : "غير متوفر"}
-                          className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors focus:outline-none ${
-                            item.isAvailable ? 'bg-success-500' : 'bg-surface-300'
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        type="button"
+                        onClick={(e) => handleToggleAvailable(e, item.id, item.isAvailable)}
+                        title={item.isAvailable ? "متوفر" : "غير متوفر"}
+                        className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors focus:outline-none ${
+                          item.isAvailable ? 'bg-success-500' : 'bg-surface-300'
+                        }`}
+                      >
+                        <span
+                          className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
+                            item.isAvailable ? '-translate-x-6' : '-translate-x-1'
                           }`}
-                        >
-                          <span
-                            className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
-                              item.isAvailable ? '-translate-x-6' : '-translate-x-1'
-                            }`}
-                          />
-                        </button>
-                      </form>
+                        />
+                      </button>
 
-                      <form action={toggleFeaturedMenuItem.bind(null, item.id, item.isFeatured, storeId) as any}>
-                        <button
-                          type="submit"
-                          title={item.isFeatured ? "إزالة من الأكثر مبيعاً" : "تعيين كـ الأكثر مبيعاً"}
-                          className={`flex items-center justify-center w-8 h-8 rounded-xl transition-colors border ${
-                            item.isFeatured 
-                              ? 'bg-yellow-50 border-yellow-200 text-yellow-500 hover:bg-yellow-100' 
-                              : 'bg-surface-50 border-surface-200 text-surface-400 hover:bg-surface-100 hover:text-yellow-500'
-                          }`}
-                        >
-                          <Star className={`w-4 h-4 ${item.isFeatured ? 'fill-current' : ''}`} />
-                        </button>
-                      </form>
+                      <button
+                        type="button"
+                        onClick={(e) => handleToggleFeatured(e, item.id, item.isFeatured)}
+                        title={item.isFeatured ? "إزالة من الأكثر مبيعاً" : "تعيين كـ الأكثر مبيعاً"}
+                        className={`flex items-center justify-center w-8 h-8 rounded-xl transition-colors border shrink-0 ${
+                          item.isFeatured 
+                            ? 'bg-yellow-50 border-yellow-200 text-yellow-500 hover:bg-yellow-100' 
+                            : 'bg-surface-50 border-surface-200 text-surface-400 hover:bg-surface-100 hover:text-yellow-500'
+                        }`}
+                      >
+                        <Star className={`w-4 h-4 ${item.isFeatured ? 'fill-current' : ''}`} />
+                      </button>
                     </div>
 
                     <div className="flex items-center gap-1 shrink-0">

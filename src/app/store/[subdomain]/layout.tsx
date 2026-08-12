@@ -237,30 +237,44 @@ export default async function StoreLayout({
               )}
             </div>
 
-            {/* Social icons — Filled with brand color, white icons */}
+            {store.branches && store.branches.length > 0 && (
+              <div className="mt-8 mb-4">
+                <h3 className={`font-bold text-sm mb-3 ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>الفروع</h3>
+                <div className="flex flex-wrap justify-center gap-4">
+                  {store.branches.map((branch: any) => (
+                    <div key={branch.id} className={`flex flex-col items-center gap-1 p-3 rounded-2xl border ${isDarkSolid ? 'bg-[#111] border-[#333]' : 'bg-white border-surface-200'}`}>
+                      <span className={`font-bold text-xs ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>{branch.name}</span>
+                      {branch.address && <span className={`text-[10px] max-w-[200px] ${isDarkSolid ? 'text-surface-400' : 'text-surface-500'}`}>{branch.address}</span>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Social icons */}
             <div className="flex justify-center items-center gap-3 mt-8">
               {store.showFacebook && store.facebookUrl && (
-                <a href={store.facebookUrl} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-xl flex items-center justify-center transition-colors text-white" style={{ backgroundColor: store.primaryColor || 'var(--color-primary-600)' }}>
+                <a href={store.facebookUrl} target="_blank" rel="noreferrer" className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${isDarkSolid ? 'text-[#0a0a0a]' : 'text-white'}`} style={{ backgroundColor: store.primaryColor || 'var(--color-primary-600)' }}>
                   <FacebookIcon className="w-4 h-4" />
                 </a>
               )}
               {store.showInstagram && store.instagramUrl && (
-                <a href={store.instagramUrl} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-xl flex items-center justify-center transition-colors text-white" style={{ backgroundColor: store.primaryColor || 'var(--color-primary-600)' }}>
+                <a href={store.instagramUrl} target="_blank" rel="noreferrer" className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${isDarkSolid ? 'text-[#0a0a0a]' : 'text-white'}`} style={{ backgroundColor: store.primaryColor || 'var(--color-primary-600)' }}>
                   <InstagramIcon className="w-4 h-4" />
                 </a>
               )}
               {store.showTwitter && store.twitterUrl && (
-                <a href={store.twitterUrl} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-xl flex items-center justify-center transition-colors text-white" style={{ backgroundColor: store.primaryColor || 'var(--color-primary-600)' }}>
+                <a href={store.twitterUrl} target="_blank" rel="noreferrer" className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${isDarkSolid ? 'text-[#0a0a0a]' : 'text-white'}`} style={{ backgroundColor: store.primaryColor || 'var(--color-primary-600)' }}>
                   <XIcon className="w-4 h-4" />
                 </a>
               )}
               {store.showTiktok && store.tiktokUrl && (
-                <a href={store.tiktokUrl} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-xl flex items-center justify-center transition-colors text-white" style={{ backgroundColor: store.primaryColor || 'var(--color-primary-600)' }}>
+                <a href={store.tiktokUrl} target="_blank" rel="noreferrer" className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${isDarkSolid ? 'text-[#0a0a0a]' : 'text-white'}`} style={{ backgroundColor: store.primaryColor || 'var(--color-primary-600)' }}>
                   <TiktokIcon className="w-4 h-4" />
                 </a>
               )}
               {store.showSnapchat && store.snapchatUrl && (
-                <a href={store.snapchatUrl} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-xl flex items-center justify-center transition-colors text-white" style={{ backgroundColor: store.primaryColor || 'var(--color-primary-600)' }}>
+                <a href={store.snapchatUrl} target="_blank" rel="noreferrer" className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${isDarkSolid ? 'text-[#0a0a0a]' : 'text-white'}`} style={{ backgroundColor: store.primaryColor || 'var(--color-primary-600)' }}>
                   <SnapchatIcon className="w-4 h-4" />
                 </a>
               )}

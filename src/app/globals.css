@@ -311,8 +311,17 @@ body {
   100% { opacity: 0; pointer-events: none; }
 }
 
+@keyframes splash-logo-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(0.85); }
+}
+
 .animate-splash-pulse {
   animation: splash-pulse-slow 2.5s ease-in-out infinite;
+}
+
+.animate-splash-logo {
+  animation: splash-logo-pulse 2s ease-in-out infinite;
 }
 
 .animate-splash-stage {

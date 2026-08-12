@@ -37,7 +37,7 @@ export function StoreSplashScreen({ logo, storeName, primaryColor, theme }: Prop
         {/* Logo without border/circle */}
         <div className="relative">
           <div
-            className="w-28 h-28 flex items-center justify-center overflow-hidden"
+            className="w-24 h-24 flex items-center justify-center overflow-hidden animate-splash-logo relative z-10 p-2"
           >
             {logo ? (
               <Image
