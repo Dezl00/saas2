@@ -160,13 +160,13 @@ export function MenuItemsGrid({
           <p className="text-lg font-medium text-surface-500">لم تقم بإضافة أي أصناف بعد.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-4">
           {menuItems.map((item) => {
             const isSelected = selectedIds.has(item.id);
             return (
               <div 
                 key={item.id} 
-                className={`flex gap-4 p-4 rounded-[24px] border-2 transition-all cursor-pointer ${
+                className={`flex gap-4 p-4 rounded-[24px] border-2 transition-all cursor-pointer min-w-0 ${
                   isSelected 
                     ? 'border-primary-500 bg-primary-50' 
                     : 'border-surface-100 bg-white hover:border-surface-200'
@@ -206,7 +206,7 @@ export function MenuItemsGrid({
 
                   {/* Actions */}
                   <div className="flex items-center justify-between mt-3 pt-3 border-t-2 border-surface-100/50 flex-wrap gap-2" onClick={e => e.stopPropagation()}>
-                    <div className="flex items-center gap-2 shrink-0">
+                    <div className="flex items-center gap-2">
                       <button
                         type="button"
                         onClick={(e) => handleToggleAvailable(e, item.id, item.isAvailable)}
@@ -236,7 +236,7 @@ export function MenuItemsGrid({
                       </button>
                     </div>
 
-                    <div className="flex items-center gap-1 shrink-0">
+                    <div className="flex items-center gap-1">
                       <GenerateImageButton itemId={item.id} hasImage={!!item.image} />
                       <MenuItemEditButton itemId={item.id} />
                       <DeleteConfirmButton action={deleteMenuItem.bind(null, item.id, storeId) as any} />

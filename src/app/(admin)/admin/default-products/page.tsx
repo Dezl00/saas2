@@ -129,6 +129,7 @@ export default async function DefaultProductsPage(props: {
                 ) : null}
 
                 <MenuItemForm 
+                  key={editItem ? editItem.id : 'new'}
                   storeId="DEFAULT_STORE"
                   categories={categories.map(c => ({ id: c.id, name: c.name }))} 
                   initialData={editItem ? {

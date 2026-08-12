@@ -77,6 +77,7 @@ export default async function MenuPage(props: { searchParams: Promise<{ page?: s
               </div>
             ) : (
               <MenuItemForm 
+                key={editItem ? editItem.id : 'new'}
                 categories={categories.map(c => ({ id: c.id, name: c.name }))} 
                 initialData={editItem ? {
                   ...editItem,

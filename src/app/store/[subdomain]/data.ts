@@ -65,7 +65,7 @@ export async function getStoreInfo(subdomain: string) {
 
 export async function getStoreCatalog(storeId: string, showDefaultProducts: boolean) {
   "use cache";
-  cacheTag(`store-catalog-${storeId}`);
+  cacheTag(`store-catalog-v2-${storeId}`);
 
   let targetStoreId = storeId;
   let useDefault = false;
