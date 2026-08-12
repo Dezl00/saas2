@@ -3,9 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import * as xlsx from "xlsx";
 
-export const dynamic = "force-dynamic";
-
-export async function GET() {
+export async function GET(req: Request) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
