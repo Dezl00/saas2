@@ -4,20 +4,33 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath, revalidateTag } from "next/cache";
 
-export async function updateStoreAppearance(
-  fontFamily: string, 
-  theme: string, 
-  hideProductDescription: boolean, 
-  hideProductAddButton: boolean,
-  enableLandingPage: boolean,
-  landingHeroTitle: string,
-  landingHeroDescription: string,
-  landingHeroImage: string,
-  landingHeroOverlayOpacity: number
-) {
+export async function updateStoreAppearance(formData: FormData) {
   const session = await auth();
   if (!session?.user?.storeId) {
     throw new Error("Unauthorized");
+  }
+
+  const fontFamily = formData.get("fontFamily") as string;
+  const theme = formData.get("theme") as string;
+  const hideProductDescription = formData.get("hideProductDescription") === "true";
+  const hideProductAddButton = formData.get("hideProductAddButton") === "true";
+  const enableLandingPage = formData.get("enableLandingPage") === "true";
+  const landingHeroTitle = formData.get("landingHeroTitle") as string;
+  const landingHeroDescription = formData.get("landingHeroDescription") as string;
+  const landingHeroOverlayOpacity = parseInt(formData.get("landingHeroOverlayOpacity") as string) || 50;
+  
+  let landingHeroImage = formData.get("landingHeroImage") as string; // Could be existing URL string
+
+  // Handle new file upload
+  const imageFile = formData.get("landingHeroImageFile") as File | null;
+  if (imageFile && imageFile.size > 0) {
+    const { uploadImageToCloudinary } = await import("@/lib/upload");
+    try {
+      landingHeroImage = await uploadImageToCloudinary(imageFile) as string;
+    } catch (e) {
+      console.error("Upload error", e);
+      throw new Error("فشل رفع الصورة");
+    }
   }
 
   const store = await prisma.store.update({

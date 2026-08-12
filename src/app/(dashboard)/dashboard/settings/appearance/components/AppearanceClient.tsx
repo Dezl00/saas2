@@ -4,8 +4,8 @@ import { useState } from "react";
 import { updateStoreAppearance } from "../actions";
 import { Loader2, Check, Palette, Type, Settings, Image as ImageIcon, LayoutTemplate } from "lucide-react";
 import toast from "react-hot-toast";
-import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
+import { ImageUpload } from "@/components/dashboard/ImageUpload";
 
 const THEMES = [
   { id: "classic", name: "الثيم الكلاسيكي (الافتراضي)", description: "تصميم مشرق وبسيط" },
@@ -64,17 +64,24 @@ export function AppearanceClient({
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      await updateStoreAppearance(
-        selectedFont, 
-        selectedTheme, 
-        hideDescription, 
-        hideAddButton,
-        enableLandingPage,
-        landingHeroTitle,
-        landingHeroDescription,
-        landingHeroImage,
-        landingHeroOverlayOpacity
-      );
+      const formData = new FormData();
+      formData.append("fontFamily", selectedFont);
+      formData.append("theme", selectedTheme);
+      formData.append("hideProductDescription", hideDescription.toString());
+      formData.append("hideProductAddButton", hideAddButton.toString());
+      formData.append("enableLandingPage", enableLandingPage.toString());
+      formData.append("landingHeroTitle", landingHeroTitle);
+      formData.append("landingHeroDescription", landingHeroDescription);
+      formData.append("landingHeroOverlayOpacity", landingHeroOverlayOpacity.toString());
+      formData.append("landingHeroImage", landingHeroImage); // Ensure URL is preserved
+
+      // Get the file from ImageUpload if a new one was selected
+      const fileInput = document.querySelector('input[name="landingHeroImageFile"]') as HTMLInputElement;
+      if (fileInput && fileInput.files && fileInput.files.length > 0) {
+        formData.append("landingHeroImageFile", fileInput.files[0]);
+      }
+
+      await updateStoreAppearance(formData);
       toast.success("تم تحديث المظهر بنجاح");
     } catch (error) {
       toast.error("حدث خطأ أثناء التحديث");
@@ -281,7 +288,11 @@ export function AppearanceClient({
                     <Image src={landingHeroImage} alt="Hero" fill className="object-cover" />
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <button
-                        onClick={() => setLandingHeroImage("")}
+                        onClick={() => {
+                          setLandingHeroImage("");
+                          const fileInput = document.querySelector('input[name="landingHeroImageFile"]') as HTMLInputElement;
+                          if (fileInput) fileInput.value = "";
+                        }}
                         className="bg-white/20 hover:bg-white text-white hover:text-red-500 backdrop-blur-sm px-4 py-2 rounded-xl text-sm font-bold transition-colors"
                       >
                         حذف الصورة
@@ -289,26 +300,11 @@ export function AppearanceClient({
                     </div>
                   </div>
                 ) : (
-                  <CldUploadWidget
-                    uploadPreset="ml_default"
-                    options={{ maxFiles: 1, maxFileSize: 5000000, resourceType: "image" }}
-                    onSuccess={(result: any) => {
-                      if (result?.info?.secure_url) {
-                        setLandingHeroImage(result.info.secure_url);
-                      }
-                    }}
-                  >
-                    {({ open }) => (
-                      <button
-                        onClick={() => open()}
-                        className="w-full h-40 flex flex-col items-center justify-center gap-3 border-2 border-dashed border-surface-300 rounded-2xl bg-surface-50 hover:bg-surface-100 transition-colors text-surface-600"
-                      >
-                        <ImageIcon className="w-8 h-8 text-surface-400" />
-                        <div className="text-sm font-semibold">اضغط لرفع صورة الخلفية</div>
-                        <div className="text-xs text-surface-500">PNG, JPG حتى 5MB</div>
-                      </button>
-                    )}
-                  </CldUploadWidget>
+                  <ImageUpload 
+                    name="landingHeroImageFile" 
+                    label="" 
+                    className="w-full"
+                  />
                 )}
               </div>
 
