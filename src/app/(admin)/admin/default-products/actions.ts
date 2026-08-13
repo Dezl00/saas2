@@ -66,6 +66,36 @@ export async function deleteDefaultCategory(categoryId: string) {
   const session = await auth();
   if (!session?.user || session.user.role !== "ADMIN") return;
   
-  await prisma.category.delete({ where: { id: categoryId } });
+  await prisma.category.delete({
+    where: { id: categoryId, storeId: 'DEFAULT_STORE' }
+  });
   revalidatePath("/admin/default-products");
+}
+
+export async function editDefaultCategory(formData: FormData) {
+  const session = await auth();
+  if (!session?.user || session.user.role !== "ADMIN") return { error: "غير مصرح" };
+
+  const categoryId = formData.get("categoryId") as string;
+  const name = formData.get("name") as string;
+  const description = formData.get("description") as string;
+  const sortOrder = parseInt(formData.get("sortOrder") as string) || 0;
+
+  if (!name) return { error: "الاسم مطلوب" };
+
+  try {
+    await prisma.category.update({
+      where: { id: categoryId, storeId: "DEFAULT_STORE" },
+      data: {
+        name,
+        description,
+        sortOrder
+      }
+    });
+
+    revalidatePath("/admin/default-products");
+    return { success: true };
+  } catch (error: any) {
+    return { error: "حدث خطأ أثناء تعديل القسم" };
+  }
 }
