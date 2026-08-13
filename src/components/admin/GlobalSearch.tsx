@@ -202,7 +202,7 @@ export function GlobalSearch() {
               </Link>
               {selectedStore.subdomain && (
                 <a
-                  href={`https://${selectedStore.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'menura.site'}`}
+                  href={`https://${selectedStore.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'almenu.pro'}`}
                   target="_blank"
                   rel="noreferrer"
                   className="flex-1 text-center px-4 py-2 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700 transition-colors"
@@ -264,7 +264,7 @@ export function GlobalSearch() {
                   </div>
                   {selectedUser.store.subdomain && (
                     <a
-                      href={`https://${selectedUser.store.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'menura.site'}`}
+                      href={`https://${selectedUser.store.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'almenu.pro'}`}
                       target="_blank"
                       rel="noreferrer"
                       className="px-3 py-1.5 bg-primary-100 text-primary-700 text-xs font-medium rounded-lg hover:bg-primary-200 transition-colors flex-shrink-0"

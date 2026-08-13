@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 export default function proxy(req: NextRequest) {
   const hostname = req.headers.get("host") || "";
-  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "menura.site";
+  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "almenu.pro";
 
   // Extract subdomain
   const subdomain = hostname
@@ -29,7 +29,7 @@ export default function proxy(req: NextRequest) {
     subdomain === rootDomain ||
     subdomain === "localhost" ||
     hostname === rootDomain ||
-    hostname === "menura.site" ||
+    hostname === "almenu.pro" ||
     hostname.startsWith("localhost") ||
     hostname.endsWith(".vercel.app") ||
     hostname.endsWith(".hostingersite.com")

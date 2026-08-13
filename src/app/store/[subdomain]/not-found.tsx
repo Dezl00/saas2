@@ -13,7 +13,7 @@ export default function NotFound() {
           عذراً، الرابط الذي تحاول الوصول إليه غير صحيح أو أن المتجر غير متاح حالياً.
         </p>
         <Link 
-          href="https://menura.site" 
+          href="https://almenu.pro" 
           className="block w-full py-3 px-4 bg-primary-500 hover:bg-primary-600 text-white font-bold rounded-xl transition-colors"
         >
           أنشئ متجرك مجاناً

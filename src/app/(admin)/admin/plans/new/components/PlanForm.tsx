@@ -109,7 +109,7 @@ export function PlanForm({ actionFn, initialData }: { actionFn: any, initialData
               <input type="checkbox" name="feat_removeBranding" value="true" defaultChecked={initialData?.features?.removeBranding ?? false} className="w-5 h-5 text-primary-600 rounded border-surface-300 focus:ring-primary-600" />
               <div>
                 <p className="font-bold text-surface-900 text-sm">إزالة شعار المنصة</p>
-                <p className="text-xs text-surface-500">إخفاء "Powered by Menura"</p>
+                <p className="text-xs text-surface-500">إخفاء "Powered by Almenu"</p>
               </div>
             </label>
           </div>

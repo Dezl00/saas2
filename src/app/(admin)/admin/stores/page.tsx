@@ -78,7 +78,7 @@ export default async function AdminStoresPage(props: { searchParams: Promise<{ s
                   </div>
                   {(store.domains[0]?.name || store.subdomain) && (
                     <p className="text-xs text-primary-500 mt-1 font-medium" dir="ltr">
-                      {store.domains[0] ? store.domains[0].name : `${store.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'menura.site'}`}
+                      {store.domains[0] ? store.domains[0].name : `${store.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'almenu.pro'}`}
                     </p>
                   )}
                 </div>
@@ -112,7 +112,7 @@ export default async function AdminStoresPage(props: { searchParams: Promise<{ s
               <div className="flex items-center gap-2">
                 {(store.domains[0]?.name || store.subdomain) && (
                   <Link
-                    href={`https://${store.domains[0] ? store.domains[0].name : `${store.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'menura.site'}`}`}
+                    href={`https://${store.domains[0] ? store.domains[0].name : `${store.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'almenu.pro'}`}`}
                     target="_blank"
                     className="p-2 rounded-[24px] hover:bg-surface-50 text-surface-800/50 hover:text-primary-500 transition-colors"
                     title="عرض المتجر"

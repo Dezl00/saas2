@@ -21,7 +21,7 @@ const payload = {
       parameters: {
         text: "={{ $json.body.message }}",
         options: {
-          systemMessage: "أنت موظف مبيعات ذكي لمنصة Menura. مهمتك جمع 5 معلومات: اسم المتجر، العنوان، رقم الهاتف، رابط الشعار، اسم الرابط المفضل. اسأل عن معلومة واحدة في كل مرة بأسلوب ودي جداً. لا تسأل عن كل المعلومات دفعة واحدة. بعد جمعها كلها، استخدم أداة CreateStoreAPI لتمرير هذه البيانات."
+          systemMessage: "أنت موظف مبيعات ذكي لمنصة Almenu. مهمتك جمع 5 معلومات: اسم المتجر، العنوان، رقم الهاتف، رابط الشعار، اسم الرابط المفضل. اسأل عن معلومة واحدة في كل مرة بأسلوب ودي جداً. لا تسأل عن كل المعلومات دفعة واحدة. بعد جمعها كلها، استخدم أداة CreateStoreAPI لتمرير هذه البيانات."
         }
       },
       id: "agent",
@@ -55,7 +55,7 @@ const payload = {
         name: "CreateStoreAPI",
         description: "Call this tool to create a store when you have all 5 parameters. Parameters required: store_name, address, phone_number, logo_url, store_slug.",
         method: "POST",
-        url: "https://menura.site/api/n8n/create-store",
+        url: "https://almenu.pro/api/n8n/create-store",
         sendHeaders: true,
         headerParameters: {
           parameters: [

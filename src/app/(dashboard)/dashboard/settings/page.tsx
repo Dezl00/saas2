@@ -62,7 +62,7 @@ export default async function SettingsPage() {
                   className="w-full px-4 py-3 bg-white border border-surface-200 text-surface-950 font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
                 />
                 <span className="px-5 py-3 bg-white border border-s-0 border-surface-200 rounded-e-2xl text-surface-600 font-bold whitespace-nowrap">
-                  .menura.site
+                  .almenu.pro
                 </span>
               </div>
             </div>
@@ -75,8 +75,8 @@ export default async function SettingsPage() {
           {store.subdomain && (
             <div className="mt-6 p-5 bg-success-50 text-success-800 rounded-[24px] font-medium text-sm">
               متجرك متاح حالياً للعملاء عبر الرابط: <br/>
-              <a href={`https://${store.subdomain}.menura.site`} target="_blank" className="font-bold underline mt-2 inline-block" dir="ltr">
-                https://{store.subdomain}.menura.site
+              <a href={`https://${store.subdomain}.almenu.pro`} target="_blank" className="font-bold underline mt-2 inline-block" dir="ltr">
+                https://{store.subdomain}.almenu.pro
               </a>
             </div>
           )}

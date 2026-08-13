@@ -73,7 +73,7 @@ export function OnboardingClient({
     }
   };
 
-  const storeLink = `${subdomain || 'your-store'}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'menura.site'}`;
+  const storeLink = `${subdomain || 'your-store'}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'almenu.pro'}`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(`https://${storeLink}`);

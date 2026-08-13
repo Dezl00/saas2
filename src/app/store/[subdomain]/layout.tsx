@@ -115,7 +115,7 @@ export default async function StoreLayout({
   const settingsPromise = prisma.platformSetting.findUnique({ where: { id: "1" } });
 
   const [store, settings] = await Promise.all([storePromise, settingsPromise]);
-  const platformName = settings?.name || "Menura";
+  const platformName = settings?.name || "Almenu";
 
   if (!store || store.status === "DELETED") {
     notFound();
@@ -201,7 +201,7 @@ export default async function StoreLayout({
             <p className="text-blue-100 mb-6 max-w-lg">
               أنشئ متجرك الإلكتروني الخاص في دقائق وابدأ في استقبال الطلبات عبر الواتساب مباشرة وبدون عمولات!
             </p>
-            <a href="https://menura.site" target="_blank" className="bg-white text-[#2563eb] font-bold py-3 px-8 rounded-2xl hover:bg-surface-50 transition-colors">
+            <a href="https://almenu.pro" target="_blank" className="bg-white text-[#2563eb] font-bold py-3 px-8 rounded-2xl hover:bg-surface-50 transition-colors">
               أنشئ متجرك مجاناً
             </a>
           </div>
@@ -281,7 +281,7 @@ export default async function StoreLayout({
             </div>
             
             <div className={`text-xs mt-10 pt-6 border-t flex items-center justify-center gap-2 ${isDarkSolid ? 'text-surface-500 border-[#222]' : 'text-surface-400 border-surface-100'}`}>
-              مدعوم بواسطة <a href="https://menura.site" target="_blank" className={`font-bold ${isDarkSolid ? 'text-white hover:text-surface-300' : 'text-surface-950 hover:text-surface-700'}`}>{platformName}</a> &copy; {new Date().getFullYear()}
+              مدعوم بواسطة <a href="https://almenu.pro" target="_blank" className={`font-bold ${isDarkSolid ? 'text-white hover:text-surface-300' : 'text-surface-950 hover:text-surface-700'}`}>{platformName}</a> &copy; {new Date().getFullYear()}
             </div>
           </div>
         </footer>

@@ -96,7 +96,7 @@ export default function NewStorePage() {
                     dir="ltr"
                   />
                   <span className="absolute end-4 text-surface-500 text-sm font-medium" dir="ltr">
-                    .menura.site
+                    .almenu.pro
                   </span>
                 </div>
                 {state?.fieldErrors?.subdomain && <p className="text-sm text-error-500 mt-1">{state.fieldErrors.subdomain[0]}</p>}

@@ -52,7 +52,7 @@ export async function POST(request: Request) {
       title,
       body,
       image,
-      url: link || `https://${store.subdomain}.menura.site`,
+      url: link || `https://${store.subdomain}.almenu.pro`,
     });
 
     let successCount = 0;

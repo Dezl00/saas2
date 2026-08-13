@@ -33,10 +33,10 @@ export default async function DefaultProductsPage(props: {
 
   // Ensure DEFAULT_STORE and its user exists
   const systemUser = await prisma.user.upsert({
-    where: { email: 'system@menura.site' },
+    where: { email: 'system@almenu.pro' },
     update: {},
     create: {
-      email: 'system@menura.site',
+      email: 'system@almenu.pro',
       name: 'System Admin',
       password: 'none', // Dummy password, cannot login
       role: 'ADMIN',
@@ -260,7 +260,7 @@ export default async function DefaultProductsPage(props: {
                         <div>
                           <p className="font-bold text-surface-950">{store.name}</p>
                           <p className="text-xs text-surface-500 dir-ltr text-left">
-                            {store.subdomain}.menura.site
+                            {store.subdomain}.almenu.pro
                           </p>
                         </div>
                       </div>

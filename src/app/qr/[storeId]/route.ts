@@ -27,10 +27,10 @@ export async function GET(
     if (store.domains && store.domains.length > 0 && store.domains[0].name) {
       redirectUrl = `https://${store.domains[0].name}`;
     } else if (store.subdomain) {
-      redirectUrl = `https://${store.subdomain}.menura.site`;
+      redirectUrl = `https://${store.subdomain}.almenu.pro`;
     } else {
       // Fallback
-      redirectUrl = `https://${store.id}.menura.site`;
+      redirectUrl = `https://${store.id}.almenu.pro`;
     }
 
     return NextResponse.redirect(redirectUrl);

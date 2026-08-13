@@ -16,7 +16,7 @@ export async function uploadImageToCloudinary(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(
       dataUri,
-      { folder: 'menura' },
+      { folder: 'almenu' },
       (error, result) => {
         if (error || !result) {
           console.error("Cloudinary upload error:", error);
@@ -56,7 +56,7 @@ export async function uploadUrlToCloudinary(url: string): Promise<string> {
     return new Promise((resolve, reject) => {
       cloudinary.uploader.upload(
         dataUri,
-        { folder: 'menura' },
+        { folder: 'almenu' },
         (error, result) => {
           if (error || !result) {
             console.error("Cloudinary upload error:", error);

@@ -104,7 +104,7 @@ export async function POST(request: Request) {
         success: true,
         message: 'تم إنشاء المتجر بنجاح',
         data: {
-            storeUrl: `https://${cleanSlug}.menura.site`, // رابط المنصة الحقيقي
+            storeUrl: `https://${cleanSlug}.almenu.pro`, // رابط المنصة الحقيقي
             adminEmail: result.user.email,
             adminPassword: phone_number, // كلمة المرور هي رقم هاتف العميل
             storeName: result.store.name,

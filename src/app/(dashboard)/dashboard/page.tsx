@@ -66,12 +66,12 @@ export default async function DashboardPage() {
           </div>
           <div className="flex items-center gap-3 w-full sm:w-auto">
             <ShareStoreButton 
-              storeUrl={store.domains?.[0]?.name ? `https://${store.domains[0].name}` : `https://${store.subdomain}.menura.site`} 
+              storeUrl={store.domains?.[0]?.name ? `https://${store.domains[0].name}` : `https://${store.subdomain}.almenu.pro`} 
               storeName={store.name}
-              qrUrl={`https://menura.site/qr/${store.id}`}
+              qrUrl={`https://almenu.pro/qr/${store.id}`}
             />
             <Link
-              href={store.domains?.[0]?.name ? `https://${store.domains[0].name}` : `https://${store.subdomain}.menura.site`}
+              href={store.domains?.[0]?.name ? `https://${store.domains[0].name}` : `https://${store.subdomain}.almenu.pro`}
               target="_blank"
               className="flex-1 sm:flex-none px-6 py-3 bg-primary-600 text-white font-bold rounded-[24px] hover:bg-primary-700 transition-colors text-center"
             >

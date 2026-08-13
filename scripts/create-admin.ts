@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
-  const email = "admin@menura.site";
+  const email = "admin@almenu.pro";
   const password = "admin123";
 
   // Check if admin already exists
