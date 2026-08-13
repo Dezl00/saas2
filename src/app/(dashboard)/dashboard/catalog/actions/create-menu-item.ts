@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { uploadImageToCloudinary } from "@/lib/upload";
 
 export async function createMenuItem(formData: FormData) {
   const session = await auth();
@@ -31,7 +32,6 @@ export async function createMenuItem(formData: FormData) {
   const sortOrder = parseInt((formData.get("sortOrder") as string) || "0");
   let imageStr = formData.get("image") as string | File | null;
   if (imageStr && typeof imageStr !== "string" && imageStr.size > 0) {
-    const { uploadImageToCloudinary } = await import("@/lib/upload");
     try {
       imageStr = await uploadImageToCloudinary(imageStr);
     } catch (e) {

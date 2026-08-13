@@ -50,7 +50,13 @@ export async function placeOrderAction(formData: FormData) {
     // 2. Verify prices from the database
     const menuItemIds = items.map((item: any) => item.id.split('-')[0]);
     const dbMenuItems = await prisma.menuItem.findMany({
-      where: { id: { in: menuItemIds }, storeId }
+      where: { 
+        id: { in: menuItemIds }, 
+        OR: [
+          { storeId },
+          { storeId: "DEFAULT_STORE" }
+        ]
+      }
     });
 
     const dbMenuItemsMap = new Map(dbMenuItems.map(item => [item.id, item]));

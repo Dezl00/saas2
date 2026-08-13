@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { uploadImageToCloudinary } from "@/lib/upload";
 
 export async function createCategory(formData: FormData) {
   const session = await auth();
@@ -21,7 +22,6 @@ export async function createCategory(formData: FormData) {
   let image = null;
   const imageFile = formData.get("imageFile") as File | null;
   if (imageFile && imageFile.size > 0) {
-    const { uploadImageToCloudinary } = await import("@/lib/upload");
     try {
       image = await uploadImageToCloudinary(imageFile) as string;
     } catch (e) {

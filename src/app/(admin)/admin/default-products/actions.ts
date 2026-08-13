@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { uploadImageToCloudinary } from "@/lib/upload";
 
 export async function toggleStoreDefaultProducts(storeId: string, currentStatus: boolean) {
   const session = await auth();
@@ -36,7 +37,6 @@ export async function createDefaultCategory(formData: FormData) {
   let image = null;
   const imageFile = formData.get("imageFile") as File | null;
   if (imageFile && imageFile.size > 0) {
-    const { uploadImageToCloudinary } = await import("@/lib/upload");
     try {
       image = (await uploadImageToCloudinary(imageFile)) as string;
     } catch (e) {
@@ -87,7 +87,6 @@ export async function editDefaultCategory(formData: FormData) {
   let image = undefined;
 
   if (imageFile && imageFile.size > 0) {
-    const { uploadImageToCloudinary } = await import("@/lib/upload");
     try {
       image = (await uploadImageToCloudinary(imageFile)) as string;
     } catch (e) {
