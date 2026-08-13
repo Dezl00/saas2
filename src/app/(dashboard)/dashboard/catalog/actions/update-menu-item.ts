@@ -23,7 +23,7 @@ export async function updateMenuItem(menuItemId: string, formData: FormData) {
   const categoryId = formData.get("categoryId") as string;
   const sortOrder = parseInt((formData.get("sortOrder") as string) || "0");
 
-  let imageStr = formData.get("image") as string | File | null;
+  let imageStr: string | File | null | undefined = formData.get("image") as string | File | null;
   if (imageStr && typeof imageStr !== "string" && imageStr.size > 0) {
     try {
       imageStr = await uploadImageToCloudinary(imageStr);
