@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ImageIcon, Trash2, CheckSquare, Square, Loader2, PackageOpen, Star } from "lucide-react";
 import { toggleMenuItemStatus } from "@/app/(dashboard)/dashboard/catalog/actions/toggle-menu-item-status";
 import { toggleFeaturedMenuItem } from "@/app/(dashboard)/dashboard/catalog/actions/toggle-featured-menu-item";
@@ -45,11 +45,11 @@ export function MenuItemsGrid({
   const [menuItems, setMenuItems] = useState(initialMenuItems);
   
   // Sync state when props change
-  import("react").then(React => {
-    React.useEffect(() => {
-      setMenuItems(initialMenuItems);
-    }, [initialMenuItems]);
-  });
+  useEffect(() => {
+    setMenuItems(initialMenuItems);
+  }, [initialMenuItems]);
+  
+
 
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [isDeletingBulk, setIsDeletingBulk] = useState(false);
