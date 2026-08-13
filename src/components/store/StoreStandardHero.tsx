@@ -1,8 +1,6 @@
 import Image from "next/image";
 import { Store as StoreIcon } from "lucide-react";
 import { StoreWorkingHoursBadge } from "./StoreWorkingHoursBadge";
-import { StoreBannersCarousel } from "./StoreBannersCarousel";
-import { PushNotificationHeroBanner } from "./PushNotificationHeroBanner";
 
 // SVG Icons for Brands
 const FacebookIcon = ({ className }: { className?: string }) => (
@@ -139,15 +137,6 @@ export function StoreStandardHero({ store }: { store: any }) {
             )}
           </div>
         )}
-
-        {/* Push Notification Banner */}
-        <div className="px-4 pb-2 mt-4">
-          <PushNotificationHeroBanner 
-            storeId={store.id} 
-            enablePushPopup={store.enablePushPopup ?? true} 
-            primaryColor={store.primaryColor || undefined} 
-          />
-        </div>
       </div>
     </section>
   );

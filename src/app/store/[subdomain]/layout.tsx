@@ -12,7 +12,6 @@ import { formatWhatsappNumber } from "@/lib/utils";
 import Image from "next/image";
 import { getStoreInfo, getStoreBanners } from "./data";
 import { PushNotificationPopup } from "@/components/store/PushNotificationPopup";
-import { PushNotificationHeroBanner } from "@/components/store/PushNotificationHeroBanner";
 
 // SVG Icons for Brands
 const FacebookIcon = ({ className }: { className?: string }) => (
