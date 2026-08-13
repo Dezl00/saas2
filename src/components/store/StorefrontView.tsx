@@ -337,8 +337,15 @@ export function StorefrontView({
                       {isFeatured ? (
                         <>
                           {/* Content (Right Side in RTL) */}
-                          <div className="p-3 sm:p-5 flex flex-col flex-grow w-2/3">
-                            <div className="flex justify-between items-start gap-2 mb-1">
+                          <div className="relative p-3 sm:p-5 flex flex-col flex-grow w-2/3 min-h-[140px] sm:min-h-[180px]">
+                            {/* Featured Badge */}
+                            <div 
+                              className="absolute top-0 right-0 px-2 sm:px-3 py-1 sm:py-1.5 rounded-bl-xl text-white text-[10px] sm:text-xs font-bold z-10 shadow-sm"
+                              style={{ backgroundColor: primaryColor }}
+                            >
+                              الأكثر مبيعاً
+                            </div>
+                            <div className="flex justify-between items-start gap-2 mb-1 pt-5 sm:pt-6">
                               <h3 className={`font-bold text-sm sm:text-lg leading-tight line-clamp-2 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-950'}`}>{item.name}</h3>
                             </div>
                             {item.description && (
@@ -355,10 +362,10 @@ export function StorefrontView({
                                 <button 
                                   className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-transform active:scale-95 shrink-0 ${
                                     item.isAvailable 
-                                      ? isDarkSolid ? 'bg-white text-black hover:scale-105' : 'bg-surface-100 hover:bg-surface-200 text-surface-900' 
+                                      ? 'hover:scale-105 hover:brightness-110' 
                                       : 'bg-surface-100 text-surface-400 cursor-not-allowed'
                                   }`}
-                                  style={item.isAvailable && !isDarkSolid ? { backgroundColor: primaryColor, color: '#fff' } : undefined}
+                                  style={item.isAvailable ? { backgroundColor: primaryColor, color: '#fff' } : undefined}
                                   disabled={!item.isAvailable}
                                   onClick={(e) => {
                                     e.stopPropagation();
@@ -371,7 +378,6 @@ export function StorefrontView({
                             </div>
                           </div>
                           
-                          {/* Image (Left Side in RTL) */}
                           <div className="relative w-1/3 min-w-[120px] sm:min-w-[160px] bg-surface-100 overflow-hidden shrink-0">
                             {item.image ? (
                               <Image src={item.image} alt={item.name} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
@@ -385,13 +391,6 @@ export function StorefrontView({
                                 <span className="bg-black text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm">نفدت الكمية</span>
                               </div>
                             )}
-                            {/* Featured Badge */}
-                            <div 
-                              className="absolute top-0 right-0 px-2 sm:px-3 py-1 sm:py-1.5 rounded-bl-xl text-white text-[10px] sm:text-xs font-bold z-10 shadow-sm"
-                              style={{ backgroundColor: primaryColor }}
-                            >
-                              الأكثر مبيعاً
-                            </div>
                           </div>
                         </>
                       ) : (
@@ -431,10 +430,10 @@ export function StorefrontView({
                                 <button 
                                   className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-transform active:scale-95 shrink-0 ${
                                     item.isAvailable 
-                                      ? isDarkSolid ? 'bg-white text-black hover:scale-105' : 'bg-surface-100 hover:bg-surface-200 text-surface-900' 
+                                      ? 'hover:scale-105 hover:brightness-110' 
                                       : 'bg-surface-100 text-surface-400 cursor-not-allowed'
                                   }`}
-                                  style={item.isAvailable && !isDarkSolid ? { backgroundColor: primaryColor, color: '#fff' } : undefined}
+                                  style={item.isAvailable ? { backgroundColor: primaryColor, color: '#fff' } : undefined}
                                   disabled={!item.isAvailable}
                                   onClick={(e) => {
                                     e.stopPropagation();

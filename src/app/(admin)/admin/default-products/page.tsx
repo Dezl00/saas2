@@ -10,6 +10,7 @@ import { DeleteConfirmButton } from "@/components/dashboard/DeleteConfirmButton"
 import { createDefaultCategory, toggleDefaultCategoryStatus, deleteDefaultCategory } from "./actions";
 import { OptimisticToggle } from "@/components/dashboard/OptimisticToggle";
 import { DefaultProductsTabs } from "./DefaultProductsTabs";
+import { ImageUpload } from "@/components/dashboard/ImageUpload";
 
 export const metadata = {
   title: "المنتجات الافتراضية | لوحة الإدارة",
@@ -168,6 +169,12 @@ export default async function DefaultProductsPage(props: {
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-surface-950 mb-1">اسم القسم *</label>
                   <input type="text" id="name" name="name" required placeholder="مثال: مقبلات" className="w-full px-3 py-2 bg-surface-50 border border-surface-200 rounded-[24px] focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-surface-950 mb-1">صورة القسم</label>
+                  <div className="bg-surface-50 border border-surface-200 rounded-[24px] overflow-hidden p-4">
+                    <ImageUpload name="imageFile" label="اختر صورة للقسم" />
+                  </div>
                 </div>
                 <div>
                   <label htmlFor="description" className="block text-sm font-medium text-surface-950 mb-1">الوصف (اختياري)</label>

@@ -15,6 +15,8 @@ export async function updateStoreAppearance(formData: FormData) {
   const hideProductDescription = formData.get("hideProductDescription") === "true";
   const hideProductAddButton = formData.get("hideProductAddButton") === "true";
   const showFloatingIcons = formData.get("showFloatingIcons") === "true";
+  const showBanners = formData.get("showBanners") === "true";
+  const showHero = formData.get("showHero") === "true";
   const enableLandingPage = formData.get("enableLandingPage") === "true";
   const landingHeroTitle = formData.get("landingHeroTitle") as string;
   const landingHeroDescription = formData.get("landingHeroDescription") as string;
@@ -42,6 +44,8 @@ export async function updateStoreAppearance(formData: FormData) {
       hideProductDescription, 
       hideProductAddButton,
       showFloatingIcons,
+      showBanners,
+      showHero,
       enableLandingPage,
       landingHeroTitle,
       landingHeroDescription,
@@ -69,6 +73,59 @@ export async function updateStoreAppearance(formData: FormData) {
 
   revalidatePath("/", "layout");
   revalidatePath("/dashboard/appearance");
+  
+  return { success: true };
+}
+
+export async function uploadStoreBanner(formData: FormData) {
+  const session = await auth();
+  if (!session?.user?.storeId) {
+    throw new Error("Unauthorized");
+  }
+
+  const imageFile = formData.get("bannerImageFile") as File | null;
+  if (!imageFile || imageFile.size === 0) {
+    return { error: "الصورة مطلوبة" };
+  }
+
+  const { uploadImageToCloudinary } = await import("@/lib/upload");
+  try {
+    const imageUrl = await uploadImageToCloudinary(imageFile) as string;
+    await prisma.storeBanner.create({
+      data: {
+        image: imageUrl,
+        storeId: session.user.storeId
+      }
+    });
+
+    const store = await prisma.store.findUnique({ where: { id: session.user.storeId }, select: { subdomain: true, domains: { select: { name: true } } } });
+    if (store?.subdomain) {
+      (revalidateTag as any)(`store-${store.subdomain}`, "default");
+    }
+    revalidatePath("/dashboard/settings/appearance");
+    
+    return { success: true };
+  } catch (e) {
+    console.error("Banner upload error", e);
+    return { error: "فشل رفع البانر" };
+  }
+}
+
+export async function deleteStoreBanner(bannerId: string) {
+  const session = await auth();
+  if (!session?.user?.storeId) {
+    throw new Error("Unauthorized");
+  }
+
+  await prisma.storeBanner.delete({
+    where: { id: bannerId, storeId: session.user.storeId }
+  });
+
+  const store = await prisma.store.findUnique({ where: { id: session.user.storeId }, select: { subdomain: true, domains: { select: { name: true } } } });
+  if (store?.subdomain) {
+    (revalidateTag as any)(`store-${store.subdomain}`, "default");
+  }
+  revalidatePath("/dashboard/settings/appearance");
   
   return { success: true };
 }

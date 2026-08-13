@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { StorefrontView } from "@/components/store/StorefrontView";
 import { StoreStandardHero } from "@/components/store/StoreStandardHero";
 import { getStoreInfo, getStoreCatalog, getStoreBanners } from "../data";
+import { StoreBannersCarousel } from "@/components/store/StoreBannersCarousel";
 
 export default async function StoreMenuPage(props: { params: Promise<{ subdomain: string }> }) {
   const params = await props.params;
@@ -32,7 +33,12 @@ export default async function StoreMenuPage(props: { params: Promise<{ subdomain
 
   return (
     <div className="animate-fade-in">
-      <StoreStandardHero store={store} banners={banners} />
+      {store.showBanners !== false && banners.length > 0 && (
+        <div className="p-2 sm:p-4 pb-0 w-full max-w-7xl mx-auto">
+          <StoreBannersCarousel banners={banners} />
+        </div>
+      )}
+      <StoreStandardHero store={store} />
       <StorefrontView 
         store={{ name: store.name, currency: store.currency, primaryColor: store.primaryColor, logo: store.logo, theme: store.theme, hideProductDescription: store.hideProductDescription, hideProductAddButton: store.hideProductAddButton }}
         categories={categoriesToDisplay.map(c => ({ id: c.id, name: c.name }))}

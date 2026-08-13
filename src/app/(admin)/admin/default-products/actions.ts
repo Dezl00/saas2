@@ -33,8 +33,20 @@ export async function createDefaultCategory(formData: FormData) {
   const description = formData.get("description") as string;
   const sortOrder = parseInt(formData.get("sortOrder") as string) || 0;
 
+  let image = null;
+  const imageFile = formData.get("imageFile") as File | null;
+  if (imageFile && imageFile.size > 0) {
+    const { uploadImageToCloudinary } = await import("@/lib/upload");
+    try {
+      image = (await uploadImageToCloudinary(imageFile)) as string;
+    } catch (e) {
+      console.error("Upload error", e);
+      return { error: "فشل رفع الصورة" };
+    }
+  }
+
   await prisma.category.create({
-    data: { name, description, sortOrder, storeId: 'DEFAULT_STORE' }
+    data: { name, description, image, sortOrder, storeId: 'DEFAULT_STORE' }
   });
   revalidatePath("/admin/default-products");
 }

@@ -205,8 +205,8 @@ export function MenuItemsGrid({
                   </div>
 
                   {/* Actions */}
-                  <div className="flex items-center justify-between mt-3 pt-3 border-t-2 border-surface-100/50 flex-wrap gap-2" onClick={e => e.stopPropagation()}>
-                    <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t-2 border-surface-100/50 flex-wrap gap-y-3 gap-x-2 w-full" onClick={e => e.stopPropagation()}>
+                    <div className="flex items-center gap-2 shrink-0">
                       <button
                         type="button"
                         onClick={(e) => handleToggleAvailable(e, item.id, item.isAvailable)}
@@ -236,7 +236,7 @@ export function MenuItemsGrid({
                       </button>
                     </div>
 
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1 shrink-0">
                       <GenerateImageButton itemId={item.id} hasImage={!!item.image} />
                       <MenuItemEditButton itemId={item.id} />
                       <DeleteConfirmButton action={deleteMenuItem.bind(null, item.id, storeId) as any} />

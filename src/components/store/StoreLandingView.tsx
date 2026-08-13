@@ -23,7 +23,7 @@ export function StoreLandingView({ store, categories, subdomain }: { store: Stor
       
       {/* Hero Section */}
       <div className="p-2 sm:p-6 w-full max-w-7xl mx-auto">
-        <section className="relative h-[320px] sm:h-[400px] md:h-[450px] w-full flex flex-col items-center justify-center text-center px-4 overflow-hidden rounded-[24px] sm:rounded-[32px] shadow-lg">
+        <section className="relative h-[320px] sm:h-[400px] md:h-[450px] w-full flex flex-col items-center justify-center text-center px-4 overflow-hidden rounded-[24px] sm:rounded-[32px]">
         {store.landingHeroImage ? (
           <>
             <div 

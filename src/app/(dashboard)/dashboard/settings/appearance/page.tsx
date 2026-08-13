@@ -15,7 +15,23 @@ export default async function AppearancePage() {
 
   const store = await prisma.store.findUnique({
     where: { id: session.user.storeId },
-    select: { fontFamily: true, theme: true, hideProductDescription: true, hideProductAddButton: true, showFloatingIcons: true },
+    select: { 
+      fontFamily: true, 
+      theme: true, 
+      hideProductDescription: true, 
+      hideProductAddButton: true, 
+      showFloatingIcons: true,
+      showBanners: true,
+      showHero: true,
+      enableLandingPage: true,
+      landingHeroTitle: true,
+      landingHeroDescription: true,
+      landingHeroImage: true,
+      landingHeroOverlayOpacity: true,
+      banners: {
+        orderBy: { sortOrder: 'asc' }
+      }
+    },
   });
 
   if (!store) {
@@ -30,6 +46,14 @@ export default async function AppearancePage() {
         currentHideDescription={store.hideProductDescription}
         currentHideAddButton={store.hideProductAddButton}
         currentShowFloatingIcons={store.showFloatingIcons}
+        currentShowBanners={store.showBanners}
+        currentShowHero={store.showHero}
+        currentEnableLandingPage={store.enableLandingPage}
+        currentLandingHeroTitle={store.landingHeroTitle}
+        currentLandingHeroDescription={store.landingHeroDescription}
+        currentLandingHeroImage={store.landingHeroImage}
+        currentLandingHeroOverlayOpacity={store.landingHeroOverlayOpacity}
+        initialBanners={store.banners}
       />
     </div>
   );

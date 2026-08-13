@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { updateStoreAppearance } from "../actions";
-import { Loader2, Check, Palette, Type, Settings, Image as ImageIcon, LayoutTemplate } from "lucide-react";
+import { updateStoreAppearance, uploadStoreBanner, deleteStoreBanner } from "../actions";
+import { Loader2, Check, Palette, Type, Settings, Image as ImageIcon, LayoutTemplate, Trash2, Plus } from "lucide-react";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { ImageUpload } from "@/components/dashboard/ImageUpload";
@@ -30,23 +30,29 @@ export function AppearanceClient({
   currentTheme,
   currentHideDescription = false,
   currentHideAddButton = false,
+  currentShowBanners = true,
+  currentShowHero = true,
   currentEnableLandingPage = false,
   currentLandingHeroTitle = "",
   currentLandingHeroDescription = "",
   currentLandingHeroImage = "",
   currentLandingHeroOverlayOpacity = 50,
-  currentShowFloatingIcons = true
+  currentShowFloatingIcons = true,
+  initialBanners = []
 }: { 
   currentFont: string, 
   currentTheme: string,
   currentHideDescription?: boolean,
   currentHideAddButton?: boolean,
+  currentShowBanners?: boolean,
+  currentShowHero?: boolean,
   currentEnableLandingPage?: boolean,
   currentLandingHeroTitle?: string | null,
   currentLandingHeroDescription?: string | null,
   currentLandingHeroImage?: string | null,
   currentLandingHeroOverlayOpacity?: number,
-  currentShowFloatingIcons?: boolean
+  currentShowFloatingIcons?: boolean,
+  initialBanners?: { id: string, image: string }[]
 }) {
   const [selectedFont, setSelectedFont] = useState(currentFont || "Tajawal");
   const [isFontDropdownOpen, setIsFontDropdownOpen] = useState(false);
@@ -54,6 +60,11 @@ export function AppearanceClient({
   const [hideDescription, setHideDescription] = useState(currentHideDescription || false);
   const [hideAddButton, setHideAddButton] = useState(currentHideAddButton || false);
   const [showFloatingIcons, setShowFloatingIcons] = useState(currentShowFloatingIcons ?? true);
+  const [showBanners, setShowBanners] = useState(currentShowBanners ?? true);
+  const [showHero, setShowHero] = useState(currentShowHero ?? true);
+  const [banners, setBanners] = useState(initialBanners || []);
+  const [isUploadingBanner, setIsUploadingBanner] = useState(false);
+  const [deletingBannerId, setDeletingBannerId] = useState<string | null>(null);
   
   // Landing Page State
   const [enableLandingPage, setEnableLandingPage] = useState(currentEnableLandingPage || false);
@@ -73,6 +84,8 @@ export function AppearanceClient({
       formData.append("hideProductDescription", hideDescription.toString());
       formData.append("hideProductAddButton", hideAddButton.toString());
       formData.append("showFloatingIcons", showFloatingIcons.toString());
+      formData.append("showBanners", showBanners.toString());
+      formData.append("showHero", showHero.toString());
       formData.append("enableLandingPage", enableLandingPage.toString());
       formData.append("landingHeroTitle", landingHeroTitle);
       formData.append("landingHeroDescription", landingHeroDescription);
@@ -101,6 +114,8 @@ export function AppearanceClient({
                      hideDescription !== (currentHideDescription || false) ||
                      hideAddButton !== (currentHideAddButton || false) ||
                      showFloatingIcons !== (currentShowFloatingIcons ?? true) ||
+                     showBanners !== (currentShowBanners ?? true) ||
+                     showHero !== (currentShowHero ?? true) ||
                      enableLandingPage !== (currentEnableLandingPage || false) ||
                      landingHeroTitle !== (currentLandingHeroTitle || "") ||
                      landingHeroDescription !== (currentLandingHeroDescription || "") ||
@@ -252,6 +267,131 @@ export function AppearanceClient({
               <div className="w-14 h-7 bg-surface-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-500"></div>
             </label>
           </div>
+
+          {/* Toggle 4: Show Banners */}
+          <div className="flex items-center justify-between p-4 rounded-2xl border border-surface-100 bg-surface-50">
+            <div>
+              <h4 className="font-bold text-surface-950">عرض البانرات</h4>
+              <p className="text-sm text-surface-500">تفعيل ظهور البانرات الإعلانية في المتجر</p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input 
+                type="checkbox" 
+                className="sr-only peer" 
+                checked={showBanners}
+                onChange={(e) => setShowBanners(e.target.checked)}
+              />
+              <div className="w-14 h-7 bg-surface-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-500"></div>
+            </label>
+          </div>
+
+          {/* Toggle 5: Show Hero */}
+          <div className="flex items-center justify-between p-4 rounded-2xl border border-surface-100 bg-surface-50">
+            <div>
+              <h4 className="font-bold text-surface-950">عرض الهيرو (صورة الغلاف)</h4>
+              <p className="text-sm text-surface-500">إظهار أو إخفاء صورة الغلاف في أعلى المنيو</p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input 
+                type="checkbox" 
+                className="sr-only peer" 
+                checked={showHero}
+                onChange={(e) => setShowHero(e.target.checked)}
+              />
+              <div className="w-14 h-7 bg-surface-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-500"></div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      {/* Banners Section */}
+      <div className="bg-white border-2 border-surface-100 rounded-[32px] p-6 lg:p-8">
+        <h3 className="text-xl font-bold text-surface-950 mb-6 flex items-center gap-2">
+          <ImageIcon className="w-6 h-6 text-primary-500" />
+          البانرات الإعلانية
+        </h3>
+        
+        <div className="space-y-6">
+          <div className="flex flex-col gap-4">
+            <h4 className="font-bold text-surface-950">إضافة بانر جديد</h4>
+            <div className="max-w-xl flex items-end gap-4">
+              <div className="flex-1">
+                <ImageUpload name="bannerImageFile" label="" className="w-full" />
+              </div>
+              <button
+                type="button"
+                onClick={async () => {
+                  const fileInput = document.querySelector('input[name="bannerImageFile"]') as HTMLInputElement;
+                  if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+                    toast.error("الرجاء اختيار صورة أولاً");
+                    return;
+                  }
+                  setIsUploadingBanner(true);
+                  try {
+                    const formData = new FormData();
+                    formData.append("bannerImageFile", fileInput.files[0]);
+                    const res = await uploadStoreBanner(formData);
+                    if (res.error) {
+                      toast.error(res.error);
+                    } else {
+                      toast.success("تم رفع البانر بنجاح");
+                      fileInput.value = "";
+                      // In a real app we'd fetch the new banner from server, but here we trigger a router refresh or just wait for next load.
+                      window.location.reload();
+                    }
+                  } catch (e) {
+                    toast.error("فشل رفع البانر");
+                  } finally {
+                    setIsUploadingBanner(false);
+                  }
+                }}
+                disabled={isUploadingBanner}
+                className="h-[120px] px-6 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-bold transition-colors flex flex-col items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {isUploadingBanner ? <Loader2 className="w-6 h-6 animate-spin" /> : <Plus className="w-6 h-6" />}
+                <span>إضافة</span>
+              </button>
+            </div>
+          </div>
+
+          {banners.length > 0 && (
+            <div className="pt-6 border-t border-surface-100">
+              <h4 className="font-bold text-surface-950 mb-4">البانرات الحالية ({banners.length})</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {banners.map((banner) => (
+                  <div key={banner.id} className="relative aspect-[16/9] rounded-2xl overflow-hidden border-2 border-surface-200 group">
+                    <Image src={banner.image} alt="Banner" fill className="object-cover" />
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <button
+                        type="button"
+                        disabled={deletingBannerId === banner.id}
+                        onClick={async () => {
+                          if (!confirm("هل أنت متأكد من حذف هذا البانر؟")) return;
+                          setDeletingBannerId(banner.id);
+                          try {
+                            const res = await deleteStoreBanner(banner.id);
+                            if (res.error) {
+                              toast.error(res.error);
+                            } else {
+                              toast.success("تم حذف البانر بنجاح");
+                              setBanners(prev => prev.filter(b => b.id !== banner.id));
+                            }
+                          } catch (e) {
+                            toast.error("فشل الحذف");
+                          } finally {
+                            setDeletingBannerId(null);
+                          }
+                        }}
+                        className="bg-white/20 hover:bg-white text-white hover:text-red-500 backdrop-blur-sm p-3 rounded-xl transition-colors disabled:opacity-50"
+                      >
+                        {deletingBannerId === banner.id ? <Loader2 className="w-5 h-5 animate-spin" /> : <Trash2 className="w-5 h-5" />}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

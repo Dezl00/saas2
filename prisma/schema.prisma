@@ -141,6 +141,8 @@ model Store {
   showTiktok           Boolean @default(true)
   snapchatUrl          String?
   showSnapchat         Boolean @default(true)
+  showBanners          Boolean @default(true)
+  showHero             Boolean @default(true)
   showDefaultProducts  Boolean @default(true)
   hideProductDescription Boolean @default(false)
   hideProductAddButton   Boolean @default(false)

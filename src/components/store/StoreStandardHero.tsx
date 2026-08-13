@@ -45,16 +45,18 @@ function hasSocialLinks(store: any): boolean {
   );
 }
 
-export function StoreStandardHero({ store, banners }: { store: any; banners: any[] }) {
+export function StoreStandardHero({ store }: { store: any }) {
+  if (store.showHero === false) {
+    return null;
+  }
+
   const isDarkSolid = store.theme === "dark_solid";
 
   return (
     <section className={`relative ${isDarkSolid ? 'bg-black' : 'bg-white'}`}>
       <div className="p-2 sm:p-4 w-full max-w-7xl mx-auto pb-0">
-      <div className="h-44 sm:h-52 w-full relative bg-surface-100 overflow-hidden rounded-[24px] sm:rounded-[32px] shadow-lg">
-        {banners && banners.length > 0 ? (
-          <StoreBannersCarousel banners={banners} />
-        ) : store.landingHeroImage || store.cover ? (
+      <div className="h-44 sm:h-52 w-full relative bg-surface-100 overflow-hidden rounded-[24px] sm:rounded-[32px]">
+        {store.landingHeroImage || store.cover ? (
           <>
             <div 
               className="absolute inset-0 bg-cover bg-center"
