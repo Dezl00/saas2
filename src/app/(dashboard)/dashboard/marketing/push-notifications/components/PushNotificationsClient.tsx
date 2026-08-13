@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Send, Bell, Image as ImageIcon, Link as LinkIcon, Activity } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -12,6 +13,7 @@ export default function PushNotificationsClient({
   campaigns: any[];
 }) {
   const [isSending, setIsSending] = useState(false);
+  const router = useRouter();
 
   const handleSend = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,7 +22,8 @@ export default function PushNotificationsClient({
       return;
     }
 
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
     const title = formData.get("title") as string;
     const body = formData.get("body") as string;
     const image = formData.get("image") as string;
@@ -37,7 +40,8 @@ export default function PushNotificationsClient({
       const data = await res.json();
       if (res.ok) {
         toast.success(`تم إرسال الإشعار بنجاح لـ ${data.campaign.successCount} مشترك`);
-        setTimeout(() => window.location.reload(), 1500);
+        form.reset();
+        router.refresh();
       } else {
         toast.error(data.error || "فشل إرسال الإشعار");
       }

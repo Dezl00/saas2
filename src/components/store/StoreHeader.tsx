@@ -74,9 +74,9 @@ type Props = {
   theme?: string | null;
   socialLinks: SocialLinks;
   workingHours?: WorkingHoursData | null;
-  mapLatitude?: string | null;
   mapLongitude?: string | null;
   hasLandingPage?: boolean;
+  branches?: any[];
 };
 
 const DAY_NAMES: Record<string, string> = {
@@ -97,9 +97,10 @@ function getCurrentDayKey(): string {
   return mapping[dayIndex];
 }
 
-export function StoreHeader({ logo, storeName, primaryColor, theme, socialLinks, workingHours, mapLatitude, mapLongitude, hasLandingPage }: Props) {
+export function StoreHeader({ logo, storeName, primaryColor, theme, socialLinks, workingHours, mapLatitude, mapLongitude, hasLandingPage, branches }: Props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isWorkingHoursOpen, setIsWorkingHoursOpen] = useState(false);
+  const [isBranchesOpen, setIsBranchesOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const color = primaryColor || "var(--color-primary-600)";
   const isDarkSolid = theme === "dark_solid";
@@ -117,15 +118,15 @@ export function StoreHeader({ logo, storeName, primaryColor, theme, socialLinks,
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMenuOpen]);
 
-  // Lock body scroll when working hours modal is open
+  // Lock body scroll when working hours or branches modal is open
   useEffect(() => {
-    if (isWorkingHoursOpen) {
+    if (isWorkingHoursOpen || isBranchesOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
     return () => { document.body.style.overflow = ""; };
-  }, [isWorkingHoursOpen]);
+  }, [isWorkingHoursOpen, isBranchesOpen]);
 
   const handleShare = async () => {
     try {
@@ -218,6 +219,17 @@ export function StoreHeader({ logo, storeName, primaryColor, theme, socialLinks,
                       <span className="font-semibold text-sm">مواعيد العمل</span>
                     </button>
 
+                    {/* Our Branches */}
+                    {branches && branches.length > 0 && (
+                      <button
+                        onClick={() => { setIsBranchesOpen(true); setIsMenuOpen(false); }}
+                        className={`flex items-center gap-3 px-5 py-4 transition-colors border-b ${isDarkSolid ? 'text-white border-[#222] hover:bg-white/5' : 'text-surface-700 hover:bg-surface-50 border-surface-50'}`}
+                      >
+                        <MapPin className="w-5 h-5" style={{ color }} />
+                        <span className="font-semibold text-sm">فروعنا</span>
+                      </button>
+                    )}
+
                     {/* Open on map */}
                     {mapLatitude && mapLongitude && (
                       <button
@@ -277,7 +289,7 @@ export function StoreHeader({ logo, storeName, primaryColor, theme, socialLinks,
           {/* Center: Logo */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none">
             {logo && (
-              <a href={hasLandingPage ? "/" : "/menu"} className="h-16 flex items-center justify-center shrink-0 pointer-events-auto py-1">
+              <a href="/" className="h-16 flex items-center justify-center shrink-0 pointer-events-auto py-1">
                 <Image src={logo} alt={storeName} width={80} height={80} className="max-h-full w-auto object-contain" priority />
               </a>
             )}
@@ -339,6 +351,56 @@ export function StoreHeader({ logo, storeName, primaryColor, theme, socialLinks,
               })}
               {!workingHours && (
                 <p className="text-center text-surface-400 text-sm py-4">لم يتم تحديد مواعيد العمل بعد</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Branches Modal */}
+      {isBranchesOpen && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 animate-fade-in"
+          onClick={(e) => { if (e.target === e.currentTarget) setIsBranchesOpen(false); }}
+        >
+          <div className={`w-[90%] max-w-md rounded-2xl overflow-hidden animate-zoom-in ${isDarkSolid ? 'bg-[#0a0a0a]' : 'bg-white'}`}>
+            <div className={`flex items-center justify-between p-5 border-b ${isDarkSolid ? 'border-[#222]' : 'border-surface-100'}`}>
+              <h3 className={`text-lg font-bold ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>فروعنا</h3>
+              <button
+                onClick={() => setIsBranchesOpen(false)}
+                className={`w-8 h-8 flex items-center justify-center rounded-full transition-colors ${isDarkSolid ? 'hover:bg-white/10' : 'hover:bg-surface-50'}`}
+              >
+                <X className={`w-5 h-5 ${isDarkSolid ? 'text-surface-400' : 'text-surface-500'}`} />
+              </button>
+            </div>
+
+            <div className="p-5 space-y-4 max-h-[70vh] overflow-y-auto">
+              {branches?.map((branch) => (
+                <div key={branch.id} className={`p-4 rounded-xl border ${isDarkSolid ? 'bg-[#111] border-[#333]' : 'bg-surface-50 border-surface-100'}`}>
+                  <h4 className={`font-bold text-lg mb-2 ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>{branch.name}</h4>
+                  {branch.address && (
+                    <div className="flex items-start gap-2 mb-2">
+                      <MapPin className="w-4 h-4 mt-0.5 text-primary-500 shrink-0" />
+                      <p className={`text-sm ${isDarkSolid ? 'text-surface-300' : 'text-surface-600'}`}>{branch.address}</p>
+                    </div>
+                  )}
+                  {branch.phone && (
+                    <p className={`text-sm mt-2 font-medium ${isDarkSolid ? 'text-surface-200' : 'text-surface-700'}`} dir="ltr">{branch.phone}</p>
+                  )}
+                  {branch.mapUrl && (
+                    <a
+                      href={branch.mapUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-3 inline-flex items-center justify-center w-full py-2 px-4 bg-primary-50 text-primary-600 hover:bg-primary-100 font-bold text-sm rounded-xl transition-colors"
+                    >
+                      عرض على الخريطة
+                    </a>
+                  )}
+                </div>
+              ))}
+              {(!branches || branches.length === 0) && (
+                <p className="text-center text-surface-400 text-sm py-4">لا توجد فروع مسجلة حالياً</p>
               )}
             </div>
           </div>

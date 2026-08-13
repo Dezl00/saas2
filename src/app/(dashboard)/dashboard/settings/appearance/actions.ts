@@ -83,20 +83,25 @@ export async function uploadStoreBanner(formData: FormData) {
     throw new Error("Unauthorized");
   }
 
-  const imageFile = formData.get("bannerImageFile") as File | null;
-  if (!imageFile || imageFile.size === 0) {
-    return { error: "الصورة مطلوبة" };
+  const imageFiles = formData.getAll("bannerImageFile") as File[];
+  if (!imageFiles || imageFiles.length === 0) {
+    return { error: "الصور مطلوبة" };
   }
 
   const { uploadImageToCloudinary } = await import("@/lib/upload");
   try {
-    const imageUrl = await uploadImageToCloudinary(imageFile) as string;
-    await prisma.storeBanner.create({
-      data: {
-        image: imageUrl,
-        storeId: session.user.storeId
-      }
-    });
+    const uploadedBanners = [];
+    for (const imageFile of imageFiles) {
+      if (imageFile.size === 0) continue;
+      const imageUrl = await uploadImageToCloudinary(imageFile) as string;
+      const newBanner = await prisma.storeBanner.create({
+        data: {
+          image: imageUrl,
+          storeId: session.user.storeId
+        }
+      });
+      uploadedBanners.push(newBanner);
+    }
 
     const store = await prisma.store.findUnique({ where: { id: session.user.storeId }, select: { subdomain: true, domains: { select: { name: true } } } });
     if (store?.subdomain) {
@@ -104,10 +109,10 @@ export async function uploadStoreBanner(formData: FormData) {
     }
     revalidatePath("/dashboard/settings/appearance");
     
-    return { success: true };
+    return { success: true, banners: uploadedBanners };
   } catch (e) {
     console.error("Banner upload error", e);
-    return { error: "فشل رفع البانر" };
+    return { error: "فشل رفع البانرات" };
   }
 }
 

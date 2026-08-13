@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Plus, Edit2, Trash2, Image as ImageIcon, Loader2, Save, X } from "lucide-react";
 import toast from "react-hot-toast";
 import { createBanner } from "../actions/create-banner";
@@ -14,6 +15,12 @@ import { cn } from "@/lib/utils";
 
 export function BannersClient({ initialBanners }: { initialBanners: StoreBanner[] }) {
   const [banners, setBanners] = useState<StoreBanner[]>(initialBanners);
+  const router = useRouter();
+  
+  useEffect(() => {
+    setBanners(initialBanners);
+  }, [initialBanners]);
+
   const [editingBanner, setEditingBanner] = useState<StoreBanner | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -57,11 +64,12 @@ export function BannersClient({ initialBanners }: { initialBanners: StoreBanner[
         toast.error(result.error);
       } else {
         toast.success(result.success || "تم الحفظ بنجاح");
-        
-        // Let's rely on router refresh if the server action revalidates the path
-        // But for a smoother experience, we can reload or update local state
-        window.location.reload();
-      }
+        // Since server action revalidates the path, initialBanners will change.
+        // We will sync banners state with initialBanners via useEffect.
+        router.refresh();
+        cancelEdit();
+        (document.getElementById("bannerForm") as HTMLFormElement)?.reset();
+        setPreviewImage(null);
     } catch (error) {
       toast.error("حدث خطأ غير متوقع");
     } finally {

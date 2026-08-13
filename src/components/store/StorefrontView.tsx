@@ -217,6 +217,89 @@ export function StorefrontView({
         </div>
       )}
 
+      {/* Featured Products Section */}
+      {menuItems.some(item => item.isFeatured) && (
+        <div className={`pt-4 pb-2 ${isDarkSolid ? 'bg-[#0a0a0a]' : 'bg-transparent'}`}>
+          <div className="px-4 mb-4 flex items-center justify-between">
+            <h2 className={`text-xl sm:text-2xl font-black flex items-center gap-2 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-950'}`}>
+              <span className="w-1.5 h-6 rounded-full" style={{ backgroundColor: primaryColor }}></span>
+              المنتجات المميزة
+            </h2>
+          </div>
+          <div className="px-4 pb-4 overflow-x-auto snap-x snap-mandatory flex gap-4 [-ms-overflow-style:'none'] [scrollbar-width:'none'] [&::-webkit-scrollbar]:hidden">
+            {menuItems.filter(i => i.isFeatured).map(item => (
+              <div 
+                key={`featured-${item.id}`}
+                onClick={() => handleOpenProduct(item)}
+                className={`snap-start shrink-0 w-[85vw] max-w-[400px] border rounded-[24px] sm:rounded-[32px] overflow-hidden cursor-pointer transition-all group hover:shadow-md flex flex-col ${
+                  isDarkSolid ? 'bg-[#111] border-[#222]' : 'bg-white border-surface-100 hover:border-surface-200 shadow-sm'
+                }`}
+              >
+                {/* Image */}
+                <div className="relative w-full aspect-[4/3] sm:aspect-video bg-surface-100 overflow-hidden">
+                  {item.image ? (
+                    <Image src={item.image} alt={item.name} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-surface-400">
+                      <ShoppingBag className="w-12 h-12 opacity-20" />
+                    </div>
+                  )}
+                  {/* Featured Badge */}
+                  <div 
+                    className="absolute top-0 right-0 px-4 py-2 rounded-bl-2xl text-white text-sm font-black z-10 shadow-lg flex items-center gap-1.5"
+                    style={{ backgroundColor: primaryColor }}
+                  >
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                    </span>
+                    الأكثر مبيعاً
+                  </div>
+                  {!item.isAvailable && (
+                    <div className="absolute inset-0 bg-white/70 backdrop-blur-[2px] flex items-center justify-center z-10">
+                      <span className="bg-black text-white px-4 py-2 rounded-full text-sm font-bold shadow-sm">نفدت الكمية</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="p-4 sm:p-5 flex flex-col flex-grow">
+                  <h3 className={`font-black text-lg sm:text-xl leading-tight line-clamp-2 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-950'}`}>{item.name}</h3>
+                  {item.description && (
+                    <p className={`text-sm sm:text-base mt-2 line-clamp-2 ${isDarkSolid ? 'text-surface-400' : 'text-surface-500'}`}>{item.description}</p>
+                  )}
+                  <div className="mt-4 pt-4 border-t border-surface-100/50 flex items-center justify-between">
+                    <span className="font-black text-xl sm:text-2xl" style={{ color: primaryColor }}>
+                      {item.sizes && item.sizes.length > 0 
+                        ? `${formatPrice(Math.min(...item.sizes.map((s: any) => s.price)), store.currency)}`
+                        : formatPrice(item.price, store.currency)
+                      }
+                    </span>
+                    {!store.hideProductAddButton && (
+                      <button 
+                        className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-transform active:scale-95 shrink-0 ${
+                          item.isAvailable 
+                            ? 'hover:scale-105 hover:brightness-110 shadow-md' 
+                            : 'bg-surface-100 text-surface-400 cursor-not-allowed'
+                        }`}
+                        style={item.isAvailable ? { backgroundColor: primaryColor, color: '#fff' } : undefined}
+                        disabled={!item.isAvailable}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if(item.isAvailable) handleOpenProduct(item);
+                        }}
+                      >
+                        <Plus className="w-5 h-5 sm:w-6 sm:h-6" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Toolbar: Search + Tabs */}
       <div className={`sticky top-14 z-20 flex flex-col ${isDarkSolid ? 'bg-black border-[#222]' : 'bg-white border-surface-100'} border-b`}>
         {/* Search Bar */}
@@ -327,73 +410,11 @@ export function StorefrontView({
                     <div 
                       key={item.id} 
                       onClick={() => handleOpenProduct(item)}
-                      className={`border rounded-2xl overflow-hidden cursor-pointer transition-all group hover:shadow-sm ${
-                        isFeatured ? 'col-span-2 md:col-span-2 lg:col-span-2 flex' : 'flex flex-col'
-                      } ${
+                      className={`flex flex-col border rounded-2xl overflow-hidden cursor-pointer transition-all group hover:shadow-sm ${
                         isDarkSolid ? 'bg-[#0a0a0a]' : 'bg-white border-surface-100 hover:border-surface-200'
                       }`}
                       style={isDarkSolid ? { borderColor: primaryColor } : undefined}
                     >
-                      {isFeatured ? (
-                        <>
-                          {/* Content (Right Side in RTL) */}
-                          <div className="relative p-3 sm:p-5 flex flex-col flex-grow w-2/3 min-h-[140px] sm:min-h-[180px]">
-                            {/* Featured Badge */}
-                            <div 
-                              className="absolute top-0 right-0 px-2 sm:px-3 py-1 sm:py-1.5 rounded-bl-xl text-white text-[10px] sm:text-xs font-bold z-10 shadow-sm"
-                              style={{ backgroundColor: primaryColor }}
-                            >
-                              الأكثر مبيعاً
-                            </div>
-                            <div className="flex justify-between items-start gap-2 mb-1 pt-5 sm:pt-6">
-                              <h3 className={`font-bold text-sm sm:text-lg leading-tight line-clamp-2 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-950'}`}>{item.name}</h3>
-                            </div>
-                            {item.description && (
-                              <p className={`text-xs sm:text-sm mt-1 line-clamp-2 ${isDarkSolid ? 'text-surface-400' : 'text-surface-500'}`}>{item.description}</p>
-                            )}
-                            <div className="mt-auto pt-3 flex items-center justify-between">
-                              <span className="font-black text-lg sm:text-xl" style={{ color: primaryColor }}>
-                                {item.sizes && item.sizes.length > 0 
-                                  ? `${formatPrice(Math.min(...item.sizes.map((s: any) => s.price)), store.currency)}`
-                                  : formatPrice(item.price, store.currency)
-                                }
-                              </span>
-                              {!store.hideProductAddButton && (
-                                <button 
-                                  className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-transform active:scale-95 shrink-0 ${
-                                    item.isAvailable 
-                                      ? 'hover:scale-105 hover:brightness-110' 
-                                      : 'bg-surface-100 text-surface-400 cursor-not-allowed'
-                                  }`}
-                                  style={item.isAvailable ? { backgroundColor: primaryColor, color: '#fff' } : undefined}
-                                  disabled={!item.isAvailable}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    if(item.isAvailable) handleOpenProduct(item);
-                                  }}
-                                >
-                                  <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
-                                </button>
-                              )}
-                            </div>
-                          </div>
-                          
-                          <div className="relative w-1/3 min-w-[120px] sm:min-w-[160px] bg-surface-100 overflow-hidden shrink-0">
-                            {item.image ? (
-                              <Image src={item.image} alt={item.name} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center text-surface-400">
-                                <ShoppingBag className="w-10 h-10 opacity-20" />
-                              </div>
-                            )}
-                            {!item.isAvailable && (
-                              <div className="absolute inset-0 bg-white/70 backdrop-blur-[2px] flex items-center justify-center">
-                                <span className="bg-black text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm">نفدت الكمية</span>
-                              </div>
-                            )}
-                          </div>
-                        </>
-                      ) : (
                         <>
                           {/* Image (Top) */}
                           <div className="relative w-full aspect-[4/3] bg-surface-100 overflow-hidden">
@@ -446,7 +467,6 @@ export function StorefrontView({
                             </div>
                           </div>
                         </>
-                      )}
                     </div>
                   )})}
                 </div>

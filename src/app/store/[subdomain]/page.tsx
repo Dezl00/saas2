@@ -44,12 +44,12 @@ export default async function StorePage(props: { params: Promise<{ subdomain: st
 
   return (
     <div className="animate-fade-in">
+      <StoreStandardHero store={store} />
       {store.showBanners !== false && banners.length > 0 && (
-        <div className="p-2 sm:p-4 pb-0 w-full max-w-7xl mx-auto">
+        <div className="p-2 sm:p-4 pb-0 w-full max-w-7xl mx-auto mt-4">
           <StoreBannersCarousel banners={banners} />
         </div>
       )}
-      <StoreStandardHero store={store} />
       <StorefrontView 
         store={{ name: store.name, currency: store.currency, primaryColor: store.primaryColor, logo: store.logo, theme: store.theme, hideProductDescription: store.hideProductDescription, hideProductAddButton: store.hideProductAddButton }}
         categories={categoriesToDisplay.map(c => ({ id: c.id, name: c.name }))}

@@ -72,6 +72,7 @@ export function AppearanceClient({
   const [landingHeroDescription, setLandingHeroDescription] = useState(currentLandingHeroDescription || "");
   const [landingHeroImage, setLandingHeroImage] = useState(currentLandingHeroImage || "");
   const [landingHeroOverlayOpacity, setLandingHeroOverlayOpacity] = useState(currentLandingHeroOverlayOpacity ?? 50);
+  const [clientBanners, setClientBanners] = useState(banners);
 
   const [isSaving, setIsSaving] = useState(false);
 
@@ -314,14 +315,37 @@ export function AppearanceClient({
         <div className="space-y-6">
           <div className="flex flex-col gap-4">
             <h4 className="font-bold text-surface-950">إضافة بانر جديد</h4>
-            <div className="max-w-xl flex items-end gap-4">
-              <div className="flex-1">
-                <ImageUpload name="bannerImageFile" label="" className="w-full" />
+            <div className="max-w-xl flex flex-col sm:flex-row items-end gap-4">
+              <div className="flex-1 w-full">
+                <div 
+                  className="relative w-full border-2 border-dashed rounded-[24px] p-6 text-center cursor-pointer transition-colors border-primary-200 bg-surface-50 hover:bg-primary-50"
+                  onClick={() => document.getElementById('bannerImageFileInput')?.click()}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    const files = e.dataTransfer.files;
+                    const input = document.getElementById('bannerImageFileInput') as HTMLInputElement;
+                    if (input) {
+                      const dt = new DataTransfer();
+                      for(let i=0; i<files.length; i++) dt.items.add(files[i]);
+                      input.files = dt.files;
+                    }
+                  }}
+                >
+                  <input id="bannerImageFileInput" type="file" accept="image/*" className="hidden" name="bannerImageFile" multiple />
+                  <div className="w-full h-full flex flex-col items-center justify-center py-6">
+                    <div className="w-16 h-16 rounded-[24px] flex items-center justify-center mx-auto mb-4 border-2 transition-colors bg-primary-50 text-primary-600 border-primary-100">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-cloud-upload w-8 h-8"><path d="M12 13v8"></path><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="m8 17 4-4 4 4"></path></svg>
+                    </div>
+                    <p className="font-black text-surface-950 mb-2">اسحب وأفلت الصورة هنا</p>
+                    <p className="text-sm font-bold text-surface-500">أو اضغط للاختيار، أو قم باللصق (Ctrl+V)</p>
+                  </div>
+                </div>
               </div>
               <button
                 type="button"
                 onClick={async () => {
-                  const fileInput = document.querySelector('input[name="bannerImageFile"]') as HTMLInputElement;
+                  const fileInput = document.getElementById('bannerImageFileInput') as HTMLInputElement;
                   if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
                     toast.error("الرجاء اختيار صورة أولاً");
                     return;
@@ -329,15 +353,16 @@ export function AppearanceClient({
                   setIsUploadingBanner(true);
                   try {
                     const formData = new FormData();
-                    formData.append("bannerImageFile", fileInput.files[0]);
+                    Array.from(fileInput.files).forEach(f => formData.append("bannerImageFile", f));
                     const res = await uploadStoreBanner(formData);
                     if (res.error) {
                       toast.error(res.error);
                     } else {
                       toast.success("تم رفع البانر بنجاح");
                       fileInput.value = "";
-                      // In a real app we'd fetch the new banner from server, but here we trigger a router refresh or just wait for next load.
-                      window.location.reload();
+                      if (res.banners) {
+                        setClientBanners(prev => [...prev, ...res.banners]);
+                      }
                     }
                   } catch (e) {
                     toast.error("فشل رفع البانر");
@@ -346,7 +371,7 @@ export function AppearanceClient({
                   }
                 }}
                 disabled={isUploadingBanner}
-                className="h-[120px] px-6 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-bold transition-colors flex flex-col items-center justify-center gap-2 disabled:opacity-50"
+                className="h-[120px] w-full sm:w-auto px-6 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-bold transition-colors flex flex-col items-center justify-center gap-2 disabled:opacity-50"
               >
                 {isUploadingBanner ? <Loader2 className="w-6 h-6 animate-spin" /> : <Plus className="w-6 h-6" />}
                 <span>إضافة</span>
@@ -354,14 +379,14 @@ export function AppearanceClient({
             </div>
           </div>
 
-          {banners.length > 0 && (
+          {clientBanners.length > 0 && (
             <div className="pt-6 border-t border-surface-100">
-              <h4 className="font-bold text-surface-950 mb-4">البانرات الحالية ({banners.length})</h4>
+              <h4 className="font-bold text-surface-950 mb-4">البانرات الحالية ({clientBanners.length})</h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {banners.map((banner) => (
+                {clientBanners.map((banner) => (
                   <div key={banner.id} className="relative aspect-[16/9] rounded-2xl overflow-hidden border-2 border-surface-200 group">
                     <Image src={banner.image} alt="Banner" fill className="object-cover" />
-                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                       <button
                         type="button"
                         disabled={deletingBannerId === banner.id}
@@ -374,10 +399,10 @@ export function AppearanceClient({
                               toast.error(res.error);
                             } else {
                               toast.success("تم حذف البانر بنجاح");
-                              setBanners(prev => prev.filter(b => b.id !== banner.id));
+                              setClientBanners(prev => prev.filter(b => b.id !== banner.id));
                             }
                           } catch (e) {
-                            toast.error("فشل الحذف");
+                            toast.error("فشل حذف البانر");
                           } finally {
                             setDeletingBannerId(null);
                           }

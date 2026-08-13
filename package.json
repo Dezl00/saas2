@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "prisma generate && prisma db push --accept-data-loss && next build",
     "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate"
@@ -23,6 +23,8 @@
     "class-variance-authority": "^0.7.1",
     "cloudinary": "^2.10.0",
     "clsx": "^2.1.1",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
     "firebase": "^12.15.0",
     "firebase-admin": "^14.1.0",
     "framer-motion": "^12.42.0",

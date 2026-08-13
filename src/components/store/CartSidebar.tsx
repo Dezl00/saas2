@@ -8,7 +8,7 @@ import Image from "next/image";
 import { placeOrderAction } from "@/app/store/[subdomain]/actions";
 import toast from "react-hot-toast";
 
-type Branch = { id: string; name: string; address: string | null };
+type Branch = { id: string; name: string; address: string | null; whatsappNumber?: string | null };
 type DeliveryArea = { id: string; name: string; fee: number };
 type StoreData = { id: string; name: string; whatsappNumber: string | null; enableWhatsappOrders: boolean; currency: string; primaryColor?: string | null; theme?: string | null };
 
@@ -114,26 +114,33 @@ export function CartSidebar({
       setIsCartOpen(false);
       setIsCheckout(false);
 
-      if (store.enableWhatsappOrders && store.whatsappNumber) {
-        // Redirect to WhatsApp
-        const waNumber = formatWhatsappNumber(store.whatsappNumber);
-        let msg = `*طلب جديد من ${store.name}*\n\n`;
-        msg += `*الاسم:* ${formData.get("customerName")}\n`;
-        msg += `*الهاتف:* ${formData.get("customerPhone")}\n`;
-        if (deliveryType === "DELIVERY") {
-          const areaName = deliveryAreas?.find(a=>a.id===selectedArea)?.name;
-          msg += `*التوصيل إلى:* ${areaName ? areaName + ' - ' : ''}${formData.get("customerAddress")}\n`;
+      if (store.enableWhatsappOrders) {
+        // Find if branch is selected and has a whatsapp number
+        const selectedBranchObj = deliveryType === "PICKUP" ? branches?.find(b => b.id === selectedBranch) : null;
+        const targetWhatsappNumber = selectedBranchObj?.whatsappNumber || store.whatsappNumber;
+
+        if (targetWhatsappNumber) {
+          // Redirect to WhatsApp
+          const waNumber = formatWhatsappNumber(targetWhatsappNumber);
+          let msg = `*طلب جديد من ${store.name}*\n\n`;
+          msg += `*الاسم:* ${formData.get("customerName")}\n`;
+          msg += `*الهاتف:* ${formData.get("customerPhone")}\n`;
+          if (deliveryType === "DELIVERY") {
+            const areaName = deliveryAreas?.find(a=>a.id===selectedArea)?.name;
+            msg += `*التوصيل إلى:* ${areaName ? areaName + ' - ' : ''}${formData.get("customerAddress")}\n`;
+          } else {
+            msg += `*استلام من فرع:* ${selectedBranchObj?.name || 'الفرع الرئيسي'}\n`;
+          }
+          msg += `\n*الطلبات:*\n`;
+          items.forEach(item => {
+            msg += `- ${item.quantity}x ${item.name} (${formatPrice(item.price, store.currency)})\n`;
+          });
+          msg += `\n*الإجمالي المطلوب:* ${formatPrice(finalTotal, store.currency)}`;
+          
+          window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
         } else {
-          const branchName = branches?.find(b=>b.id===selectedBranch)?.name;
-          msg += `*استلام من فرع:* ${branchName || 'الفرع الرئيسي'}\n`;
+          alert("تم إرسال طلبك بنجاح!");
         }
-        msg += `\n*الطلبات:*\n`;
-        items.forEach(item => {
-          msg += `- ${item.quantity}x ${item.name} (${formatPrice(item.price, store.currency)})\n`;
-        });
-        msg += `\n*الإجمالي المطلوب:* ${formatPrice(finalTotal, store.currency)}`;
-        
-        window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
       } else {
         alert("تم إرسال طلبك بنجاح!");
       }

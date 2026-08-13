@@ -11,6 +11,8 @@ export async function addBranch(formData: FormData) {
   const name = formData.get("name") as string;
   const phone = formData.get("phone") as string;
   const address = formData.get("address") as string;
+  const whatsappNumber = formData.get("whatsappNumber") as string;
+  const mapUrl = formData.get("mapUrl") as string;
 
   if (!name) {
     return { error: "الاسم مطلوب" };
@@ -29,6 +31,8 @@ export async function addBranch(formData: FormData) {
         name,
         phone,
         address,
+        whatsappNumber,
+        mapUrl,
         storeId: session.user.storeId
       }
     });
@@ -37,6 +41,38 @@ export async function addBranch(formData: FormData) {
     return { success: true };
   } catch (error: any) {
     return { error: "حدث خطأ أثناء إضافة الفرع: " + (error.message || "") };
+  }
+}
+
+export async function editBranch(formData: FormData) {
+  const session = await auth();
+  if (!session?.user?.storeId) return { error: "غير مصرح" };
+
+  const branchId = formData.get("branchId") as string;
+  const name = formData.get("name") as string;
+  const phone = formData.get("phone") as string;
+  const address = formData.get("address") as string;
+  const whatsappNumber = formData.get("whatsappNumber") as string;
+  const mapUrl = formData.get("mapUrl") as string;
+
+  if (!name) return { error: "الاسم مطلوب" };
+
+  try {
+    await prisma.branch.update({
+      where: { id: branchId, storeId: session.user.storeId },
+      data: {
+        name,
+        phone,
+        address,
+        whatsappNumber,
+        mapUrl
+      }
+    });
+
+    revalidatePath("/dashboard/branches");
+    return { success: true };
+  } catch (error: any) {
+    return { error: "حدث خطأ أثناء تعديل الفرع: " + (error.message || "") };
   }
 }
 

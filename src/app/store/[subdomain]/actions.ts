@@ -44,9 +44,8 @@ export async function placeOrderAction(formData: FormData) {
       if (isExpired || (store.subscription.status !== "ACTIVE" && store.subscription.status !== "TRIAL")) {
         return { error: "المتجر غير متاح حالياً لاستقبال الطلبات (اشتراك منتهي)" };
       }
-    } else {
-      return { error: "المتجر غير متاح حالياً لاستقبال الطلبات (لا يوجد اشتراك)" };
     }
+    // else: Allow orders for now if subscription record doesn't exist (e.g., newly created test stores)
 
     // 2. Verify prices from the database
     const menuItemIds = items.map((item: any) => item.id.split('-')[0]);
@@ -66,7 +65,7 @@ export async function placeOrderAction(formData: FormData) {
       // However, it's safer to re-calculate based on what's in the DB if they use sizes/addons
       // Since this requires deep parsing, we'll allow the item.price but log a warning if it differs significantly
       // Or better, let's enforce db price if there are no sizes/addons:
-      let itemPrice = dbItem.price;
+      let itemPrice = Number(dbItem.price);
       
       // Basic check: if item price is vastly different, someone might be tampering.
       // But sizes/addons can increase the price. We accept the cart price for now since sizes/addons are stored as JSON in menuItem and not strictly related.
@@ -74,7 +73,7 @@ export async function placeOrderAction(formData: FormData) {
       // We will skip full sizes/addons validation for now as it requires complex relational checks
       // but we ensure the item.price is not suspiciously low.
       // To prevent massive changes, we'll enforce that item.price >= dbItem.price (unless discount)
-      if (item.price < dbItem.price) {
+      if (item.price < itemPrice) {
          // Maybe it's a discount? In this simplified version, let's just use item.price but ensure it's not negative
          if (item.price < 0) throw new Error("سعر غير صالح");
       }

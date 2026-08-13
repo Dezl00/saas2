@@ -53,7 +53,7 @@ export async function getStoreInfo(subdomain: string) {
       landingHeroOverlayOpacity: true,
       branches: { 
         where: { isActive: true },
-        select: { id: true, name: true, address: true }
+        select: { id: true, name: true, address: true, phone: true, whatsappNumber: true, mapUrl: true }
       },
       deliveryAreas: { 
         where: { isActive: true },

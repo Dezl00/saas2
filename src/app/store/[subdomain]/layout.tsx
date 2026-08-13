@@ -184,6 +184,8 @@ export default async function StoreLayout({
           workingHours={store.workingHours as any}
           mapLatitude={store.mapLatitude}
           mapLongitude={store.mapLongitude}
+          hasLandingPage={store.enableLandingPage}
+          branches={store.branches as any}
         />
 
 
@@ -237,13 +239,48 @@ export default async function StoreLayout({
             </div>
 
             {store.branches && store.branches.length > 0 && (
-              <div className="mt-8 mb-4">
-                <h3 className={`font-bold text-sm mb-3 ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>الفروع</h3>
-                <div className="flex flex-wrap justify-center gap-4">
+              <div className="mt-12 mb-6">
+                <h3 className={`font-bold text-lg mb-6 ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>فروعنا</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-start">
                   {store.branches.map((branch: any) => (
-                    <div key={branch.id} className={`flex flex-col items-center gap-1 p-3 rounded-2xl border ${isDarkSolid ? 'bg-[#111] border-[#333]' : 'bg-white border-surface-200'}`}>
-                      <span className={`font-bold text-xs ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>{branch.name}</span>
-                      {branch.address && <span className={`text-[10px] max-w-[200px] ${isDarkSolid ? 'text-surface-400' : 'text-surface-500'}`}>{branch.address}</span>}
+                    <div key={branch.id} className={`flex flex-col gap-3 p-5 rounded-2xl border transition-all hover:shadow-md ${isDarkSolid ? 'bg-[#111] border-[#333]' : 'bg-white border-surface-200'}`}>
+                      <h4 className={`font-bold text-base ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>{branch.name}</h4>
+                      
+                      {branch.address && (
+                        <div className="flex items-start gap-2">
+                          <MapPin className="w-4 h-4 mt-0.5 text-primary-500 shrink-0" />
+                          <span className={`text-xs leading-relaxed ${isDarkSolid ? 'text-surface-400' : 'text-surface-600'}`}>{branch.address}</span>
+                        </div>
+                      )}
+                      
+                      {branch.phone && (
+                        <div className="flex items-start gap-2">
+                          <Phone className="w-4 h-4 mt-0.5 text-primary-500 shrink-0" />
+                          <span className={`text-xs leading-relaxed ${isDarkSolid ? 'text-surface-400' : 'text-surface-600'}`} dir="ltr">{branch.phone}</span>
+                        </div>
+                      )}
+                      
+                      {branch.mapUrl && (
+                        <div className="mt-2 h-32 w-full rounded-xl overflow-hidden relative border border-surface-100 group">
+                          {branch.mapUrl.includes('<iframe') ? (
+                            <div className="w-full h-full pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity" dangerouslySetInnerHTML={{ __html: branch.mapUrl.replace(/width=".*?"/, 'width="100%"').replace(/height=".*?"/, 'height="100%"') }} />
+                          ) : (
+                            <div className={`w-full h-full flex items-center justify-center ${isDarkSolid ? 'bg-[#222]' : 'bg-surface-100'}`}>
+                              <MapPin className="w-8 h-8 text-surface-400 opacity-50" />
+                            </div>
+                          )}
+                          <a 
+                            href={branch.mapUrl.includes('<iframe') ? branch.mapUrl.match(/src="(.*?)"/)?.[1] || branch.mapUrl : branch.mapUrl} 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <span className="bg-primary-600 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm">
+                              فتح في خرائط جوجل
+                            </span>
+                          </a>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
