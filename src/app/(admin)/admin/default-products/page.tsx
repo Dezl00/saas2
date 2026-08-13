@@ -7,11 +7,12 @@ import { AIMenuScanner } from "@/components/dashboard/AIMenuScanner";
 import { MenuItemsGrid } from "@/components/dashboard/MenuItemsGrid";
 import { SubmitButton } from "@/components/dashboard/SubmitButton";
 import { DeleteConfirmButton } from "@/components/dashboard/DeleteConfirmButton";
-import { DefaultCategoryEditModal } from "./DefaultCategoryEditModal";
+import { DefaultCategoryForm } from "./DefaultCategoryForm";
 import { createDefaultCategory, toggleDefaultCategoryStatus, deleteDefaultCategory } from "./actions";
 import { OptimisticToggle } from "@/components/dashboard/OptimisticToggle";
 import { DefaultProductsTabs } from "./DefaultProductsTabs";
 import { ImageUpload } from "@/components/dashboard/ImageUpload";
+import Link from "next/link";
 
 export const metadata = {
   title: "المنتجات الافتراضية | لوحة الإدارة",
@@ -22,7 +23,7 @@ export const maxDuration = 60;
 import { connection } from "next/server";
 
 export default async function DefaultProductsPage(props: {
-  searchParams: Promise<{ tab?: string; edit?: string }>;
+  searchParams: Promise<{ tab?: string; edit?: string; editCategory?: string }>;
 }) {
   await connection();
   const searchParams = await props.searchParams;
@@ -66,6 +67,14 @@ export default async function DefaultProductsPage(props: {
     editItem = await prisma.menuItem.findUnique({
       where: { id: editId, storeId: 'DEFAULT_STORE' },
       include: { sizes: true, addons: true }
+    });
+  }
+
+  const editCategoryId = searchParams.editCategory;
+  let editCategory = null;
+  if (editCategoryId) {
+    editCategory = await prisma.category.findUnique({
+      where: { id: editCategoryId, storeId: 'DEFAULT_STORE' }
     });
   }
 
@@ -160,34 +169,7 @@ export default async function DefaultProductsPage(props: {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6 animate-fade-in">
           {/* Add Category Form */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-[24px] border border-surface-200 p-6 sticky top-6 max-h-[calc(100vh-2rem)] overflow-y-auto scrollbar-hide">
-              <h3 className="text-lg font-bold text-surface-950 mb-4 flex items-center gap-2">
-                <Plus className="w-5 h-5 text-primary-500" />
-                إضافة قسم افتراضي
-              </h3>
-              
-              <form action={createDefaultCategory as any} className="space-y-4">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-surface-950 mb-1">اسم القسم *</label>
-                  <input type="text" id="name" name="name" required placeholder="مثال: مقبلات" className="w-full px-3 py-2 bg-surface-50 border border-surface-200 rounded-[24px] focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-surface-950 mb-1">صورة القسم</label>
-                  <div className="bg-surface-50 border border-surface-200 rounded-[24px] overflow-hidden p-4">
-                    <ImageUpload name="imageFile" label="اختر صورة للقسم" />
-                  </div>
-                </div>
-                <div>
-                  <label htmlFor="description" className="block text-sm font-medium text-surface-950 mb-1">الوصف (اختياري)</label>
-                  <textarea id="description" name="description" rows={2} className="w-full px-3 py-2 bg-surface-50 border border-surface-200 rounded-[24px] focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" />
-                </div>
-                <div>
-                  <label htmlFor="sortOrder" className="block text-sm font-medium text-surface-950 mb-1">الترتيب</label>
-                  <input type="number" id="sortOrder" name="sortOrder" defaultValue="0" className="w-full px-3 py-2 bg-surface-50 border border-surface-200 rounded-[24px] focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none" />
-                </div>
-                <SubmitButton className="w-full py-2.5 px-4 bg-primary-600 hover:bg-primary-700 text-white rounded-[24px] font-bold transition-all">حفظ القسم</SubmitButton>
-              </form>
-            </div>
+            <DefaultCategoryForm editCategory={editCategory} />
           </div>
 
           {/* Categories List */}
@@ -225,7 +207,13 @@ export default async function DefaultProductsPage(props: {
                           </td>
                           <td className="px-6 py-4">
                             <div className="flex items-center justify-end gap-2">
-                              <DefaultCategoryEditModal category={category} />
+                              <Link 
+                                href={`/admin/default-products?tab=categories&editCategory=${category.id}`}
+                                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-100 transition-colors text-surface-500"
+                                title="تعديل القسم"
+                              >
+                                <Pencil className="w-4 h-4" />
+                              </Link>
                               <DeleteConfirmButton action={deleteDefaultCategory.bind(null, category.id) as any} />
                             </div>
                           </td>

@@ -83,13 +83,27 @@ export async function editDefaultCategory(formData: FormData) {
 
   if (!name) return { error: "الاسم مطلوب" };
 
+  const imageFile = formData.get("imageFile") as File | null;
+  let image = undefined;
+
+  if (imageFile && imageFile.size > 0) {
+    const { uploadImageToCloudinary } = await import("@/lib/upload");
+    try {
+      image = (await uploadImageToCloudinary(imageFile)) as string;
+    } catch (e) {
+      console.error("Upload error", e);
+      return { error: "فشل رفع الصورة" };
+    }
+  }
+
   try {
     await prisma.category.update({
       where: { id: categoryId, storeId: "DEFAULT_STORE" },
       data: {
         name,
         description,
-        sortOrder
+        sortOrder,
+        ...(image !== undefined && { image })
       }
     });
 
