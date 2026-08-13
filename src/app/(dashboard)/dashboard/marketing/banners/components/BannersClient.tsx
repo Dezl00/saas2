@@ -70,6 +70,7 @@ export function BannersClient({ initialBanners }: { initialBanners: StoreBanner[
         cancelEdit();
         (document.getElementById("bannerForm") as HTMLFormElement)?.reset();
         setPreviewImage(null);
+      }
     } catch (error) {
       toast.error("حدث خطأ غير متوقع");
     } finally {
