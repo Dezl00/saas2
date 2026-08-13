@@ -140,7 +140,7 @@ export default async function StoreLayout({
   const isDarkSolid = store.theme === "dark_solid";
 
   return (
-    <CartProvider>
+    <CartProvider storeId={store.id}>
       <link href={googleFontUrl} rel="stylesheet" />
       <div 
         className={`min-h-screen pb-0 flex flex-col ${isDarkSolid ? 'bg-black text-white' : 'bg-white text-surface-950'}`}
@@ -261,25 +261,43 @@ export default async function StoreLayout({
                       )}
                       
                       {branch.mapUrl && (
-                        <div className="mt-2 h-32 w-full rounded-xl overflow-hidden relative border border-surface-100 group">
-                          {branch.mapUrl.includes('<iframe') ? (
+                        branch.mapUrl.includes('<iframe') ? (
+                          <div className="mt-2 h-32 w-full rounded-xl overflow-hidden relative border border-surface-100 group bg-surface-100">
                             <div className="w-full h-full pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity" dangerouslySetInnerHTML={{ __html: branch.mapUrl.replace(/width=".*?"/, 'width="100%"').replace(/height=".*?"/, 'height="100%"') }} />
-                          ) : (
-                            <div className={`w-full h-full flex items-center justify-center ${isDarkSolid ? 'bg-[#222]' : 'bg-surface-100'}`}>
-                              <MapPin className="w-8 h-8 text-surface-400 opacity-50" />
-                            </div>
-                          )}
-                          <a 
-                            href={branch.mapUrl.includes('<iframe') ? branch.mapUrl.match(/src="(.*?)"/)?.[1] || branch.mapUrl : branch.mapUrl} 
-                            target="_blank" 
-                            rel="noreferrer" 
-                            className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <span className="bg-primary-600 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm">
-                              فتح في خرائط جوجل
-                            </span>
-                          </a>
-                        </div>
+                            <a 
+                              href={branch.mapUrl.match(/src="(.*?)"/)?.[1] || branch.mapUrl} 
+                              target="_blank" 
+                              rel="noreferrer" 
+                              className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <span className="bg-primary-600 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm">
+                                فتح في خرائط جوجل
+                              </span>
+                            </a>
+                          </div>
+                        ) : (
+                          <div className="mt-2 h-32 w-full rounded-xl overflow-hidden relative border border-surface-100 group bg-surface-100">
+                            <iframe 
+                              src={`https://maps.google.com/maps?q=${encodeURIComponent(branch.address || branch.name || store.name)}&t=&z=14&ie=UTF8&iwloc=&output=embed`} 
+                              width="100%" 
+                              height="100%" 
+                              frameBorder="0" 
+                              style={{ border: 0 }} 
+                              allowFullScreen 
+                              className="w-full h-full pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity"
+                            />
+                            <a 
+                              href={branch.mapUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <span className="bg-primary-600 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm">
+                                فتح في خرائط جوجل
+                              </span>
+                            </a>
+                          </div>
+                        )
                       )}
                     </div>
                   ))}

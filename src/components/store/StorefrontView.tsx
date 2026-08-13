@@ -231,28 +231,27 @@ export function StorefrontView({
               <div 
                 key={`featured-${item.id}`}
                 onClick={() => handleOpenProduct(item)}
-                className={`snap-start shrink-0 w-[85vw] max-w-[400px] border rounded-[24px] overflow-hidden cursor-pointer transition-all group hover:shadow-md flex flex-row items-stretch ${
-                  isDarkSolid ? 'bg-[#111] border-[#222]' : 'bg-white border-surface-100 hover:border-surface-200 shadow-sm'
-                }`}
+                className="relative snap-start shrink-0 w-[85vw] max-w-[400px] cursor-pointer transition-all group flex flex-row items-stretch bg-transparent min-h-[140px] sm:min-h-[160px]"
               >
+                {/* Featured Badge (Stuck to corner) */}
+                <div className="absolute top-0 start-0 z-10 rounded-ee-2xl rounded-ss-[24px] inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-[10px] sm:text-xs font-black shadow-sm" style={{ backgroundColor: primaryColor }}>
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
+                  </span>
+                  الأكثر مبيعاً
+                </div>
+
                 {/* Content */}
-                <div className="p-3 sm:p-4 flex flex-col flex-grow justify-between w-2/3">
+                <div className="pt-8 pb-3 pe-4 ps-2 sm:ps-4 flex flex-col flex-grow justify-between w-2/3">
                   <div>
-                    {/* Featured Badge */}
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-white text-[10px] sm:text-xs font-black shadow-sm mb-2 w-max" style={{ backgroundColor: primaryColor }}>
-                      <span className="relative flex h-1.5 w-1.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
-                      </span>
-                      الأكثر مبيعاً
-                    </div>
-                    <h3 className={`font-black text-base sm:text-lg leading-tight line-clamp-2 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-950'}`}>{item.name}</h3>
+                    <h3 className={`font-black text-lg sm:text-xl leading-tight line-clamp-2 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-950'}`}>{item.name}</h3>
                     {item.description && (
-                      <p className={`text-xs sm:text-sm mt-1 line-clamp-1 ${isDarkSolid ? 'text-surface-400' : 'text-surface-500'}`}>{item.description}</p>
+                      <p className={`text-sm sm:text-base mt-2 line-clamp-2 ${isDarkSolid ? 'text-surface-400' : 'text-surface-500'}`}>{item.description}</p>
                     )}
                   </div>
-                  <div className="mt-2 pt-2 border-t border-surface-100/50 flex items-center justify-between">
-                    <span className="font-black text-lg sm:text-xl" style={{ color: primaryColor }}>
+                  <div className="mt-3 flex items-center justify-between">
+                    <span className="font-black text-xl sm:text-2xl" style={{ color: primaryColor }}>
                       {item.sizes && item.sizes.length > 0 
                         ? `${formatPrice(Math.min(...item.sizes.map((s: any) => s.price)), store.currency)}`
                         : formatPrice(item.price, store.currency)
@@ -260,7 +259,7 @@ export function StorefrontView({
                     </span>
                     {!store.hideProductAddButton && (
                       <button 
-                        className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-transform active:scale-95 shrink-0 ${
+                        className={`w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center transition-transform active:scale-95 shrink-0 ${
                           item.isAvailable ? 'hover:scale-105 hover:brightness-110 shadow-md' : 'opacity-50 cursor-not-allowed'
                         }`}
                         style={{ backgroundColor: item.isAvailable ? primaryColor : undefined, color: item.isAvailable ? '#fff' : undefined }}
@@ -270,14 +269,14 @@ export function StorefrontView({
                           if (item.isAvailable) handleOpenProduct(item);
                         }}
                       >
-                        <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <Plus className="w-5 h-5 sm:w-6 sm:h-6" />
                       </button>
                     )}
                   </div>
                 </div>
 
                 {/* Image (Left side in RTL) */}
-                <div className="relative w-1/3 shrink-0 bg-transparent overflow-hidden border-s border-surface-100/30">
+                <div className="relative w-1/3 shrink-0 bg-surface-100 overflow-hidden rounded-2xl shadow-sm my-2 me-2">
                   {item.image ? (
                     <Image src={item.image} alt={item.name} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
                   ) : (
