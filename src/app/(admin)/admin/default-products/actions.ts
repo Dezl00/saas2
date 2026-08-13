@@ -66,7 +66,7 @@ export async function deleteDefaultCategory(categoryId: string) {
   const session = await auth();
   if (!session?.user || session.user.role !== "ADMIN") return;
   
-  await prisma.category.delete({
+  await prisma.category.deleteMany({
     where: { id: categoryId, storeId: 'DEFAULT_STORE' }
   });
   revalidatePath("/admin/default-products");
@@ -96,7 +96,7 @@ export async function editDefaultCategory(formData: FormData) {
   }
 
   try {
-    await prisma.category.update({
+    await prisma.category.updateMany({
       where: { id: categoryId, storeId: "DEFAULT_STORE" },
       data: {
         name,

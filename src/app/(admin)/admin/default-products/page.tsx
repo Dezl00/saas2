@@ -64,8 +64,8 @@ export default async function DefaultProductsPage(props: {
 
   let editItem = null;
   if (editId) {
-    editItem = await prisma.menuItem.findUnique({
-      where: { id: editId, storeId: 'DEFAULT_STORE' },
+    editItem = await prisma.menuItem.findFirst({
+      where: { id: editId as string, storeId: 'DEFAULT_STORE' },
       include: { sizes: true, addons: true }
     });
   }
@@ -73,8 +73,8 @@ export default async function DefaultProductsPage(props: {
   const editCategoryId = searchParams.editCategory;
   let editCategory = null;
   if (editCategoryId) {
-    editCategory = await prisma.category.findUnique({
-      where: { id: editCategoryId, storeId: 'DEFAULT_STORE' }
+    editCategory = await prisma.category.findFirst({
+      where: { id: editCategoryId as string, storeId: 'DEFAULT_STORE' }
     });
   }
 
