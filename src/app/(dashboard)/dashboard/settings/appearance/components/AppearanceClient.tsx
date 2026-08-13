@@ -444,8 +444,7 @@ export function AppearanceClient({
             </label>
           </div>
 
-          {enableLandingPage && (
-            <div className="space-y-4 pt-4 border-t border-surface-100">
+          <div className="space-y-4 pt-4 border-t border-surface-100">
               <div>
                 <label className="block text-sm font-semibold text-surface-700 mb-2">عنوان الهيرو</label>
                 <input
@@ -514,7 +513,6 @@ export function AppearanceClient({
                 </div>
               </div>
             </div>
-          )}
         </div>
       </div>
 
