@@ -74,6 +74,7 @@ type Props = {
   theme?: string | null;
   socialLinks: SocialLinks;
   workingHours?: WorkingHoursData | null;
+  mapLatitude?: string | null;
   mapLongitude?: string | null;
   hasLandingPage?: boolean;
   branches?: any[];
