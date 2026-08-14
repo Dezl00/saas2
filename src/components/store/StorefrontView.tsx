@@ -69,6 +69,7 @@ export function StorefrontView({
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [activeFeaturedIndex, setActiveFeaturedIndex] = useState(0);
 
   // Modal State
   const [selectedSize, setSelectedSize] = useState<Size | null>(null);
@@ -226,12 +227,32 @@ export function StorefrontView({
               المنتجات المميزة
             </h2>
           </div>
-          <div className="pb-4 overflow-x-auto snap-x snap-mandatory flex gap-4 -mx-4 px-4 [-ms-overflow-style:'none'] [scrollbar-width:'none'] [&::-webkit-scrollbar]:hidden">
+          <div 
+            className="pb-4 overflow-x-auto snap-x snap-mandatory flex gap-4 -mx-4 px-4 [-ms-overflow-style:'none'] [scrollbar-width:'none'] [&::-webkit-scrollbar]:hidden"
+            onScroll={(e) => {
+              const container = e.currentTarget;
+              const cards = container.querySelectorAll('.featured-card');
+              if (cards.length === 0) return;
+              const containerCenter = container.getBoundingClientRect().left + container.clientWidth / 2;
+              let minDistance = Infinity;
+              let closestIndex = 0;
+              cards.forEach((card, i) => {
+                const rect = card.getBoundingClientRect();
+                const center = rect.left + rect.width / 2;
+                const distance = Math.abs(containerCenter - center);
+                if (distance < minDistance) {
+                  minDistance = distance;
+                  closestIndex = i;
+                }
+              });
+              setActiveFeaturedIndex(closestIndex);
+            }}
+          >
             {menuItems.filter(i => i.isFeatured).map((item, index, arr) => (
               <div 
                 key={`featured-${item.id}`}
                 onClick={() => handleOpenProduct(item)}
-                className={`relative snap-start shrink-0 ${arr.length === 1 ? 'w-full max-w-none' : 'w-[85vw] max-w-[400px]'} cursor-pointer transition-all group flex flex-row items-stretch border rounded-2xl overflow-hidden min-h-[160px] sm:min-h-[180px] ${
+                className={`featured-card relative snap-start shrink-0 ${arr.length === 1 ? 'w-[calc(100vw-32px)] max-w-full' : 'w-[75vw] max-w-[320px]'} cursor-pointer transition-all group flex flex-row items-stretch border rounded-2xl overflow-hidden min-h-[160px] sm:min-h-[180px] ${
                   isDarkSolid ? 'bg-transparent' : 'bg-white border-surface-100 hover:border-surface-200'
                 }`}
                 style={isDarkSolid ? { borderColor: primaryColor } : undefined}
@@ -296,6 +317,19 @@ export function StorefrontView({
               </div>
             ))}
           </div>
+          {menuItems.filter(i => i.isFeatured).length > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-2 mb-4" dir="ltr">
+              {menuItems.filter(i => i.isFeatured).map((_, index) => (
+                <div
+                  key={`dot-${index}`}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    index === activeFeaturedIndex ? "w-6" : "w-2 bg-surface-300"
+                  }`}
+                  style={index === activeFeaturedIndex ? { backgroundColor: primaryColor } : {}}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
 
