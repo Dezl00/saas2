@@ -117,7 +117,7 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
         setFormMode("create");
         setEditCategoryData(null);
       } else {
-        toast.error(result.error);
+        toast.error(result.error || "حدث خطأ غير معروف");
       }
     } else {
       const result = await createCategory(formData);
@@ -125,7 +125,7 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
         toast.success(result.success);
         document.getElementById("categoryForm")?.closest("form")?.reset();
       } else {
-        toast.error(result.error);
+        toast.error(result.error || "حدث خطأ غير معروف");
       }
     }
   };
