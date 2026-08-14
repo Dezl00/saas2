@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useTransition, useRef, useEffect } from "react";
 import { LayoutGrid, GripVertical, Check, X, Edit2, Plus, Trash2, Image as ImageIcon } from "lucide-react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
