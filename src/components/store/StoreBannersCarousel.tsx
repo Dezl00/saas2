@@ -36,7 +36,7 @@ export function StoreBannersCarousel({ banners }: Props) {
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="w-full relative aspect-[16/9] bg-surface-100 rounded-[24px] sm:rounded-[32px] overflow-hidden shadow-sm">
+      <div className="w-full relative aspect-[16/9] bg-surface-100 rounded-[24px] sm:rounded-[32px] overflow-hidden">
         <div className="overflow-hidden w-full h-full cursor-grab active:cursor-grabbing" ref={emblaRef} dir="rtl">
           <div className="flex w-full h-full touch-pan-y">
             {banners.map((banner, index) => (
@@ -60,7 +60,7 @@ export function StoreBannersCarousel({ banners }: Props) {
             <div
               key={index}
               className={`h-2 rounded-full transition-all duration-300 ${
-                index === selectedIndex ? "w-6 bg-primary-600" : "w-2 bg-surface-300"
+                index === selectedIndex ? "w-6" : "w-2 bg-surface-300"
               }`}
               style={index === selectedIndex ? { backgroundColor: 'var(--store-primary, #db9434)' } : {}}
             />

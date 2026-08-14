@@ -231,10 +231,13 @@ export function StorefrontView({
               <div 
                 key={`featured-${item.id}`}
                 onClick={() => handleOpenProduct(item)}
-                className="relative snap-start shrink-0 w-[85vw] max-w-[400px] cursor-pointer transition-all group flex flex-row items-stretch bg-transparent min-h-[160px] sm:min-h-[180px]"
+                className={`relative snap-start shrink-0 w-[85vw] max-w-[400px] cursor-pointer transition-all group flex flex-row items-stretch border rounded-2xl overflow-hidden min-h-[160px] sm:min-h-[180px] ${
+                  isDarkSolid ? 'bg-transparent' : 'bg-white border-surface-100 hover:border-surface-200'
+                }`}
+                style={isDarkSolid ? { borderColor: primaryColor } : undefined}
               >
                 {/* Featured Badge (Stuck to corner) */}
-                <div className="absolute top-0 start-0 z-10 rounded-ee-2xl inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-[10px] sm:text-xs font-black shadow-sm" style={{ backgroundColor: primaryColor }}>
+                <div className="absolute top-0 start-0 z-10 rounded-ee-2xl inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-[10px] sm:text-xs font-black" style={{ backgroundColor: primaryColor }}>
                   <span className="relative flex h-1.5 w-1.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
@@ -276,7 +279,7 @@ export function StorefrontView({
                 </div>
 
                 {/* Image (Left side in RTL) */}
-                <div className="relative w-1/3 shrink-0 bg-surface-100 overflow-hidden rounded-2xl shadow-sm my-2 me-2">
+                <div className={`relative w-1/3 shrink-0 overflow-hidden border-s ${isDarkSolid ? 'border-[#333] bg-[#111]' : 'border-surface-100 bg-surface-100'}`}>
                   {item.image ? (
                     <Image src={item.image} alt={item.name} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
                   ) : (

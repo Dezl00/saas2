@@ -245,7 +245,7 @@ export default async function StoreLayout({
                 <h3 className={`font-bold text-lg mb-6 ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>فروعنا</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-start">
                   {store.branches.map((branch: any) => (
-                    <div key={branch.id} className={`flex flex-col gap-3 p-5 rounded-2xl border transition-all hover:shadow-md ${isDarkSolid ? 'bg-[#111] border-[#333]' : 'bg-white border-surface-200'}`}>
+                    <div key={branch.id} className={`flex flex-col gap-3 p-5 rounded-2xl border transition-all ${isDarkSolid ? 'bg-[#111] border-[#333]' : 'bg-white border-surface-200'}`}>
                       <h4 className={`font-bold text-base ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>{branch.name}</h4>
                       
                       {branch.address && (
