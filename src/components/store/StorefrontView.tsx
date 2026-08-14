@@ -228,7 +228,7 @@ export function StorefrontView({
             </h2>
           </div>
           <div 
-            className="pb-4 overflow-x-auto snap-x snap-mandatory flex gap-4 -mx-4 px-4 [-ms-overflow-style:'none'] [scrollbar-width:'none'] [&::-webkit-scrollbar]:hidden"
+            className="pb-4 overflow-x-auto snap-x snap-mandatory flex gap-4 -mx-4 px-4 scroll-px-4 after:content-[''] after:w-px after:shrink-0 [-ms-overflow-style:'none'] [scrollbar-width:'none'] [&::-webkit-scrollbar]:hidden"
             onScroll={(e) => {
               const container = e.currentTarget;
               const cards = container.querySelectorAll('.featured-card');
