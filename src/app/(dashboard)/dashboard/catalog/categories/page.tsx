@@ -29,7 +29,7 @@ export default async function CategoriesPage() {
 
   return (
     <div className="space-y-6">
-      <CategoriesClient initialCategories={categories} />
+      <CategoriesClient initialCategories={categories} storeId={session.user.storeId} />
     </div>
   );
 }

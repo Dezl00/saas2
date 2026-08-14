@@ -29,9 +29,10 @@ interface Category {
 
 interface CategoriesClientProps {
   initialCategories: Category[];
+  storeId: string;
 }
 
-export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
+export function CategoriesClient({ initialCategories, storeId }: CategoriesClientProps) {
   const [categories, setCategories] = useState(initialCategories);
   const [isPending, startTransition] = useTransition();
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -58,7 +59,7 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
     setCategories(newCategories);
 
     startTransition(async () => {
-      const result = await reorderCategories(newCategories.map(c => c.id));
+      const result = await reorderCategories(newCategories.map(c => c.id), storeId);
       if (result?.error) toast.error(result.error);
     });
   };
