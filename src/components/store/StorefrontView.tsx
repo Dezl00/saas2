@@ -227,11 +227,11 @@ export function StorefrontView({
             </h2>
           </div>
           <div className="pb-4 overflow-x-auto snap-x snap-mandatory flex gap-4 -mx-4 px-4 [-ms-overflow-style:'none'] [scrollbar-width:'none'] [&::-webkit-scrollbar]:hidden">
-            {menuItems.filter(i => i.isFeatured).map(item => (
+            {menuItems.filter(i => i.isFeatured).map((item, index, arr) => (
               <div 
                 key={`featured-${item.id}`}
                 onClick={() => handleOpenProduct(item)}
-                className={`relative snap-start shrink-0 w-[85vw] max-w-[400px] cursor-pointer transition-all group flex flex-row items-stretch border rounded-2xl overflow-hidden min-h-[160px] sm:min-h-[180px] ${
+                className={`relative snap-start shrink-0 ${arr.length === 1 ? 'w-full max-w-none' : 'w-[85vw] max-w-[400px]'} cursor-pointer transition-all group flex flex-row items-stretch border rounded-2xl overflow-hidden min-h-[160px] sm:min-h-[180px] ${
                   isDarkSolid ? 'bg-transparent' : 'bg-white border-surface-100 hover:border-surface-200'
                 }`}
                 style={isDarkSolid ? { borderColor: primaryColor } : undefined}
