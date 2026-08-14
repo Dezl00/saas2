@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { X, Search, ImageIcon, Loader2, UploadCloud } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { X, Search, ImageIcon, Loader2, UploadCloud, Save } from "lucide-react";
 import Image from "next/image";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 import { getAllMenuItems } from "@/app/(dashboard)/dashboard/catalog/actions/get-all-menu-items";
-import { quickUpdateMenuItem, quickUpdateMenuImage } from "@/app/(dashboard)/dashboard/catalog/actions/quick-update-menu-item";
+import { bulkUpdateMenuItems } from "@/app/(dashboard)/dashboard/catalog/actions/bulk-update-menu-items";
+import { quickUpdateMenuImage } from "@/app/(dashboard)/dashboard/catalog/actions/quick-update-menu-item";
 
 type CategoryType = { id: string; name: string };
 type MenuItem = {
@@ -17,37 +19,34 @@ type MenuItem = {
   category: { id: string; name: string };
 };
 
+type UpdateData = {
+  id: string;
+  name?: string;
+  price?: number;
+  categoryId?: string;
+};
+
 // Row Component for individual state management
 function BulkEditRow({ 
   item, 
-  categories 
+  categories,
+  onChange,
+  hasChanged
 }: { 
   item: MenuItem; 
-  categories: CategoryType[] 
+  categories: CategoryType[];
+  onChange: (field: keyof UpdateData, value: string | number) => void;
+  hasChanged: boolean;
 }) {
   const [name, setName] = useState(item.name);
   const [price, setPrice] = useState(Number(item.price));
   const [categoryId, setCategoryId] = useState(item.categoryId);
   const [image, setImage] = useState<string | null>(item.image);
   
-  const [isUpdating, setIsUpdating] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Auto-save debounced handler for text fields
-  const handleUpdate = async (field: 'name' | 'price' | 'categoryId', value: string | number) => {
-    setIsUpdating(true);
-    const data = { [field]: value };
-    const res = await quickUpdateMenuItem(item.id, data);
-    setIsUpdating(false);
-    
-    if (res.error) {
-      toast.error(res.error);
-      // Revert state if needed (simplified here)
-    }
-  };
 
   const onDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -85,7 +84,7 @@ function BulkEditRow({
   };
 
   return (
-    <tr className="hover:bg-surface-50/50 transition-colors">
+    <tr className={`transition-colors ${hasChanged ? 'bg-primary-50/50' : 'hover:bg-surface-50/50'}`}>
       <td className="p-3">
         <div 
           className={`relative w-16 h-16 rounded-[12px] overflow-hidden border-2 transition-all flex items-center justify-center cursor-pointer group
@@ -126,13 +125,13 @@ function BulkEditRow({
         <input 
           type="text" 
           value={name}
-          onChange={(e) => setName(e.target.value)}
-          onBlur={(e) => {
-            if (e.target.value !== item.name) {
-              handleUpdate('name', e.target.value);
-            }
+          onChange={(e) => {
+            setName(e.target.value);
+            onChange('name', e.target.value);
           }}
-          className="w-full p-2.5 bg-white border-2 border-surface-200 rounded-[12px] text-sm font-bold text-surface-900 focus:border-primary-500 outline-none transition-colors"
+          className={`w-full p-2.5 bg-white border-2 rounded-[12px] text-sm font-bold focus:outline-none transition-colors ${
+            hasChanged ? 'border-primary-300 text-primary-900 focus:border-primary-500' : 'border-surface-200 text-surface-900 focus:border-surface-400'
+          }`}
         />
       </td>
       
@@ -141,9 +140,11 @@ function BulkEditRow({
           value={categoryId}
           onChange={(e) => {
             setCategoryId(e.target.value);
-            handleUpdate('categoryId', e.target.value);
+            onChange('categoryId', e.target.value);
           }}
-          className="w-full p-2.5 bg-white border-2 border-surface-200 rounded-[12px] text-sm font-bold text-surface-900 focus:border-primary-500 outline-none transition-colors"
+          className={`w-full p-2.5 bg-white border-2 rounded-[12px] text-sm font-bold focus:outline-none transition-colors ${
+            hasChanged ? 'border-primary-300 text-primary-900 focus:border-primary-500' : 'border-surface-200 text-surface-900 focus:border-surface-400'
+          }`}
         >
           {categories.map(c => (
             <option key={c.id} value={c.id}>{c.name}</option>
@@ -152,22 +153,17 @@ function BulkEditRow({
       </td>
       
       <td className="p-3">
-        <div className="relative">
-          <input 
-            type="number" 
-            value={price}
-            onChange={(e) => setPrice(Number(e.target.value))}
-            onBlur={(e) => {
-              if (Number(e.target.value) !== Number(item.price)) {
-                handleUpdate('price', Number(e.target.value));
-              }
-            }}
-            className="w-full p-2.5 bg-white border-2 border-surface-200 rounded-[12px] text-sm font-bold text-surface-900 focus:border-primary-500 outline-none transition-colors"
-          />
-          {isUpdating && (
-            <Loader2 className="absolute end-3 top-3 w-4 h-4 text-surface-400 animate-spin" />
-          )}
-        </div>
+        <input 
+          type="number" 
+          value={price}
+          onChange={(e) => {
+            setPrice(Number(e.target.value));
+            onChange('price', Number(e.target.value));
+          }}
+          className={`w-full p-2.5 bg-white border-2 rounded-[12px] text-sm font-bold focus:outline-none transition-colors ${
+            hasChanged ? 'border-primary-300 text-primary-900 focus:border-primary-500' : 'border-surface-200 text-surface-900 focus:border-surface-400'
+          }`}
+        />
       </td>
     </tr>
   );
@@ -184,9 +180,14 @@ export function BulkEditModal({
   categories: CategoryType[];
   storeId?: string;
 }) {
+  const router = useRouter();
   const [items, setItems] = useState<MenuItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   
+  // Track changes
+  const [changedItems, setChangedItems] = useState<Record<string, UpdateData>>({});
+
   // Filters
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("all");
@@ -201,6 +202,7 @@ export function BulkEditModal({
 
   const fetchItems = async () => {
     setIsLoading(true);
+    setChangedItems({});
     const res = await getAllMenuItems();
     if (res.items) {
       setItems(res.items);
@@ -208,6 +210,37 @@ export function BulkEditModal({
       toast.error(res.error || "فشل في جلب المنتجات");
     }
     setIsLoading(false);
+  };
+
+  const handleRowChange = (id: string, field: keyof UpdateData, value: string | number) => {
+    setChangedItems(prev => {
+      const existing = prev[id] || { id };
+      return {
+        ...prev,
+        [id]: { ...existing, [field]: value }
+      };
+    });
+  };
+
+  const handleSaveAll = async () => {
+    const updates = Object.values(changedItems);
+    if (updates.length === 0) {
+      toast.error("لا توجد تعديلات لحفظها");
+      return;
+    }
+
+    setIsSaving(true);
+    const res = await bulkUpdateMenuItems(updates);
+    setIsSaving(false);
+
+    if (res.error) {
+      toast.error(res.error);
+    } else {
+      toast.success(`تم حفظ تعديلات ${updates.length} منتج بنجاح`);
+      setChangedItems({});
+      router.refresh(); // Refresh parent table data
+      onClose(); // Close the modal
+    }
   };
 
   const filteredItems = items.filter(item => {
@@ -218,6 +251,8 @@ export function BulkEditModal({
 
   if (!isOpen) return null;
 
+  const changesCount = Object.keys(changedItems).length;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-sm animate-fade-in">
       <div className="bg-white rounded-[32px] shadow-2xl w-full max-w-7xl h-[90vh] flex flex-col overflow-hidden">
@@ -227,15 +262,37 @@ export function BulkEditModal({
           <div>
             <h2 className="text-2xl font-bold text-surface-950">التعديل السريع للمنتجات</h2>
             <p className="text-sm text-surface-500 mt-1">
-              قم بتعديل الاسم، السعر، القسم، أو اسحب وأفلت الصور ليتم الحفظ فوراً بدون الحاجة لزر حفظ.
+              قم بتعديل الأسعار والأقسام للعديد من المنتجات معاً ثم اضغط على حفظ الكل. الصور يتم تحديثها فوراً عند سحبها.
             </p>
           </div>
-          <button 
-            onClick={onClose}
-            className="w-12 h-12 flex items-center justify-center rounded-full bg-surface-100 text-surface-600 hover:bg-surface-200 transition-colors"
-          >
-            <X className="w-6 h-6" />
-          </button>
+          
+          <div className="flex items-center gap-4">
+            {changesCount > 0 && (
+              <button
+                onClick={handleSaveAll}
+                disabled={isSaving}
+                className="flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-[20px] transition-colors disabled:opacity-50"
+              >
+                {isSaving ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <Save className="w-5 h-5" />
+                )}
+                حفظ التعديلات ({changesCount})
+              </button>
+            )}
+            <button 
+              onClick={() => {
+                if (changesCount > 0) {
+                  if(!confirm("توجد تعديلات غير محفوظة، هل أنت متأكد من الإغلاق؟")) return;
+                }
+                onClose();
+              }}
+              className="w-12 h-12 flex items-center justify-center rounded-full bg-surface-100 text-surface-600 hover:bg-surface-200 transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
         </div>
 
         {/* Filters */}
@@ -291,6 +348,8 @@ export function BulkEditModal({
                     key={item.id} 
                     item={item as any} 
                     categories={categories} 
+                    onChange={(field, value) => handleRowChange(item.id, field, value)}
+                    hasChanged={!!changedItems[item.id]}
                   />
                 ))}
               </tbody>
