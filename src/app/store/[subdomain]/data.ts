@@ -44,6 +44,7 @@ export async function getStoreInfo(subdomain: string) {
       hideProductDescription: true,
       hideProductAddButton: true,
       showFloatingIcons: true,
+      showWatermark: true,
       showBanners: true,
       showHero: true,
       enableLandingPage: true,
