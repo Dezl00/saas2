@@ -1,22 +1,32 @@
 "use client";
 
 import { useState, useOptimistic, useTransition } from "react";
-import { Trash2, AlertTriangle, Loader2, User, Phone, Mail } from "lucide-react";
-import { toggleStoreStatus } from "../new/actions/toggle-store-status"; // We'll export it from new/actions.ts for now
+import { Trash2, AlertTriangle, Loader2, User, Phone, Mail, Megaphone, MegaphoneOff } from "lucide-react";
+import { toggleStoreStatus } from "../new/actions/toggle-store-status";
+import { toggleStoreWatermark } from "../actions/toggle-store-watermark";
 
 interface StoreActionsProps {
   storeId: string;
   storeName: string;
   status: "ACTIVE" | "SUSPENDED" | "DELETED";
   ownerInfo: { name: string; email: string; phone: string };
+  showWatermark: boolean;
 }
 
-export function StoreActions({ storeId, storeName, status, ownerInfo }: StoreActionsProps) {
+export function StoreActions({ storeId, storeName, status, ownerInfo, showWatermark }: StoreActionsProps) {
   const [isPending, startTransition] = useTransition();
+  const [isWatermarkPending, startWatermarkTransition] = useTransition();
+  
   const [optimisticStatus, addOptimisticStatus] = useOptimistic(
     status,
     (state: string, newStatus: string) => newStatus as "ACTIVE" | "SUSPENDED" | "DELETED"
   );
+  
+  const [optimisticWatermark, addOptimisticWatermark] = useOptimistic(
+    showWatermark,
+    (state: boolean, newValue: boolean) => newValue
+  );
+
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showOwnerModal, setShowOwnerModal] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState("");
@@ -28,6 +38,14 @@ export function StoreActions({ storeId, storeName, status, ownerInfo }: StoreAct
     startTransition(async () => {
       addOptimisticStatus(isActive ? "SUSPENDED" : "ACTIVE");
       await toggleStoreStatus(storeId, newStatus);
+    });
+  };
+  
+  const handleToggleWatermark = () => {
+    startWatermarkTransition(async () => {
+      const newValue = !optimisticWatermark;
+      addOptimisticWatermark(newValue);
+      await toggleStoreWatermark(storeId, newValue);
     });
   };
 
@@ -43,6 +61,24 @@ export function StoreActions({ storeId, storeName, status, ownerInfo }: StoreAct
 
   return (
     <div className="flex items-center gap-4">
+      {/* Watermark/Ad Toggle Button */}
+      <button
+        onClick={handleToggleWatermark}
+        disabled={isWatermarkPending}
+        className={`p-2 rounded-[24px] hover:bg-surface-50 transition-colors ${
+          optimisticWatermark ? 'text-primary-600' : 'text-surface-800/30'
+        }`}
+        title={optimisticWatermark ? "إلغاء إعلان المنصة" : "تفعيل إعلان المنصة"}
+      >
+        {isWatermarkPending ? (
+          <Loader2 className="w-5 h-5 animate-spin" />
+        ) : optimisticWatermark ? (
+          <Megaphone className="w-5 h-5" />
+        ) : (
+          <MegaphoneOff className="w-5 h-5" />
+        )}
+      </button>
+
       {/* Toggle Switch */}
       <button
         onClick={handleToggle}

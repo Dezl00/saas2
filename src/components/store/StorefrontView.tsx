@@ -219,7 +219,7 @@ export function StorefrontView({
 
       {/* Featured Products Section */}
       {menuItems.some(item => item.isFeatured) && (
-        <div className={`pt-4 pb-2 ${isDarkSolid ? 'bg-[#0a0a0a]' : 'bg-transparent'}`}>
+        <div className={`pt-4 pb-2 bg-transparent`}>
           <div className="px-4 mb-4 flex items-center justify-between">
             <h2 className={`text-xl sm:text-2xl font-black flex items-center gap-2 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-950'}`}>
               <span className="w-1.5 h-6 rounded-full" style={{ backgroundColor: primaryColor }}></span>
@@ -231,10 +231,10 @@ export function StorefrontView({
               <div 
                 key={`featured-${item.id}`}
                 onClick={() => handleOpenProduct(item)}
-                className="relative snap-start shrink-0 w-[85vw] max-w-[400px] cursor-pointer transition-all group flex flex-row items-stretch bg-transparent min-h-[140px] sm:min-h-[160px]"
+                className="relative snap-start shrink-0 w-[85vw] max-w-[400px] cursor-pointer transition-all group flex flex-row items-stretch bg-transparent min-h-[160px] sm:min-h-[180px]"
               >
                 {/* Featured Badge (Stuck to corner) */}
-                <div className="absolute top-0 start-0 z-10 rounded-ee-2xl rounded-ss-[24px] inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-[10px] sm:text-xs font-black shadow-sm" style={{ backgroundColor: primaryColor }}>
+                <div className="absolute top-0 start-0 z-10 rounded-ee-2xl inline-flex items-center gap-1.5 px-3 py-1.5 text-white text-[10px] sm:text-xs font-black shadow-sm" style={{ backgroundColor: primaryColor }}>
                   <span className="relative flex h-1.5 w-1.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
@@ -244,7 +244,7 @@ export function StorefrontView({
 
                 {/* Content */}
                 <div className="pt-8 pb-3 pe-4 ps-2 sm:ps-4 flex flex-col flex-grow justify-between w-2/3">
-                  <div>
+                  <div className="mt-4">
                     <h3 className={`font-black text-lg sm:text-xl leading-tight line-clamp-2 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-950'}`}>{item.name}</h3>
                     {item.description && (
                       <p className={`text-sm sm:text-base mt-2 line-clamp-2 ${isDarkSolid ? 'text-surface-400' : 'text-surface-500'}`}>{item.description}</p>
@@ -407,7 +407,7 @@ export function StorefrontView({
                       key={item.id} 
                       onClick={() => handleOpenProduct(item)}
                       className={`flex flex-col border rounded-2xl overflow-hidden cursor-pointer transition-all group hover:shadow-sm ${
-                        isDarkSolid ? 'bg-[#0a0a0a]' : 'bg-white border-surface-100 hover:border-surface-200'
+                        isDarkSolid ? 'bg-transparent' : 'bg-white border-surface-100 hover:border-surface-200'
                       }`}
                       style={isDarkSolid ? { borderColor: primaryColor } : undefined}
                     >

@@ -136,6 +136,7 @@ export default async function AdminStoresPage(props: { searchParams: Promise<{ s
                   storeName={store.name} 
                   status={store.status} 
                   ownerInfo={{ name: store.user.name, email: store.user.email, phone: store.user.phone || '' }} 
+                  showWatermark={store.showWatermark}
                 />
               </div>
             </div>

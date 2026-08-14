@@ -196,17 +196,19 @@ export default async function StoreLayout({
         </main>
 
         {/* Promo Banner */}
-        <div className="max-w-5xl mx-auto px-4 mt-16">
-          <div className="bg-[#2563eb] rounded-3xl p-8 text-center text-white flex flex-col items-center">
-            <h3 className="text-2xl font-bold mb-2 text-white">هل تمتلك مطعماً أو متجراً؟</h3>
-            <p className="text-blue-100 mb-6 max-w-lg">
-              أنشئ متجرك الإلكتروني الخاص في دقائق وابدأ في استقبال الطلبات عبر الواتساب مباشرة وبدون عمولات!
-            </p>
-            <a href="https://almenu.pro" target="_blank" className="bg-white text-[#2563eb] font-bold py-3 px-8 rounded-2xl hover:bg-surface-50 transition-colors">
-              أنشئ متجرك مجاناً
-            </a>
+        {store.showWatermark !== false && (
+          <div className="max-w-5xl mx-auto px-4 mt-16">
+            <div className="bg-[#2563eb] rounded-3xl p-8 text-center text-white flex flex-col items-center">
+              <h3 className="text-2xl font-bold mb-2 text-white">هل تمتلك مطعماً أو متجراً؟</h3>
+              <p className="text-blue-100 mb-6 max-w-lg">
+                أنشئ متجرك الإلكتروني الخاص في دقائق وابدأ في استقبال الطلبات عبر الواتساب مباشرة وبدون عمولات!
+              </p>
+              <a href="https://almenu.pro" target="_blank" className="bg-white text-[#2563eb] font-bold py-3 px-8 rounded-2xl hover:bg-surface-50 transition-colors">
+                أنشئ متجرك مجاناً
+              </a>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Footer */}
         <footer id="store-footer-contact" className={`border-t mt-12 py-10 ${isDarkSolid ? 'bg-[#0a0a0a] border-[#222]' : 'bg-surface-50 border-surface-100'}`}>
