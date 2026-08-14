@@ -327,11 +327,11 @@ export function StorefrontView({
           {categories.filter(cat => menuItems.some(item => item.categoryId === cat.id)).map((cat) => (
             <button
               key={cat.id}
-              id={`tab-${cat.name.replace(/\s+/g, '-')}`}
+              id={`tab-${cat.id}`}
               onClick={() => {
                 isManualScrolling.current = true;
                 setActiveTab(cat.id);
-                document.getElementById(`category-${cat.name.replace(/\s+/g, '-')}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                document.getElementById(`category-${cat.id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
                 
                 if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
                 scrollTimeout.current = setTimeout(() => {
@@ -379,7 +379,7 @@ export function StorefrontView({
             hasAnyResults = true;
 
             return (
-              <div key={category.id} id={`category-${category.name.replace(/\s+/g, '-')}`} className="scroll-mt-36">
+              <div key={category.id} id={`category-${category.id}`} className="scroll-mt-36">
                 <h2 
                   className={`text-2xl p-2 text-center font-bold mb-6 flex items-center justify-center gap-3 ${isDarkSolid ? 'text-[#fff5e5]' : 'rounded-xl'}`}
                   style={isDarkSolid ? {} : { 
