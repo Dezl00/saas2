@@ -14,8 +14,11 @@ import {
   Palette, 
   Settings,
   LogOut, 
-  Home 
+  Home,
+  Menu,
+  X
 } from "lucide-react";
+import { useState, useEffect } from "react";
 
 const navItems = [
   { href: "/admin", icon: LayoutDashboard, label: "الرئيسية" },
@@ -62,38 +65,94 @@ export function AdminNav() {
 
 export function AdminMobileNav() {
   const pathname = usePathname();
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
+
+  // Close the more menu when navigating
+  useEffect(() => {
+    setIsMoreOpen(false);
+  }, [pathname]);
+
+  const mainItems = navItems.slice(0, 4);
+  const moreItems = navItems.slice(4);
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-surface-200 flex items-center justify-around p-2 pb-safe z-50">
-      {navItems.map((item) => {
-        const isActive = item.href === "/admin" ? pathname === item.href : pathname.startsWith(item.href);
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={cn(
-              "flex flex-col items-center gap-1 p-2 transition-colors",
-              isActive ? "text-primary-600" : "text-surface-500 hover:text-primary-600 active:text-primary-600"
-            )}
-          >
-            {item.href === "/admin" ? (
-              <Home className="w-5 h-5" />
-            ) : (
-              <item.icon className="w-5 h-5" />
-            )}
-            <span className={cn("text-[10px]", isActive ? "font-bold" : "font-medium")}>
-              {item.label}
-            </span>
-          </Link>
-        );
-      })}
-      <Link
-        href="/api/auth/signout"
-        className="flex flex-col items-center gap-1 p-2 text-error-500 hover:text-error-600 transition-colors"
-      >
-        <LogOut className="w-5 h-5" />
-        <span className="text-[10px] font-medium">خروج</span>
-      </Link>
-    </nav>
+    <>
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-surface-200 flex items-center justify-around p-2 pb-safe z-[60]">
+        {mainItems.map((item) => {
+          const isActive = item.href === "/admin" ? pathname === item.href : pathname.startsWith(item.href);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "flex flex-col items-center gap-1 p-2 transition-colors",
+                isActive ? "text-primary-600" : "text-surface-500 hover:text-primary-600"
+              )}
+            >
+              {item.href === "/admin" ? (
+                <Home className="w-5 h-5" />
+              ) : (
+                <item.icon className="w-5 h-5" />
+              )}
+              <span className={cn("text-[10px]", isActive ? "font-bold" : "font-medium")}>
+                {item.label}
+              </span>
+            </Link>
+          );
+        })}
+        
+        <button
+          onClick={() => setIsMoreOpen(!isMoreOpen)}
+          className={cn(
+            "flex flex-col items-center gap-1 p-2 transition-colors",
+            isMoreOpen ? "text-primary-600" : "text-surface-500 hover:text-primary-600"
+          )}
+        >
+          {isMoreOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          <span className={cn("text-[10px]", isMoreOpen ? "font-bold" : "font-medium")}>
+            المزيد
+          </span>
+        </button>
+      </nav>
+
+      {/* Overlay and Drawer */}
+      {isMoreOpen && (
+        <div className="md:hidden fixed inset-0 z-[55] flex flex-col justify-end">
+          <div 
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity" 
+            onClick={() => setIsMoreOpen(false)}
+          />
+          <div className="relative bg-white rounded-t-[32px] p-6 pb-24 shadow-2xl animate-slide-up">
+            <div className="w-12 h-1.5 bg-surface-200 rounded-full mx-auto mb-6" />
+            <div className="grid grid-cols-3 gap-4">
+              {moreItems.map((item) => {
+                const isActive = pathname.startsWith(item.href);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                      "flex flex-col items-center justify-center gap-2 p-4 rounded-[20px] text-center transition-colors",
+                      isActive ? "bg-primary-50 text-primary-600 border border-primary-100" : "bg-surface-50 text-surface-600 hover:bg-surface-100 border border-transparent"
+                    )}
+                  >
+                    <item.icon className="w-6 h-6" />
+                    <span className="text-xs font-bold leading-tight">{item.label}</span>
+                  </Link>
+                );
+              })}
+              
+              <Link
+                href="/api/auth/signout"
+                className="flex flex-col items-center justify-center gap-2 p-4 rounded-[20px] text-center bg-error-50 text-error-600 hover:bg-error-100 transition-colors border border-error-100"
+              >
+                <LogOut className="w-6 h-6" />
+                <span className="text-xs font-bold leading-tight">تسجيل الخروج</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
