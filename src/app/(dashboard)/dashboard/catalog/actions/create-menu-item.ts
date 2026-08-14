@@ -101,6 +101,6 @@ export async function createMenuItem(formData: FormData) {
     return { success: "تم إضافة الصنف بنجاح" };
   } catch (error: any) {
     console.error("Create Menu Item Error:", error);
-    return { error: "حدث خطأ أثناء إضافة الصنف: " + (error.message || "") };
+    return { error: "حدث خطأ أثناء إضافة الصنف: " + (error.message || "", "default") };
   }
 }

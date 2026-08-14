@@ -17,6 +17,7 @@ type MenuItem = {
   categoryId: string;
   image: string | null;
   category: { id: string; name: string };
+  sizes?: { id: string; name: string; price: any }[];
 };
 
 type UpdateData = {
@@ -153,17 +154,23 @@ function BulkEditRow({
       </td>
       
       <td className="p-3">
-        <input 
-          type="number" 
-          value={price}
-          onChange={(e) => {
-            setPrice(Number(e.target.value));
-            onChange('price', Number(e.target.value));
-          }}
-          className={`w-full p-2.5 bg-white border-2 rounded-[12px] text-sm font-bold focus:outline-none transition-colors ${
-            hasChanged ? 'border-primary-300 text-primary-900 focus:border-primary-500' : 'border-surface-200 text-surface-900 focus:border-surface-400'
-          }`}
-        />
+        {item.sizes && item.sizes.length > 0 ? (
+          <div className="w-full p-2.5 bg-surface-50 border-2 border-surface-200 rounded-[12px] text-sm font-bold text-surface-400 cursor-not-allowed text-center" title="هذا المنتج متعدد الأحجام، السعر يعدل من داخل المنتج">
+            متعدد الأحجام
+          </div>
+        ) : (
+          <input 
+            type="number" 
+            value={price}
+            onChange={(e) => {
+              setPrice(Number(e.target.value));
+              onChange('price', Number(e.target.value));
+            }}
+            className={`w-full p-2.5 bg-white border-2 rounded-[12px] text-sm font-bold focus:outline-none transition-colors ${
+              hasChanged ? 'border-primary-300 text-primary-900 focus:border-primary-500' : 'border-surface-200 text-surface-900 focus:border-surface-400'
+            }`}
+          />
+        )}
       </td>
     </tr>
   );

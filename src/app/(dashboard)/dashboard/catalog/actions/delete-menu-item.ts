@@ -36,7 +36,7 @@ export async function deleteMenuItem(menuItemId: string, targetStoreId?: string)
     revalidateTag(`store-${storeIdToUse}`, "default");
     return { success: "تم حذف الصنف بنجاح" };
   } catch (error) {
-    console.error("Delete Menu Item Error:", error);
+    console.error("Delete Menu Item Error:", error, "default");
     return { error: "حدث خطأ أثناء حذف الصنف." };
   }
 }

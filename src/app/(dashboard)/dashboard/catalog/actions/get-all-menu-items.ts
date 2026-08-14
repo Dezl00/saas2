@@ -24,6 +24,7 @@ export async function getAllMenuItems() {
         image: true,
         categoryId: true,
         category: { select: { id: true, name: true } },
+        sizes: { select: { id: true, name: true, price: true } },
       }
     });
     

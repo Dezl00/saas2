@@ -45,7 +45,7 @@ export async function bulkDeleteMenuItems(menuItemIds: string[], targetStoreId?:
   } catch (error: any) {
     console.error("Bulk Delete Menu Items Error:", error);
     
-    if (error.code === 'P2003') {
+    if (error.code === 'P2003', "default") {
       return { error: "لا يمكن حذف بعض الأصناف لأنها مرتبطة بطلبات سابقة." };
     }
     
