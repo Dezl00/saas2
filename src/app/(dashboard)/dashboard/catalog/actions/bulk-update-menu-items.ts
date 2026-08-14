@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 type UpdateData = {
   id: string;
@@ -36,6 +36,8 @@ export async function bulkUpdateMenuItems(updates: UpdateData[]) {
     );
 
     revalidatePath("/dashboard/catalog");
+    (revalidateTag as any)(`store-${session.user.storeId}`, "default");
+    (revalidateTag as any)(`store-catalog-v2-${session.user.storeId}`, "default");
     return { success: true };
   } catch (error) {
     console.error("Error in bulkUpdateMenuItems:", error);

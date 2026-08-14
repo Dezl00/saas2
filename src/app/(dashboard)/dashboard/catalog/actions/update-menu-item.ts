@@ -85,7 +85,7 @@ export async function updateMenuItem(menuItemId: string, formData: FormData) {
     if (storeIdToUse === "DEFAULT_STORE") {
       revalidatePath("/admin/default-products");
     } else {
-      revalidatePath("/dashboard/menu");
+      revalidatePath("/dashboard/catalog");
     }
     (revalidateTag as any)(`store-${storeIdToUse}`, "default");
     (revalidateTag as any)(`store-catalog-v2-${storeIdToUse}`, "default");
