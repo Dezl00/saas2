@@ -35,7 +35,7 @@ export default async function OrderDetailsPage(props: { params: Promise<{ orderI
       include: {
         items: true,
         branch: true,
-        deliveryArea: true,
+        deliveryArea: { include: { governorate: { select: { name: true } } } },
       }
     })
   ]);

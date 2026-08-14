@@ -57,8 +57,23 @@ export async function getStoreInfo(subdomain: string) {
         select: { id: true, name: true, address: true, phone: true, whatsappNumber: true, mapUrl: true }
       },
       deliveryAreas: { 
-        where: { isActive: true },
+        where: { isActive: true, governorateId: null },
         select: { id: true, name: true, deliveryFee: true }
+      },
+      deliveryGovernorates: {
+        where: { isActive: true },
+        orderBy: { sortOrder: 'asc' },
+        select: {
+          id: true,
+          name: true,
+          whatsappNumber: true,
+          uniformFee: true,
+          cities: {
+            where: { isActive: true },
+            orderBy: { name: 'asc' },
+            select: { id: true, name: true, deliveryFee: true }
+          }
+        }
       }
     }
   });

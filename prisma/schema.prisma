@@ -174,6 +174,7 @@ model Store {
   paymentMethods PaymentMethod[]
   branches       Branch[]
   deliveryAreas  DeliveryArea[]
+  deliveryGovernorates DeliveryGovernorate[]
   domains        Domain[]
   subscription   Subscription?
   paymentRequests PaymentRequest[]
@@ -226,6 +227,25 @@ model Domain {
   @@index([storeId])
 }
 
+model DeliveryGovernorate {
+  id             String   @id @default(cuid())
+  name           String
+  whatsappNumber String?
+  uniformFee     Decimal? @db.Decimal(10, 2)
+  isActive       Boolean  @default(true)
+  sortOrder      Int      @default(0)
+
+  storeId String
+  store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  cities DeliveryArea[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
+}
+
 model DeliveryArea {
   id          String  @id @default(cuid())
   name        String
@@ -234,12 +254,17 @@ model DeliveryArea {
 
   storeId String
   store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  governorateId String?
+  governorate   DeliveryGovernorate? @relation(fields: [governorateId], references: [id], onDelete: Cascade)
+
   orders  Order[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([storeId])
+  @@index([governorateId])
 }
 
 model PaymentMethod {

@@ -33,7 +33,7 @@ export default async function OrdersPage(props: { searchParams: Promise<{ page?:
     include: {
       items: true,
       branch: true,
-      deliveryArea: true,
+      deliveryArea: { include: { governorate: { select: { name: true } } } },
     },
     skip: (page - 1) * pageSize,
     take: pageSize

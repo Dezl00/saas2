@@ -28,7 +28,7 @@ type OrderListItem = {
 type OrderWithRelations = Order & {
   items: OrderItem[];
   branch: Branch | null;
-  deliveryArea: DeliveryArea | null;
+  deliveryArea: (DeliveryArea & { governorate?: { name: string } | null }) | null;
 };
 
 export function OrderMasterDetail({ 
@@ -154,7 +154,7 @@ export function OrderMasterDetail({
                     <Truck className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="font-bold text-surface-900">توصيل ({selectedOrder.deliveryArea?.name})</p>
+                    <p className="font-bold text-surface-900">توصيل ({selectedOrder.deliveryArea?.governorate?.name ? `${selectedOrder.deliveryArea.governorate.name} - ` : ''}{selectedOrder.deliveryArea?.name})</p>
                     <p className="font-medium text-surface-500 text-sm">{selectedOrder.customerAddress}</p>
                   </div>
                 </div>

@@ -94,6 +94,21 @@ export async function placeOrderAction(formData: FormData) {
       };
     });
 
+    let finalDeliveryFee = 0;
+    if (deliveryType === "DELIVERY" && selectedArea) {
+      const area = await prisma.deliveryArea.findUnique({
+        where: { id: selectedArea },
+        include: { governorate: true }
+      });
+      if (area) {
+        if (area.governorate?.uniformFee !== null && area.governorate?.uniformFee !== undefined) {
+          finalDeliveryFee = Number(area.governorate.uniformFee);
+        } else {
+          finalDeliveryFee = Number(area.deliveryFee);
+        }
+      }
+    }
+
     // Generate a simple sequential order number
     const lastOrder = await prisma.order.findFirst({
       where: { storeId },
@@ -113,8 +128,8 @@ export async function placeOrderAction(formData: FormData) {
         deliveryAreaId: deliveryType === "DELIVERY" && selectedArea ? selectedArea : null,
         branchId: deliveryType === "PICKUP" && selectedBranch ? selectedBranch : null,
         subtotal: calculatedSubtotal,
-        deliveryFee,
-        total: calculatedSubtotal + deliveryFee,
+        deliveryFee: finalDeliveryFee,
+        total: calculatedSubtotal + finalDeliveryFee,
         status: "PENDING",
         paymentMethod: "CASH",
         items: {

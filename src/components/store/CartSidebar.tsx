@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { X, Plus, Minus, ShoppingBag, Truck, Store as StoreIcon, Loader2, Check } from "lucide-react";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { X, Plus, Minus, ShoppingBag, Truck, Store as StoreIcon, Loader2, Check, Search, ChevronDown } from "lucide-react";
 import { useCart } from "./CartProvider";
 import { formatPrice, formatWhatsappNumber } from "@/lib/utils";
 import Image from "next/image";
@@ -10,21 +10,159 @@ import toast from "react-hot-toast";
 
 type Branch = { id: string; name: string; address: string | null; whatsappNumber?: string | null };
 type DeliveryArea = { id: string; name: string; fee: number };
+type DeliveryGovernorate = {
+  id: string;
+  name: string;
+  whatsappNumber: string | null;
+  uniformFee: number | null;
+  cities: DeliveryArea[];
+};
 type StoreData = { id: string; name: string; whatsappNumber: string | null; enableWhatsappOrders: boolean; currency: string; primaryColor?: string | null; theme?: string | null };
+
+// Custom searchable dropdown component
+function SearchableSelect({
+  options,
+  value,
+  onChange,
+  placeholder,
+  isDarkSolid,
+  primaryColor,
+  currency,
+  showFee = true,
+}: {
+  options: DeliveryArea[];
+  value: string;
+  onChange: (val: string) => void;
+  placeholder: string;
+  isDarkSolid: boolean;
+  primaryColor: string;
+  currency?: string;
+  showFee?: boolean;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const filtered = useMemo(() => {
+    if (!search.trim()) return options;
+    const q = search.trim().toLowerCase();
+    return options.filter(o => o.name.toLowerCase().includes(q));
+  }, [options, search]);
+
+  const selectedOption = options.find(o => o.id === value);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+        setSearch("");
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  useEffect(() => {
+    if (isOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isOpen]);
+
+  return (
+    <div ref={containerRef} className="relative">
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className={`w-full p-3 border rounded-xl outline-none transition-colors text-start flex items-center justify-between ${
+          isDarkSolid
+            ? "bg-[#111] border-[#333] text-white"
+            : "bg-white border-surface-200 text-surface-900"
+        }`}
+      >
+        <span className={selectedOption ? "" : (isDarkSolid ? "text-surface-500" : "text-surface-400")}>
+          {selectedOption
+            ? `${selectedOption.name}${showFee ? ` (+${formatPrice(selectedOption.fee, currency)})` : ""}`
+            : placeholder}
+        </span>
+        <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""} ${isDarkSolid ? "text-surface-400" : "text-surface-500"}`} />
+      </button>
+
+      {isOpen && (
+        <div className={`absolute z-50 w-full mt-1 border rounded-xl overflow-hidden ${
+          isDarkSolid ? "bg-[#111] border-[#333]" : "bg-white border-surface-200"
+        }`}>
+          {/* Search input */}
+          {options.length > 5 && (
+            <div className={`p-2 border-b ${isDarkSolid ? "border-[#333]" : "border-surface-100"}`}>
+              <div className={`flex items-center gap-2 px-3 py-2 rounded-lg ${isDarkSolid ? "bg-[#222]" : "bg-surface-50"}`}>
+                <Search className={`w-4 h-4 shrink-0 ${isDarkSolid ? "text-surface-500" : "text-surface-400"}`} />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="ابحث..."
+                  className={`flex-1 bg-transparent text-sm outline-none ${isDarkSolid ? "text-white placeholder:text-surface-500" : "text-surface-900 placeholder:text-surface-400"}`}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Options list */}
+          <div className="max-h-[200px] overflow-y-auto scrollbar-hide">
+            {filtered.length === 0 ? (
+              <div className={`p-3 text-center text-sm ${isDarkSolid ? "text-surface-500" : "text-surface-400"}`}>
+                لا توجد نتائج
+              </div>
+            ) : (
+              filtered.map((option) => (
+                <button
+                  key={option.id}
+                  type="button"
+                  onClick={() => {
+                    onChange(option.id);
+                    setIsOpen(false);
+                    setSearch("");
+                  }}
+                  className={`w-full text-start px-3 py-2.5 text-sm transition-colors flex items-center justify-between ${
+                    value === option.id
+                      ? isDarkSolid ? "bg-primary-900/20 text-white" : "bg-primary-50 text-primary-700"
+                      : isDarkSolid ? "text-surface-300 hover:bg-[#222]" : "text-surface-700 hover:bg-surface-50"
+                  }`}
+                >
+                  <span className="font-medium">{option.name}</span>
+                  {showFee && (
+                    <span className={`text-xs font-bold ${isDarkSolid ? "text-surface-500" : "text-surface-400"}`}>
+                      +{formatPrice(option.fee, currency)}
+                    </span>
+                  )}
+                </button>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function CartSidebar({
   store,
   branches,
-  deliveryAreas
+  deliveryAreas,
+  deliveryGovernorates,
 }: {
   store?: StoreData;
   branches?: Branch[];
   deliveryAreas?: DeliveryArea[];
+  deliveryGovernorates?: DeliveryGovernorate[];
 }) {
   const { items, isCartOpen, setIsCartOpen, updateQuantity, removeItem, total, clearCart } = useCart();
   
   const [isCheckout, setIsCheckout] = useState(false);
   const [deliveryType, setDeliveryType] = useState<"DELIVERY" | "PICKUP">("DELIVERY");
+  const [selectedGovernorate, setSelectedGovernorate] = useState<string>("");
   const [selectedArea, setSelectedArea] = useState<string>("");
   const [selectedBranch, setSelectedBranch] = useState<string>("");
   
@@ -33,6 +171,70 @@ export function CartSidebar({
 
   const isDarkSolid = store?.theme === "dark_solid";
   const primaryColor = store?.primaryColor || "var(--color-primary-600)";
+
+  // Determine if we have the new governorate system
+  const hasGovernorates = deliveryGovernorates && deliveryGovernorates.length > 0;
+  const isSingleGovernorate = hasGovernorates && deliveryGovernorates.length === 1;
+  
+  // Auto-select single governorate
+  useEffect(() => {
+    if (isSingleGovernorate && deliveryGovernorates) {
+      setSelectedGovernorate(deliveryGovernorates[0].id);
+    }
+  }, [isSingleGovernorate, deliveryGovernorates]);
+
+  // Reset city when governorate changes
+  useEffect(() => {
+    setSelectedArea("");
+  }, [selectedGovernorate]);
+
+  // Get current governorate object
+  const currentGovernorate = hasGovernorates
+    ? deliveryGovernorates.find(g => g.id === selectedGovernorate)
+    : null;
+
+  // Get available cities for current governorate
+  const availableCities = currentGovernorate?.cities || [];
+
+  // Calculate delivery fee
+  const deliveryFee = useMemo(() => {
+    if (deliveryType !== "DELIVERY") return 0;
+    
+    // New governorate system
+    if (hasGovernorates && currentGovernorate) {
+      // If governorate has uniform fee, use that
+      if (currentGovernorate.uniformFee !== null) {
+        return currentGovernorate.uniformFee;
+      }
+      // Otherwise use city fee
+      const city = availableCities.find(c => c.id === selectedArea);
+      return city?.fee || 0;
+    }
+    
+    // Legacy flat delivery areas
+    if (selectedArea && deliveryAreas) {
+      return deliveryAreas.find(a => a.id === selectedArea)?.fee || 0;
+    }
+    
+    return 0;
+  }, [deliveryType, hasGovernorates, currentGovernorate, selectedArea, availableCities, deliveryAreas]);
+
+  // Determine which WhatsApp number to use
+  const getTargetWhatsapp = () => {
+    // If a governorate is selected and has a whatsapp number, use it
+    if (hasGovernorates && currentGovernorate?.whatsappNumber) {
+      return currentGovernorate.whatsappNumber;
+    }
+    // If pickup with branch whatsapp
+    if (deliveryType === "PICKUP") {
+      const branchObj = branches?.find(b => b.id === selectedBranch);
+      if (branchObj?.whatsappNumber) return branchObj.whatsappNumber;
+    }
+    // Fallback to store whatsapp
+    return store?.whatsappNumber || null;
+  };
+  
+  const finalTotal = total + deliveryFee;
 
   useEffect(() => {
     const handlePopState = () => {
@@ -52,20 +254,26 @@ export function CartSidebar({
 
   if (!isCartOpen) return null;
 
-  // Calculate final total
-  const deliveryFee = deliveryType === "DELIVERY" && selectedArea 
-    ? (deliveryAreas?.find(a => a.id === selectedArea)?.fee || 0) 
-    : 0;
-  
-  const finalTotal = total + deliveryFee;
-
   const handleSubmitOrder = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!store) return;
 
-    if (deliveryType === "DELIVERY" && !selectedArea && deliveryAreas && deliveryAreas.length > 0) {
-      toast.error("يرجى اختيار منطقة التوصيل");
-      return;
+    // Validate delivery area selection
+    if (deliveryType === "DELIVERY") {
+      if (hasGovernorates) {
+        if (!selectedGovernorate) {
+          toast.error("يرجى اختيار المحافظة");
+          return;
+        }
+        // If no uniform fee, must select city
+        if (currentGovernorate && currentGovernorate.uniformFee === null && !selectedArea && availableCities.length > 0) {
+          toast.error("يرجى اختيار المدينة");
+          return;
+        }
+      } else if (deliveryAreas && deliveryAreas.length > 0 && !selectedArea) {
+        toast.error("يرجى اختيار منطقة التوصيل");
+        return;
+      }
     }
     if (deliveryType === "PICKUP" && !selectedBranch && branches && branches.length > 0) {
       toast.error("يرجى اختيار الفرع");
@@ -91,8 +299,11 @@ export function CartSidebar({
       return;
     }
 
+    // Use the city ID as selectedArea for the order
+    const effectiveAreaId = selectedArea || "";
+    
     formData.append("deliveryType", deliveryType);
-    formData.append("selectedArea", selectedArea);
+    formData.append("selectedArea", effectiveAreaId);
     formData.append("selectedBranch", selectedBranch);
     formData.append("storeId", store.id);
     formData.append("cartItems", JSON.stringify(items));
@@ -115,20 +326,28 @@ export function CartSidebar({
       setIsCheckout(false);
 
       if (store.enableWhatsappOrders) {
-        // Find if branch is selected and has a whatsapp number
-        const selectedBranchObj = deliveryType === "PICKUP" ? branches?.find(b => b.id === selectedBranch) : null;
-        const targetWhatsappNumber = selectedBranchObj?.whatsappNumber || store.whatsappNumber;
+        const targetWhatsappNumber = getTargetWhatsapp();
 
         if (targetWhatsappNumber) {
-          // Redirect to WhatsApp
           const waNumber = formatWhatsappNumber(targetWhatsappNumber);
           let msg = `*طلب جديد من ${store.name}*\n\n`;
           msg += `*الاسم:* ${formData.get("customerName")}\n`;
           msg += `*الهاتف:* ${formData.get("customerPhone")}\n`;
           if (deliveryType === "DELIVERY") {
-            const areaName = deliveryAreas?.find(a=>a.id===selectedArea)?.name;
-            msg += `*التوصيل إلى:* ${areaName ? areaName + ' - ' : ''}${formData.get("customerAddress")}\n`;
+            // Build location string
+            let locationParts: string[] = [];
+            if (hasGovernorates && currentGovernorate) {
+              if (!isSingleGovernorate) locationParts.push(currentGovernorate.name);
+              const cityName = availableCities.find(c => c.id === selectedArea)?.name;
+              if (cityName) locationParts.push(cityName);
+            } else {
+              const areaName = deliveryAreas?.find(a => a.id === selectedArea)?.name;
+              if (areaName) locationParts.push(areaName);
+            }
+            const locationStr = locationParts.length > 0 ? locationParts.join(" - ") + " - " : "";
+            msg += `*التوصيل إلى:* ${locationStr}${formData.get("customerAddress")}\n`;
           } else {
+            const selectedBranchObj = branches?.find(b => b.id === selectedBranch);
             msg += `*استلام من فرع:* ${selectedBranchObj?.name || 'الفرع الرئيسي'}\n`;
           }
           msg += `\n*الطلبات:*\n`;
@@ -150,6 +369,10 @@ export function CartSidebar({
       setIsSubmitting(false);
     }
   };
+
+  // Determine if we need to show delivery area selection at all
+  const hasAnyDeliveryAreas = (hasGovernorates && deliveryGovernorates.some(g => g.cities.length > 0 || g.uniformFee !== null)) || 
+    (deliveryAreas && deliveryAreas.length > 0);
 
   return (
     <>
@@ -272,23 +495,73 @@ export function CartSidebar({
                   </button>
                 </div>
 
-                {deliveryType === "DELIVERY" && deliveryAreas && deliveryAreas.length > 0 && (
-                  <div className="space-y-1">
-                    <label className={`text-sm font-bold ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>اختر منطقة التوصيل *</label>
-                    <select
-                      value={selectedArea}
-                      onChange={(e) => setSelectedArea(e.target.value)}
-                      className={`w-full p-3 border rounded-xl outline-none transition-colors ${isDarkSolid ? 'bg-[#111] border-[#333] text-white focus:border-primary-500' : 'bg-white border-surface-200 focus:border-primary-500 text-surface-900'}`}
-                      style={{ outlineColor: primaryColor }}
-                      required
-                    >
-                      <option value="">-- اختر منطقتك --</option>
-                      {deliveryAreas.map((area) => (
-                        <option key={area.id} value={area.id}>
-                          {area.name} (+{formatPrice(area.fee, store?.currency)})
-                        </option>
-                      ))}
-                    </select>
+                {/* Delivery Area Selection */}
+                {deliveryType === "DELIVERY" && hasAnyDeliveryAreas && (
+                  <div className="space-y-3">
+                    {/* New Governorate System */}
+                    {hasGovernorates && (
+                      <>
+                        {/* Governorate selector - hidden if only one */}
+                        {!isSingleGovernorate && (
+                          <div className="space-y-1">
+                            <label className={`text-sm font-bold ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>اختر المحافظة *</label>
+                            <select
+                              value={selectedGovernorate}
+                              onChange={(e) => setSelectedGovernorate(e.target.value)}
+                              className={`w-full p-3 border rounded-xl outline-none transition-colors ${isDarkSolid ? 'bg-[#111] border-[#333] text-white focus:border-primary-500' : 'bg-white border-surface-200 focus:border-primary-500 text-surface-900'}`}
+                              required
+                            >
+                              <option value="">-- اختر المحافظة --</option>
+                              {deliveryGovernorates.map((gov) => (
+                                <option key={gov.id} value={gov.id}>
+                                  {gov.name}
+                                  {gov.uniformFee !== null ? ` (${formatPrice(gov.uniformFee, store?.currency)})` : ""}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        )}
+
+                        {/* City selector - shown when governorate selected AND no uniform fee */}
+                        {selectedGovernorate && currentGovernorate && currentGovernorate.uniformFee === null && availableCities.length > 0 && (
+                          <div className="space-y-1">
+                            <label className={`text-sm font-bold ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>اختر المدينة *</label>
+                            <SearchableSelect
+                              options={availableCities}
+                              value={selectedArea}
+                              onChange={setSelectedArea}
+                              placeholder="-- اختر المدينة --"
+                              isDarkSolid={isDarkSolid}
+                              primaryColor={primaryColor}
+                              currency={store?.currency}
+                            />
+                          </div>
+                        )}
+
+                        {/* Show uniform fee info */}
+                        {selectedGovernorate && currentGovernorate && currentGovernorate.uniformFee !== null && (
+                          <div className={`p-3 rounded-xl text-sm font-medium ${isDarkSolid ? 'bg-[#111] text-surface-300' : 'bg-surface-50 text-surface-600'}`}>
+                            رسوم التوصيل: <span className="font-bold" style={{ color: primaryColor }}>{formatPrice(currentGovernorate.uniformFee, store?.currency)}</span>
+                          </div>
+                        )}
+                      </>
+                    )}
+
+                    {/* Legacy flat delivery areas (no governorates) */}
+                    {!hasGovernorates && deliveryAreas && deliveryAreas.length > 0 && (
+                      <div className="space-y-1">
+                        <label className={`text-sm font-bold ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>اختر منطقة التوصيل *</label>
+                        <SearchableSelect
+                          options={deliveryAreas}
+                          value={selectedArea}
+                          onChange={setSelectedArea}
+                          placeholder="-- اختر منطقتك --"
+                          isDarkSolid={isDarkSolid}
+                          primaryColor={primaryColor}
+                          currency={store?.currency}
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -363,7 +636,7 @@ export function CartSidebar({
                 <span>المجموع</span>
                 <span>{formatPrice(total, store?.currency)}</span>
               </div>
-              {deliveryType === "DELIVERY" && selectedArea && (
+              {deliveryType === "DELIVERY" && deliveryFee > 0 && (
                 <div className={`flex justify-between text-sm ${isDarkSolid ? 'text-surface-400' : 'text-surface-600'}`}>
                   <span>رسوم التوصيل</span>
                   <span>{formatPrice(deliveryFee, store?.currency)}</span>

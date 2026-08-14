@@ -389,6 +389,13 @@ export default async function StoreLayout({
             }}
             branches={store.branches}
             deliveryAreas={store.deliveryAreas.map(a => ({ id: a.id, name: a.name, fee: Number(a.deliveryFee) }))}
+            deliveryGovernorates={store.deliveryGovernorates.map(g => ({
+              id: g.id,
+              name: g.name,
+              whatsappNumber: g.whatsappNumber,
+              uniformFee: g.uniformFee ? Number(g.uniformFee) : null,
+              cities: g.cities.map(c => ({ id: c.id, name: c.name, fee: Number(c.deliveryFee) }))
+            }))}
           />
 
           {/* Push Notification Popup */}
