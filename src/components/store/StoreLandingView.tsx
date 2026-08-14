@@ -74,7 +74,11 @@ export function StoreLandingView({ store, categories, subdomain }: { store: Stor
       {/* Categories Grid */}
       <section className="flex-1 py-8 sm:py-12 px-2 sm:px-4 max-w-5xl mx-auto w-full">
         <div className="text-center mb-8 sm:mb-10">
-          <h2 className={`text-2xl sm:text-3xl font-bold mb-2 ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>- الأقسام -</h2>
+          <h2 className={`text-2xl sm:text-3xl font-bold mb-2 flex items-center justify-center gap-2 ${isDarkSolid ? 'text-white' : 'text-surface-950'}`}>
+            <span style={{ color: primaryColor }}>-</span>
+            الأقسام
+            <span style={{ color: primaryColor }}>-</span>
+          </h2>
           <p className={`text-sm sm:text-base ${isDarkSolid ? 'text-surface-400' : 'text-surface-500'}`}>تشكيلة متنوعة من أشهى الأصناف</p>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-8">
@@ -84,7 +88,7 @@ export function StoreLandingView({ store, categories, subdomain }: { store: Stor
             <Link 
               key={cat.id} 
               href={`/menu#category-${cat.name.replace(/\s+/g, '-')}`}
-              className="flex flex-col items-center group p-3 sm:p-5 rounded-[20px] sm:rounded-[24px] border-2 transition-all hover:shadow-md"
+              className="flex flex-col items-center group p-3 sm:p-5 rounded-[20px] sm:rounded-[24px] border transition-all hover:shadow-md"
               style={{ borderColor: primaryColor }}
             >
               <div 

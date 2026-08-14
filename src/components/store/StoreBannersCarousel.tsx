@@ -62,7 +62,7 @@ export function StoreBannersCarousel({ banners }: Props) {
               className={`h-2 rounded-full transition-all duration-300 ${
                 index === selectedIndex ? "w-6" : "w-2 bg-surface-300"
               }`}
-              style={index === selectedIndex ? { backgroundColor: 'var(--store-primary, #db9434)' } : {}}
+              style={index === selectedIndex ? { backgroundColor: 'var(--color-primary-600, #db9434)' } : {}}
             />
           ))}
         </div>

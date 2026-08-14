@@ -220,13 +220,13 @@ export function StorefrontView({
       {/* Featured Products Section */}
       {menuItems.some(item => item.isFeatured) && (
         <div className={`pt-4 pb-2 bg-transparent`}>
-          <div className="px-4 mb-4 flex items-center justify-between">
+          <div className="mb-4 flex items-center justify-between">
             <h2 className={`text-xl sm:text-2xl font-black flex items-center gap-2 ${isDarkSolid ? 'text-[#fff5e5]' : 'text-surface-950'}`}>
               <span className="w-1.5 h-6 rounded-full" style={{ backgroundColor: primaryColor }}></span>
               المنتجات المميزة
             </h2>
           </div>
-          <div className="px-4 pb-4 overflow-x-auto snap-x snap-mandatory flex gap-4 [-ms-overflow-style:'none'] [scrollbar-width:'none'] [&::-webkit-scrollbar]:hidden">
+          <div className="pb-4 overflow-x-auto snap-x snap-mandatory flex gap-4 -mx-4 px-4 [-ms-overflow-style:'none'] [scrollbar-width:'none'] [&::-webkit-scrollbar]:hidden">
             {menuItems.filter(i => i.isFeatured).map(item => (
               <div 
                 key={`featured-${item.id}`}
@@ -300,9 +300,9 @@ export function StorefrontView({
       )}
 
       {/* Toolbar: Search + Tabs */}
-      <div className={`sticky top-14 z-20 flex flex-col ${isDarkSolid ? 'bg-black border-[#222]' : 'bg-white border-surface-100'} border-b`}>
+      <div className={`sticky top-14 z-20 flex flex-col ${isDarkSolid ? 'bg-black border-[#222]' : 'bg-white border-surface-100'} border-b -mx-4 px-4`}>
         {/* Search Bar */}
-        <div className={`px-4 py-3 flex items-center ${isDarkSolid ? 'border-[#222]' : 'border-surface-100'} border-b`}>
+        <div className={`py-3 flex items-center ${isDarkSolid ? 'border-[#222]' : 'border-surface-100'} border-b`}>
           <div className="flex-1 flex items-center gap-2">
             <div className={`flex-1 flex items-center gap-2 rounded-full px-4 py-2 border ${isDarkSolid ? 'bg-[#111] border-[#333]' : 'bg-surface-50 border-surface-200'}`}>
               <Search className={`w-5 h-5 shrink-0 ${isDarkSolid ? 'text-surface-400' : 'text-surface-400'}`} />
@@ -326,7 +326,7 @@ export function StorefrontView({
         </div>
 
         {/* Categories Tabs - Scrollable */}
-        <div className="px-4 py-2.5 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] flex items-center gap-2">
+        <div className="py-2.5 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] flex items-center gap-2">
           {categories.filter(cat => menuItems.some(item => item.categoryId === cat.id)).map((cat) => (
             <button
               key={cat.id}
