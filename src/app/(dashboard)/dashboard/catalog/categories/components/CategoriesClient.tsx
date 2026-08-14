@@ -178,8 +178,8 @@ export function CategoriesClient({ initialCategories, storeId }: CategoriesClien
               {editCategoryData?.image && (
                 <div className="mb-3">
                   <span className="block text-xs text-surface-500 mb-2">الصورة الحالية:</span>
-                  <div className="relative w-16 h-16 rounded-[16px] overflow-hidden border border-surface-200">
-                    <Image src={editCategoryData.image} alt={editCategoryData.name} fill className="object-cover" />
+                  <div className="relative w-16 h-16 rounded-[16px] overflow-hidden">
+                    <Image src={editCategoryData.image} alt={editCategoryData.name} fill className="object-contain" />
                   </div>
                 </div>
               )}
@@ -248,11 +248,13 @@ export function CategoriesClient({ initialCategories, storeId }: CategoriesClien
 
                           <div className="flex items-start justify-between mb-4 pr-1 pl-10">
                             <div className="flex items-start gap-3 flex-1 min-w-0">
-                              <div className="shrink-0 relative w-16 h-16 rounded-full overflow-hidden border-2 border-surface-200 bg-surface-50 flex items-center justify-center">
+                              <div className="shrink-0 relative w-16 h-16 rounded-full overflow-hidden flex items-center justify-center">
                                 {category.image ? (
-                                  <Image src={category.image} alt={category.name} fill className="object-cover" />
+                                  <Image src={category.image} alt={category.name} fill className="object-contain" />
                                 ) : (
-                                  <ImageIcon className="w-6 h-6 text-surface-300" />
+                                  <div className="w-full h-full border-2 border-surface-200 bg-surface-50 rounded-full flex items-center justify-center">
+                                    <ImageIcon className="w-6 h-6 text-surface-300" />
+                                  </div>
                                 )}
                               </div>
 

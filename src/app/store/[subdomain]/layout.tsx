@@ -68,7 +68,7 @@ export async function generateMetadata(props: { params: Promise<{ subdomain: str
   if (!store) return { title: "المتجر غير موجود" };
 
   const description = store.description || `اطلب الآن من ${store.name}`;
-  const image = (store as any).cover || store.logo || "/favicon.ico";
+  const image = store.logo || "/favicon.ico";
   const icon = store.favicon || store.logo || "/favicon.ico";
 
   return {
