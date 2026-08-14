@@ -4,7 +4,7 @@ import { Breadcrumb } from "@/components/dashboard/Breadcrumb";
 import { Plus, PackageSearch, Store, Pencil } from "lucide-react";
 import { MenuItemForm } from "@/components/dashboard/MenuItemForm";
 import { AIMenuScanner } from "@/components/dashboard/AIMenuScanner";
-import { MenuItemsGrid } from "@/components/dashboard/MenuItemsGrid";
+import { MenuItemsTable } from "@/components/dashboard/MenuItemsTable";
 import { SubmitButton } from "@/components/dashboard/SubmitButton";
 import { DeleteConfirmButton } from "@/components/dashboard/DeleteConfirmButton";
 import { DefaultCategoryForm } from "./DefaultCategoryForm";
@@ -155,7 +155,7 @@ export default async function DefaultProductsPage(props: {
 
             {/* قائمة الأصناف */}
             <div className="xl:col-span-2">
-              <MenuItemsGrid 
+              <MenuItemsTable 
                 storeId="DEFAULT_STORE"
                 menuItems={menuItems} 
                 categories={categories.map(c => ({ id: c.id, name: c.name }))} 
