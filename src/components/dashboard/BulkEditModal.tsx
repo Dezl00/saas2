@@ -266,7 +266,7 @@ export function BulkEditModal({
   const changesCount = Object.keys(changedItems).length;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 animate-fade-in">
       <div className="bg-white rounded-[32px] shadow-2xl w-full max-w-7xl h-[90vh] flex flex-col overflow-hidden">
         
         {/* Header */}

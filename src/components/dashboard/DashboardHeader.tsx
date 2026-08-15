@@ -16,7 +16,7 @@ export function DashboardHeader({ userName, isAdminImpersonating = false }: Dash
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 md:right-64 z-20 bg-white/80 backdrop-blur-md border-b border-surface-100 h-16 flex items-center justify-between px-4 md:px-8">
+      <header className="fixed top-0 left-0 right-0 md:right-64 z-20 bg-white/80 border-b border-surface-100 h-16 flex items-center justify-between px-4 md:px-8">
         {/* Global Search */}
         <div className="flex-1 max-w-xl">
           <div className="relative group w-full md:w-96">

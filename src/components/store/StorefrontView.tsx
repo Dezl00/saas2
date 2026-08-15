@@ -309,7 +309,7 @@ export function StorefrontView({
                     </div>
                   )}
                   {!item.isAvailable && (
-                    <div className="absolute inset-0 bg-white/70 backdrop-blur-[2px] flex items-center justify-center z-10">
+                    <div className="absolute inset-0 bg-white/70 ] flex items-center justify-center z-10">
                       <span className="bg-black text-white px-2 py-1 rounded-full text-[10px] font-bold shadow-sm">نفدت</span>
                     </div>
                   )}
@@ -459,7 +459,7 @@ export function StorefrontView({
                               </div>
                             )}
                             {!item.isAvailable && (
-                              <div className="absolute inset-0 bg-white/70 backdrop-blur-[2px] flex items-center justify-center">
+                              <div className="absolute inset-0 bg-white/70 ] flex items-center justify-center">
                                 <span className="bg-black text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm">نفدت الكمية</span>
                               </div>
                             )}
@@ -571,7 +571,7 @@ export function StorefrontView({
               )}
               <button 
                 onClick={closeProductModal}
-                className="absolute top-3 end-3 w-8 h-8 bg-black/40 backdrop-blur-sm rounded-full text-white flex items-center justify-center hover:bg-black/60 transition-colors"
+                className="absolute top-3 end-3 w-8 h-8 bg-black/40 rounded-full text-white flex items-center justify-center hover:bg-black/60 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>

@@ -407,7 +407,7 @@ export function AppearanceClient({
                             setDeletingBannerId(null);
                           }
                         }}
-                        className="bg-white/20 hover:bg-white text-white hover:text-red-500 backdrop-blur-sm p-3 rounded-xl transition-colors disabled:opacity-50"
+                        className="bg-white/20 hover:bg-white text-white hover:text-red-500 p-3 rounded-xl transition-colors disabled:opacity-50"
                       >
                         {deletingBannerId === banner.id ? <Loader2 className="w-5 h-5 animate-spin" /> : <Trash2 className="w-5 h-5" />}
                       </button>
@@ -479,7 +479,7 @@ export function AppearanceClient({
                           const fileInput = document.querySelector('input[name="landingHeroImageFile"]') as HTMLInputElement;
                           if (fileInput) fileInput.value = "";
                         }}
-                        className="bg-white/20 hover:bg-white text-white hover:text-red-500 backdrop-blur-sm px-4 py-2 rounded-xl text-sm font-bold transition-colors"
+                        className="bg-white/20 hover:bg-white text-white hover:text-red-500 px-4 py-2 rounded-xl text-sm font-bold transition-colors"
                       >
                         حذف الصورة
                       </button>

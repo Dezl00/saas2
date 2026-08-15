@@ -39,7 +39,7 @@ export function ChangeUserPasswordButton({ userId, userName }: { userId: string,
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" dir="rtl">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4" dir="rtl">
           <div className="bg-white rounded-2xl w-full max-w-sm shadow-xl animate-fade-in overflow-hidden">
             <div className="p-4 border-b border-surface-200 flex items-center justify-between">
               <h3 className="font-bold text-surface-950">تغيير كلمة المرور</h3>

@@ -170,7 +170,7 @@ export function StoreHeader({ logo, storeName, primaryColor, theme, socialLinks,
 
   return (
     <>
-      <header className={`sticky top-0 z-50 backdrop-blur-md border-b ${isDarkSolid ? 'bg-black/95 border-[#222]' : 'bg-white/95 border-surface-100'}`}>
+      <header className={`sticky top-0 z-50 border-b ${isDarkSolid ? 'bg-black/95 border-[#222]' : 'bg-white/95 border-surface-100'}`}>
         <div className="max-w-5xl mx-auto px-4 h-14 relative flex items-center justify-between">
           {/* Right side: Hamburger */}
           <div className="flex items-center" ref={menuRef}>

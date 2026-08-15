@@ -40,7 +40,7 @@ export function EditBranchModal({ branch }: { branch: Branch }) {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fade-in" onClick={(e) => { if (e.target === e.currentTarget) setIsOpen(false); }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 animate-fade-in" onClick={(e) => { if (e.target === e.currentTarget) setIsOpen(false); }}>
           <div className="bg-white rounded-[32px] w-[90%] max-w-lg overflow-hidden shadow-xl animate-zoom-in">
             <div className="p-6 border-b border-surface-100 flex items-center justify-between">
               <h3 className="text-xl font-bold text-surface-950">تعديل الفرع</h3>

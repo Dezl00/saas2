@@ -90,8 +90,8 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
   return (
     <form id="menuItemForm" onSubmit={handleSubmit} className="space-y-6">
       {storeId && <input type="hidden" name="storeId" value={storeId} />}
-      <div className="space-y-5">
-        <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div className="sm:col-span-1">
           <label htmlFor="categoryId" className="block text-sm font-bold text-surface-950 mb-2">القسم *</label>
           <select
             id="categoryId"
@@ -107,7 +107,7 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
           </select>
         </div>
 
-        <div>
+        <div className="sm:col-span-1">
           <label htmlFor="name" className="block text-sm font-bold text-surface-950 mb-2">اسم الصنف *</label>
           <input
             type="text"
@@ -120,9 +120,9 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
           />
         </div>
 
-        <div>
+        <div className="sm:col-span-1">
           <label htmlFor="price" className="block text-sm font-bold text-surface-950 mb-2">
-            السعر الأساسي * <span className="text-xs font-normal text-surface-500">(سيتم استخدامه إذا لم يقم باختيار حجم)</span>
+            السعر الأساسي * <span className="text-xs font-normal text-surface-500">(بشكل افتراضي)</span>
           </label>
           <input
             type="number"
@@ -135,25 +135,25 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
             className="w-full px-4 py-3 bg-surface-50 border-2 border-surface-200 rounded-[24px] text-surface-950 font-bold focus:border-primary-500 outline-none transition-colors"
           />
         </div>
-
-        <div>
+        
+        <div className="sm:col-span-1">
           <label htmlFor="description" className="block text-sm font-bold text-surface-950 mb-2">الوصف (اختياري)</label>
           <textarea
             id="description"
             name="description"
-            rows={3}
+            rows={2}
             defaultValue={initialData?.description || ""}
             className="w-full px-4 py-3 bg-surface-50 border-2 border-surface-200 rounded-[24px] text-surface-950 font-medium focus:border-primary-500 outline-none transition-colors resize-none"
           />
         </div>
 
-        <div>
+        <div className="sm:col-span-2">
           <ImageUpload name="image" label="صورة الصنف (اختياري)" defaultValue={initialData?.image} />
         </div>
       </div>
 
       {/* الأحجام */}
-      <div className="border-2 border-surface-100 rounded-[24px] p-5 bg-surface-50 space-y-4">
+      <div className="border-2 border-surface-100 rounded-[24px] p-4 sm:p-5 bg-surface-50 space-y-4">
         <div className="flex items-center justify-between">
           <h4 className="font-bold text-surface-950">الأحجام (اختياري)</h4>
           <button type="button" onClick={addSize} className="text-xs font-bold bg-primary-100 text-primary-700 px-3 py-2 rounded-lg flex items-center gap-1 hover:bg-primary-200 transition-colors">
@@ -161,13 +161,13 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
           </button>
         </div>
         {sizes.map((size, index) => (
-          <div key={index} className="flex flex-wrap sm:flex-nowrap gap-3 items-center bg-white p-2 rounded-[24px] border-2 border-surface-100">
+          <div key={index} className="flex gap-2 w-full bg-white p-2 rounded-[24px] border-2 border-surface-100">
             <input
               type="text"
-              placeholder="اسم الحجم (مثال: كبير)"
+              placeholder="اسم الحجم"
               value={size.name}
               onChange={(e) => updateSize(index, "name", e.target.value)}
-              className="flex-1 px-3 py-2 bg-surface-50 border-2 border-surface-100 rounded-lg focus:border-primary-500 outline-none font-bold text-sm min-w-[120px]"
+              className="flex-1 w-0 px-3 py-2 bg-surface-50 border-2 border-surface-100 rounded-lg focus:border-primary-500 outline-none font-bold text-sm"
               required
             />
             <input
@@ -176,10 +176,10 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
               placeholder="السعر"
               value={size.price}
               onChange={(e) => updateSize(index, "price", e.target.value)}
-              className="w-24 sm:w-32 px-3 py-2 bg-surface-50 border-2 border-surface-100 rounded-lg focus:border-primary-500 outline-none font-bold text-sm"
+              className="w-20 sm:w-28 shrink-0 px-3 py-2 bg-surface-50 border-2 border-surface-100 rounded-lg focus:border-primary-500 outline-none font-bold text-sm"
               required
             />
-            <button type="button" onClick={() => removeSize(index)} className="w-10 h-10 flex items-center justify-center text-error-500 hover:bg-error-50 rounded-lg shrink-0">
+            <button type="button" onClick={() => removeSize(index)} className="w-10 h-10 shrink-0 flex items-center justify-center text-error-500 hover:bg-error-50 rounded-lg">
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -187,7 +187,7 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
       </div>
 
       {/* الإضافات */}
-      <div className="border-2 border-surface-100 rounded-[24px] p-5 bg-surface-50 space-y-4">
+      <div className="border-2 border-surface-100 rounded-[24px] p-4 sm:p-5 bg-surface-50 space-y-4">
         <div className="flex items-center justify-between">
           <h4 className="font-bold text-surface-950">الإضافات (اختياري)</h4>
           <button type="button" onClick={addAddon} className="text-xs font-bold bg-primary-100 text-primary-700 px-3 py-2 rounded-lg flex items-center gap-1 hover:bg-primary-200 transition-colors">
@@ -195,13 +195,13 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
           </button>
         </div>
         {addons.map((addon, index) => (
-          <div key={index} className="flex flex-wrap sm:flex-nowrap gap-3 items-center bg-white p-2 rounded-[24px] border-2 border-surface-100">
+          <div key={index} className="flex gap-2 w-full bg-white p-2 rounded-[24px] border-2 border-surface-100">
             <input
               type="text"
-              placeholder="اسم الإضافة (مثال: جبنة زيادة)"
+              placeholder="اسم الإضافة"
               value={addon.name}
               onChange={(e) => updateAddon(index, "name", e.target.value)}
-              className="flex-1 px-3 py-2 bg-surface-50 border-2 border-surface-100 rounded-lg focus:border-primary-500 outline-none font-bold text-sm min-w-[120px]"
+              className="flex-1 w-0 px-3 py-2 bg-surface-50 border-2 border-surface-100 rounded-lg focus:border-primary-500 outline-none font-bold text-sm"
               required
             />
             <input
@@ -210,10 +210,10 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
               placeholder="السعر"
               value={addon.price}
               onChange={(e) => updateAddon(index, "price", e.target.value)}
-              className="w-24 sm:w-32 px-3 py-2 bg-surface-50 border-2 border-surface-100 rounded-lg focus:border-primary-500 outline-none font-bold text-sm"
+              className="w-20 sm:w-28 shrink-0 px-3 py-2 bg-surface-50 border-2 border-surface-100 rounded-lg focus:border-primary-500 outline-none font-bold text-sm"
               required
             />
-            <button type="button" onClick={() => removeAddon(index)} className="w-10 h-10 flex items-center justify-center text-error-500 hover:bg-error-50 rounded-lg shrink-0">
+            <button type="button" onClick={() => removeAddon(index)} className="w-10 h-10 shrink-0 flex items-center justify-center text-error-500 hover:bg-error-50 rounded-lg">
               <X className="w-5 h-5" />
             </button>
           </div>

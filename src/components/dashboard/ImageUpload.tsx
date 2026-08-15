@@ -118,7 +118,7 @@ export function ImageUpload({ name, defaultValue, className = "", label = "اخ�
         {preview ? (
           <div className="relative w-full h-48 group rounded-[24px] overflow-hidden border-2 border-surface-200 bg-white">
             <Image src={preview} alt="Preview" fill className="object-contain" unoptimized />
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center ">
               <span className="text-white font-bold text-sm">تغيير الصورة</span>
             </div>
             <button 

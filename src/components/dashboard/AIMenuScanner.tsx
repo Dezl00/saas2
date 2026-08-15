@@ -226,7 +226,7 @@ export function AIMenuScanner({ storeId }: { storeId?: string }) {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 animate-fade-in">
           <div className="bg-white w-full max-w-2xl max-h-[90vh] flex flex-col rounded-[32px] border-2 border-surface-200 overflow-hidden animate-zoom-in">
             <div className="px-6 py-5 border-b-2 border-surface-100 flex items-center justify-between bg-surface-50 shrink-0">
               <h3 className="text-xl font-black text-surface-950 flex items-center gap-2">
@@ -282,7 +282,7 @@ export function AIMenuScanner({ storeId }: { storeId?: string }) {
                     )}
                     
                     {isScanning && (
-                      <div className="absolute inset-0 bg-primary-900/60 backdrop-blur-sm flex flex-col items-center justify-center text-white p-6 text-center">
+                      <div className="absolute inset-0 bg-primary-900/60 flex flex-col items-center justify-center text-white p-6 text-center">
                         <div className="relative">
                           <div className="w-16 h-16 rounded-full border-4 border-primary-300/30 border-t-primary-400 animate-spin mb-4" />
                           <div className="absolute inset-0 flex items-center justify-center">

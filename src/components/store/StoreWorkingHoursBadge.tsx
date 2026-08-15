@@ -97,8 +97,8 @@ export function StoreWorkingHoursBadge({ workingHours, primaryColor, theme, clas
         onClick={() => setIsModalOpen(true)}
         className={`flex items-center justify-center pb-[2px] whitespace-nowrap px-3 sm:px-4 py-1 sm:py-1.5 rounded-full font-bold text-sm sm:text-base border transition-transform hover:scale-105 z-20 ${
           isOpen 
-            ? "bg-success-50/90 text-success-600 border-success-200 backdrop-blur-sm" 
-            : "bg-error-50/90 text-error-600 border-error-200 backdrop-blur-sm"
+            ? "bg-success-50/90 text-success-600 border-success-200 " 
+            : "bg-error-50/90 text-error-600 border-error-200 "
         } ${className || ""}`}
       >
         {isOpen ? "مفتوح" : "مغلق"}

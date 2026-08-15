@@ -155,7 +155,7 @@ export function BannersClient({ initialBanners }: { initialBanners: StoreBanner[
                       <Image src={previewImage} alt="Preview" fill className="object-cover" />
                     </div>
                     <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-[24px] m-2">
-                      <p className="text-white font-bold flex items-center gap-2 bg-black/50 px-4 py-2 rounded-[24px] backdrop-blur-sm">
+                      <p className="text-white font-bold flex items-center gap-2 bg-black/50 px-4 py-2 rounded-[24px] ">
                         <Edit2 className="w-5 h-5" />
                         تغيير الصورة
                       </p>
@@ -256,13 +256,13 @@ export function BannersClient({ initialBanners }: { initialBanners: StoreBanner[
                   <div className="absolute top-4 end-4 flex gap-2">
                     <button
                       onClick={() => handleEdit(banner)}
-                      className="w-9 h-9 bg-white/90 backdrop-blur text-surface-700 hover:text-primary-600 rounded-[24px] flex items-center justify-center  hover: transition-all"
+                      className="w-9 h-9 bg-white/90 text-surface-700 hover:text-primary-600 rounded-[24px] flex items-center justify-center  hover: transition-all"
                     >
                       <Edit2 className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => setDeleteId(banner.id)}
-                      className="w-9 h-9 bg-white/90 backdrop-blur text-surface-700 hover:text-error-600 rounded-[24px] flex items-center justify-center  hover: transition-all"
+                      className="w-9 h-9 bg-white/90 text-surface-700 hover:text-error-600 rounded-[24px] flex items-center justify-center  hover: transition-all"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>

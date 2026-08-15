@@ -84,7 +84,7 @@ export function OnboardingClient({
   return (
     <div className="w-full relative">
       {copied && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-slide-up flex items-center gap-2 px-6 py-3 bg-success-100/90 backdrop-blur-md text-success-700 font-medium rounded-full">
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-slide-up flex items-center gap-2 px-6 py-3 bg-success-100/90 text-success-700 font-medium rounded-full">
           <CheckCircle2 className="w-5 h-5 text-success-600" />
           تم نسخ الرابط بنجاح!
         </div>

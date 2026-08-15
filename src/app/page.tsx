@@ -31,7 +31,7 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen bg-slate-50 selection:bg-primary-200 selection:text-primary-900">
       {/* Navigation */}
-      <nav className="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200 shadow-sm">
+      <nav className="fixed top-0 inset-x-0 z-50 bg-white/80 border-b border-slate-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             <div className="flex items-center gap-3">

@@ -36,6 +36,7 @@ export async function getStoreInfo(subdomain: string) {
       showTiktok: true,
       snapchatUrl: true,
       showSnapchat: true,
+      enablePushPopup: true,
       showDefaultProducts: true,
       fontFamily: true,
       workingHours: true,

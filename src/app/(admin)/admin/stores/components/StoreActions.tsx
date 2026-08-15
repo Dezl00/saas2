@@ -107,7 +107,7 @@ export function StoreActions({ storeId, storeName, status, ownerInfo, showWaterm
 
       {/* Owner Info Modal */}
       {showOwnerModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-surface-950/50 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-surface-950/50 ">
           <div className="bg-white rounded-[24px] w-full max-w-sm  p-6 animate-fade-in relative">
             <button onClick={() => setShowOwnerModal(false)} className="absolute top-4 left-4 text-surface-400 hover:text-surface-900">
               ✕
@@ -165,7 +165,7 @@ export function StoreActions({ storeId, storeName, status, ownerInfo, showWaterm
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-surface-950/50 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-surface-950/50 ">
           <div className="bg-white rounded-[24px] w-full max-w-md  p-6 space-y-6 animate-fade-in">
             <div className="flex flex-col items-center text-center space-y-4">
               <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center">

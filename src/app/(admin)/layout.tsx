@@ -81,7 +81,7 @@ export default async function AdminLayout({
       {/* Main Content Area */}
       <div className="flex-1 md:mr-64 flex flex-col min-h-screen relative w-full max-w-full">
         {/* Simple Header with Search */}
-        <header className="fixed top-0 left-0 right-0 md:right-64 z-20 bg-white/80 backdrop-blur-md border-b border-surface-100 h-16 flex items-center justify-between px-4 md:px-8">
+        <header className="fixed top-0 left-0 right-0 md:right-64 z-20 bg-white/80 border-b border-surface-100 h-16 flex items-center justify-between px-4 md:px-8">
           <div className="flex-1 max-w-xl">
             <GlobalSearch />
           </div>

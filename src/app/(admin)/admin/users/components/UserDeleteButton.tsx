@@ -33,7 +33,7 @@ export default function UserDeleteButton({ userId, storeName }: { userId: string
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 ">
           <div className="bg-white rounded-[24px]  max-w-md w-full p-6 animate-zoom-in">
             <h3 className="text-xl font-bold text-red-600 mb-2">حذف نهائي!</h3>
             <p className="text-gray-600 mb-4">

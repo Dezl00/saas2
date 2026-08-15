@@ -119,7 +119,7 @@ export function AdminMobileNav() {
       {isMoreOpen && (
         <div className="md:hidden fixed inset-0 z-[55] flex flex-col justify-end">
           <div 
-            className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity" 
+            className="absolute inset-0 bg-black/40 transition-opacity" 
             onClick={() => setIsMoreOpen(false)}
           />
           <div className="relative bg-white rounded-t-[32px] p-6 pb-24 shadow-2xl animate-slide-up">

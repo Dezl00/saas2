@@ -12,52 +12,34 @@ export const metadata = {
 
 export const maxDuration = 60;
 
-export default async function MenuPage(props: { searchParams: Promise<{ page?: string; edit?: string; category?: string }> }) {
-  const searchParams = await props.searchParams;
-  const page = Number(searchParams.page) || 1;
-  const categoryId = searchParams.category;
-  const pageSize = 12;
-  
+export default async function MenuPage() {
   const session = await auth();
   
   if (!session?.user?.storeId) {
     notFound();
   }
 
-  // Build the where clause based on filters
-  const whereClause: any = { storeId: session.user.storeId };
-  if (categoryId && categoryId !== 'all') {
-    whereClause.categoryId = categoryId;
-  }
-
-  const [totalItems, categories] = await Promise.all([
-    prisma.menuItem.count({ where: whereClause }),
+  const [categories, menuItems] = await Promise.all([
     prisma.category.findMany({
       where: { storeId: session.user.storeId },
       orderBy: { sortOrder: 'asc' }
+    }),
+    prisma.menuItem.findMany({
+      where: { storeId: session.user.storeId },
+      orderBy: [
+        { category: { sortOrder: 'asc' } },
+        { sortOrder: 'asc' },
+        { createdAt: 'desc' }
+      ],
+      include: { category: true, sizes: true, addons: true }
     })
   ]);
-
-  const totalPages = Math.ceil(totalItems / pageSize);
-
-  const menuItems = await prisma.menuItem.findMany({
-    where: whereClause,
-    orderBy: [
-      { category: { sortOrder: 'asc' } },
-      { sortOrder: 'asc' },
-      { createdAt: 'asc' },
-      { id: 'asc' }
-    ],
-    include: { category: true, sizes: true, addons: true },
-    skip: (page - 1) * pageSize,
-    take: pageSize
-  });
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <CategoryFilter categories={categories.map(c => ({ id: c.id, name: c.name }))} />
-        <div className="flex items-center gap-2">
+        {/* We will move the category filter and search into CatalogClient for instant client-side filtering */}
+        <div className="flex items-center gap-2 mr-auto">
           <ImportExportButtons />
           <AIMenuScanner />
         </div>
@@ -67,7 +49,6 @@ export default async function MenuPage(props: { searchParams: Promise<{ page?: s
         menuItems={menuItems} 
         categories={categories.map(c => ({ id: c.id, name: c.name }))} 
         storeId={session.user.storeId} 
-        totalPages={totalPages} 
       />
     </div>
   );

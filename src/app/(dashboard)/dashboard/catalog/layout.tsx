@@ -19,7 +19,7 @@ export default function MenuLayout({
 
   return (
     <div className="max-w-6xl mx-auto pb-10">
-      <div className="sticky top-16 z-10 bg-white/95 backdrop-blur-sm pt-4 pb-4 mb-8 -mx-4 px-4 md:mx-0 md:px-0">
+      <div className="sticky top-16 z-10 bg-white/95 pt-4 pb-4 mb-8 -mx-4 px-4 md:mx-0 md:px-0">
         <div className="flex overflow-x-auto hide-scrollbar">
           <div className="flex w-max min-w-full gap-2">
             {tabs.map((tab) => {

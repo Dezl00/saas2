@@ -167,22 +167,22 @@ export function MenuItemsTable({
       </div>
 
       <div className="bg-white border-2 border-surface-100 rounded-[32px] overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="w-full">
           <table className="w-full text-right">
             <thead>
               <tr className="bg-surface-50 border-b-2 border-surface-100">
-                <th className="px-6 py-4 w-12"></th>
-                <th className="px-6 py-4 text-sm font-bold text-surface-600">المنتج</th>
-                <th className="px-6 py-4 text-sm font-bold text-surface-600">القسم</th>
-                <th className="px-6 py-4 text-sm font-bold text-surface-600">السعر</th>
-                <th className="px-6 py-4 text-sm font-bold text-surface-600">الحالة</th>
-                <th className="px-6 py-4 text-sm font-bold text-surface-600">إجراءات</th>
+                <th className="px-3 md:px-6 py-4 w-10 md:w-12"></th>
+                <th className="px-3 md:px-6 py-4 text-sm font-bold text-surface-600">المنتج</th>
+                <th className="px-3 md:px-6 py-4 text-sm font-bold text-surface-600 hidden lg:table-cell">القسم</th>
+                <th className="px-3 md:px-6 py-4 text-sm font-bold text-surface-600 hidden sm:table-cell">السعر</th>
+                <th className="px-3 md:px-6 py-4 text-sm font-bold text-surface-600 hidden md:table-cell">الحالة</th>
+                <th className="px-3 md:px-6 py-4 text-sm font-bold text-surface-600 w-24">إجراءات</th>
               </tr>
             </thead>
             <tbody className="divide-y-2 divide-surface-100">
               {menuItems.map((item) => (
                 <tr key={item.id} className="hover:bg-surface-50/50 transition-colors">
-                  <td className="px-6 py-4">
+                  <td className="px-3 md:px-6 py-4">
                     <button onClick={() => handleToggleSelect(item.id)} className="text-surface-400 hover:text-primary-600 transition-colors">
                       {selectedItems.includes(item.id) ? (
                         <CheckSquare className="w-5 h-5 text-primary-600" />
@@ -191,36 +191,38 @@ export function MenuItemsTable({
                       )}
                     </button>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-4">
+                  <td className="px-3 md:px-6 py-4">
+                    <div className="flex items-center gap-3">
                       {item.image ? (
-                        <div className="relative w-12 h-12 rounded-[12px] overflow-hidden border-2 border-surface-100 shrink-0">
+                        <div className="relative w-10 h-10 md:w-12 md:h-12 rounded-[10px] md:rounded-[12px] overflow-hidden border-2 border-surface-100 shrink-0">
                           <Image src={item.image} alt={item.name} fill className="object-cover" />
                         </div>
                       ) : (
-                        <div className="w-12 h-12 bg-surface-50 border-2 border-surface-100 rounded-[12px] flex items-center justify-center shrink-0">
-                          <ImageIcon className="w-5 h-5 text-surface-300" />
+                        <div className="w-10 h-10 md:w-12 md:h-12 bg-surface-50 border-2 border-surface-100 rounded-[10px] md:rounded-[12px] flex items-center justify-center shrink-0">
+                          <ImageIcon className="w-4 h-4 md:w-5 md:h-5 text-surface-300" />
                         </div>
                       )}
                       <div>
-                        <h4 className="font-bold text-surface-950 line-clamp-1">{item.name}</h4>
-                        {item.description && <p className="text-xs text-surface-500 line-clamp-1 mt-0.5 max-w-[200px]">{item.description}</p>}
+                        <h4 className="font-bold text-sm md:text-base text-surface-950 line-clamp-1">{item.name}</h4>
+                        <div className="flex items-center gap-2 mt-0.5 md:hidden">
+                           <span className="font-bold text-primary-600 text-xs">{Number(item.price)}</span>
+                        </div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-3 md:px-6 py-4 hidden lg:table-cell">
                     <span className="inline-flex items-center px-3 py-1 rounded-full bg-surface-100 text-surface-700 text-xs font-bold">
                       {item.category?.name || "غير محدد"}
                     </span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-3 md:px-6 py-4 hidden sm:table-cell">
                     <span className="font-bold text-primary-600">{Number(item.price)}</span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-3 md:px-6 py-4 hidden md:table-cell">
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleToggleStatus(item.id, item.isAvailable)}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors shrink-0 ${
                           item.isAvailable ? 'bg-success-500' : 'bg-surface-300'
                         }`}
                       >
@@ -231,7 +233,7 @@ export function MenuItemsTable({
                       <button
                         onClick={() => handleToggleFeatured(item.id, item.isFeatured)}
                         title={item.isFeatured ? "إزالة من الأكثر مبيعاً" : "تعيين كأكثر مبيعاً"}
-                        className={`p-1.5 rounded-full transition-colors ${
+                        className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${
                           item.isFeatured 
                             ? 'bg-warning-50 text-warning-500' 
                             : 'bg-surface-100 text-surface-400 hover:text-warning-500'
@@ -241,8 +243,8 @@ export function MenuItemsTable({
                       </button>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
+                  <td className="px-3 md:px-6 py-4">
+                    <div className="flex items-center gap-1 sm:gap-2">
                       {onEdit ? (
                         <button
                           onClick={(e) => {
@@ -250,7 +252,7 @@ export function MenuItemsTable({
                             onEdit(item);
                           }}
                           title="تعديل"
-                          className="p-2 text-surface-500 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                          className="w-8 h-8 flex items-center justify-center text-surface-500 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors shrink-0"
                         >
                           <Edit3 className="w-4 h-4" />
                         </button>

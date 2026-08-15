@@ -77,7 +77,7 @@ export function ImportPreviewModal({ isOpen, onClose, onConfirm, previewData, is
   const selectedCount = products.filter(p => p.selected).length;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-surface-950/50 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-surface-950/50 animate-fade-in">
       <div className="bg-white rounded-[24px] shadow-2xl w-full max-w-5xl flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b-2 border-surface-100 shrink-0">

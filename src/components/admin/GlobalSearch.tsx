@@ -148,7 +148,7 @@ export function GlobalSearch() {
 
       {/* Store Modal */}
       {mounted && selectedStore && createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-surface-950/50 backdrop-blur-sm">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-surface-950/50 ">
           <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-6 relative animate-fade-in">
             <button onClick={() => setSelectedStore(null)} className="absolute top-4 left-4 text-surface-400 hover:text-surface-900">
               <X className="w-5 h-5" />
@@ -218,7 +218,7 @@ export function GlobalSearch() {
 
       {/* User Modal */}
       {mounted && selectedUser && createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-surface-950/50 backdrop-blur-sm">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-surface-950/50 ">
           <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-6 relative animate-fade-in">
             <button onClick={() => setSelectedUser(null)} className="absolute top-4 left-4 text-surface-400 hover:text-surface-900">
               <X className="w-5 h-5" />
