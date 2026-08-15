@@ -180,16 +180,18 @@ export function BulkEditModal({
   isOpen, 
   onClose,
   categories,
-  storeId
+  storeId,
+  initialItems = []
 }: { 
   isOpen: boolean; 
   onClose: () => void;
   categories: CategoryType[];
   storeId?: string;
+  initialItems?: MenuItem[];
 }) {
   const router = useRouter();
-  const [items, setItems] = useState<MenuItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [items, setItems] = useState<MenuItem[]>(initialItems);
+  const [isLoading, setIsLoading] = useState(initialItems.length === 0);
   const [isSaving, setIsSaving] = useState(false);
   
   // Track changes
@@ -208,7 +210,10 @@ export function BulkEditModal({
   }, [isOpen]);
 
   const fetchItems = async () => {
-    setIsLoading(true);
+    // Only show loading if we don't have initial items
+    if (items.length === 0) {
+      setIsLoading(true);
+    }
     setChangedItems({});
     const res = await getAllMenuItems();
     if (res.items) {

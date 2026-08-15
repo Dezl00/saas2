@@ -6,12 +6,11 @@ import { toggleMenuItemStatus } from "@/app/(dashboard)/dashboard/catalog/action
 import { toggleFeaturedMenuItem } from "@/app/(dashboard)/dashboard/catalog/actions/toggle-featured-menu-item";
 import { deleteMenuItem } from "@/app/(dashboard)/dashboard/catalog/actions/delete-menu-item";
 import { bulkDeleteMenuItems } from "@/app/(dashboard)/dashboard/catalog/actions/bulk-delete-menu-items";
-import { MenuItemEditButton } from "@/components/dashboard/MenuItemEditButton";
-import { DeleteConfirmButton } from "@/components/dashboard/DeleteConfirmButton";
-import toast from "react-hot-toast";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import Image from "next/image";
 import { BulkEditModal } from "./BulkEditModal";
+import { DeleteConfirmButton } from "@/components/dashboard/DeleteConfirmButton";
+import toast from "react-hot-toast";
 
 type MenuItemType = {
   id: string;
@@ -36,11 +35,13 @@ type CategoryType = {
 export function MenuItemsTable({ 
   menuItems: initialMenuItems, 
   categories,
-  storeId
+  storeId,
+  onEdit
 }: { 
   menuItems: MenuItemType[], 
   categories: CategoryType[],
-  storeId?: string 
+  storeId?: string,
+  onEdit?: (item: MenuItemType) => void
 }) {
   const [menuItems, setMenuItems] = useState(initialMenuItems);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
@@ -242,7 +243,18 @@ export function MenuItemsTable({
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
-                      <MenuItemEditButton itemId={item.id} />
+                      {onEdit ? (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onEdit(item);
+                          }}
+                          title="تعديل"
+                          className="p-2 text-surface-500 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                        >
+                          <Edit3 className="w-4 h-4" />
+                        </button>
+                      ) : null}
                       <DeleteConfirmButton action={async () => { await handleDelete(item.id); }} />
                     </div>
                   </td>
@@ -270,6 +282,7 @@ export function MenuItemsTable({
           onClose={() => setShowBulkEditModal(false)}
           categories={categories}
           storeId={storeId}
+          initialItems={menuItems as any}
         />
       )}
     </div>

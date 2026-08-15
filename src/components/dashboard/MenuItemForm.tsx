@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Plus, X, Loader2 } from "lucide-react";
 import { createMenuItem } from "@/app/(dashboard)/dashboard/catalog/actions/create-menu-item";
 import { updateMenuItem } from "@/app/(dashboard)/dashboard/catalog/actions/update-menu-item";
@@ -44,6 +44,8 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
     setAddons(newAddons);
   };
 
+  const [isPending, startTransition] = useTransition();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -52,38 +54,41 @@ export function MenuItemForm({ categories, initialData, onSuccess, storeId }: { 
     formData.append("sizes", JSON.stringify(sizes));
     formData.append("addons", JSON.stringify(addons));
 
-    try {
-      let result;
-      if (initialData) {
-        result = await updateMenuItem(initialData.id, formData);
-      } else {
-        result = await createMenuItem(formData);
-      }
+    startTransition(async () => {
+      try {
+        let result;
+        if (initialData) {
+          result = await updateMenuItem(initialData.id, formData);
+        } else {
+          result = await createMenuItem(formData);
+        }
 
-      if (result?.error) {
-        toast.error(result.error);
+        if (result?.error) {
+          toast.error(result.error);
+          setIsSubmitting(false);
+          return;
+        }
+        
+        toast.success(initialData ? "تم تحديث الصنف بنجاح" : "تمت إضافة الصنف بنجاح");
+        
+        // Reset form after successful submission
+        if (!initialData) {
+          const formElement = document.getElementById("menuItemForm") as HTMLFormElement;
+          if (formElement) formElement.reset();
+          setSizes([]);
+          setAddons([]);
+        }
+        if (onSuccess) onSuccess();
+      } catch (error) {
+        toast.error("حدث خطأ أثناء الحفظ");
+      } finally {
         setIsSubmitting(false);
-        return;
       }
-      
-      toast.success(initialData ? "تم تحديث الصنف بنجاح" : "تمت إضافة الصنف بنجاح");
-      
-      // Reset form after successful submission
-      if (!initialData) {
-        (e.target as HTMLFormElement).reset();
-        setSizes([]);
-        setAddons([]);
-      }
-      if (onSuccess) onSuccess();
-    } catch (error) {
-      toast.error("حدث خطأ أثناء الحفظ");
-    } finally {
-      setIsSubmitting(false);
-    }
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form id="menuItemForm" onSubmit={handleSubmit} className="space-y-6">
       {storeId && <input type="hidden" name="storeId" value={storeId} />}
       <div className="space-y-5">
         <div>
