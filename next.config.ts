@@ -5,8 +5,11 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 })
 
 const nextConfig: NextConfig = {
-  serverActions: {
-    bodySizeLimit: '10mb',
+  cacheComponents: true,
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb',
+    },
   },
   images: {
     formats: ['image/avif', 'image/webp'],
