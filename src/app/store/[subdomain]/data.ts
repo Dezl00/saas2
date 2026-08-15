@@ -81,6 +81,12 @@ export async function getStoreInfo(subdomain: string) {
   return store;
 }
 
+export async function getPlatformSettings() {
+  "use cache";
+  cacheTag('platform-settings');
+  return prisma.platformSetting.findUnique({ where: { id: "1" } });
+}
+
 export async function getStoreCatalog(storeId: string, showDefaultProducts: boolean) {
   "use cache";
   cacheTag(`store-catalog-v2-${storeId}`);

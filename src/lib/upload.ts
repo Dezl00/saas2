@@ -1,11 +1,15 @@
 import { v2 as cloudinary } from 'cloudinary';
 
 cloudinary.config({
-  cloud_name: 'dw7senbmg',
-  api_key: '158265941332155',
-  api_secret: 'mBJcsqsgRlp9nuR0rMAquNp6E8s'
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 export async function uploadImageToCloudinary(file: File): Promise<string> {
+  if (file.size > 5 * 1024 * 1024) throw new Error('حجم الملف يتجاوز الحد المسموح (5 ميجابايت)');
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'];
+  if (!allowedTypes.includes(file.type)) throw new Error('نوع الملف غير مدعوم');
+
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
   
@@ -46,9 +50,17 @@ export async function uploadUrlToCloudinary(url: string): Promise<string> {
       throw new Error(`فشل جلب الصورة (${response.status})`);
     }
 
+    const contentType = response.headers.get('content-type') || 'image/jpeg';
+    if (!contentType.startsWith('image/')) {
+      throw new Error("الرابط لا يحتوي على صورة صالحة");
+    }
+
     const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
-    const contentType = response.headers.get('content-type') || 'image/jpeg';
+    
+    if (buffer.length > 10 * 1024 * 1024) {
+      throw new Error("حجم الصورة يتجاوز الحد المسموح (10 ميجابايت)");
+    }
     
     const base64String = buffer.toString('base64');
     const dataUri = `data:${contentType};base64,${base64String}`;

@@ -9,8 +9,12 @@ import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { sendOTP } from "@/lib/email";
+import { checkRateLimit, getClientIP } from "@/lib/rate-limit";
 
-const SECRET_KEY = process.env.NEXTAUTH_SECRET || "default_secret_key_32_chars_min!";
+const SECRET_KEY = process.env.NEXTAUTH_SECRET;
+if (!SECRET_KEY) {
+  throw new Error('NEXTAUTH_SECRET environment variable is required');
+}
 const ALGORITHM = 'aes-256-cbc';
 
 function encryptData(data: any): string {
@@ -84,6 +88,22 @@ async function createUserWithStore(userData: any, isVerified: boolean, otpMethod
 export async function loginAction(prevState: any, formData: FormData) {
   try {
     const rawData = Object.fromEntries(formData);
+    const email = rawData.email as string;
+    const ip = await getClientIP();
+    
+    // IP-based limit (Global brute force protection)
+    const ipLimit = await checkRateLimit({ key: `login_ip:${ip}`, limit: 20, windowMs: 15 * 60 * 1000 });
+    if (!ipLimit.success) {
+      return { error: "محاولات كثيرة جداً. يرجى الانتظار 15 دقيقة." };
+    }
+
+    if (email) {
+      // Identifier-based limit (Account brute force protection)
+      const rl = await checkRateLimit({ key: `login_email:${email}`, limit: 10, windowMs: 5 * 60 * 1000 });
+      if (!rl.success) {
+        return { error: "محاولات كثيرة. يرجى الانتظار قبل المحاولة مرة أخرى.", values: rawData };
+      }
+    }
     const validatedData = loginSchema.parse(rawData);
 
     // Get user to determine role for redirect and check suspension
@@ -151,6 +171,21 @@ export async function loginAction(prevState: any, formData: FormData) {
 export async function registerAction(prevState: any, formData: FormData) {
   try {
     const rawData = Object.fromEntries(formData);
+    const email = rawData.email as string;
+    const ip = await getClientIP();
+    
+    // Prevent Account creation spam by IP
+    const ipLimit = await checkRateLimit({ key: `register_ip:${ip}`, limit: 5, windowMs: 60 * 60 * 1000 });
+    if (!ipLimit.success) {
+      return { error: "لقد تجاوزت الحد المسموح للتسجيل من هذا الجهاز. يرجى المحاولة لاحقاً.", values: rawData };
+    }
+
+    if (email) {
+      const rl = await checkRateLimit({ key: `register_email:${email}`, limit: 3, windowMs: 5 * 60 * 1000 });
+      if (!rl.success) {
+        return { error: "محاولات كثيرة. يرجى الانتظار قبل المحاولة مرة أخرى.", values: rawData };
+      }
+    }
     const validatedData = registerSchema.parse(rawData);
 
     const existingUser = await prisma.user.findUnique({
@@ -174,7 +209,7 @@ export async function registerAction(prevState: any, formData: FormData) {
       isVerified = true;
     }
 
-    const otpCode = Math.floor(1000 + Math.random() * 9000).toString();
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
     const otpExpiry = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
 
     if (existingUser) {
@@ -224,6 +259,12 @@ export async function registerAction(prevState: any, formData: FormData) {
 
 export async function verifyOtpAction(email: string, otp: string) {
   try {
+    const ip = await getClientIP();
+    const rl = await checkRateLimit({ key: `otp_verify:${email}_${ip}`, limit: 5, windowMs: 15 * 60 * 1000 });
+    if (!rl.success) {
+      return { error: "محاولات كثيرة. يرجى الانتظار قبل المحاولة مرة أخرى." };
+    }
+
     const cookieStore = await cookies();
     const pendingCookie = cookieStore.get("pending_registration");
     if (!pendingCookie?.value) return { error: "انتهت صلاحية الجلسة، يرجى التسجيل من جديد" };
@@ -249,6 +290,12 @@ export async function verifyOtpAction(email: string, otp: string) {
 
 export async function verifyFirebaseTokenAction(email: string, idToken: string) {
   try {
+    const ip = await getClientIP();
+    const rl = await checkRateLimit({ key: `otp_firebase:${email}_${ip}`, limit: 5, windowMs: 15 * 60 * 1000 });
+    if (!rl.success) {
+      return { error: "محاولات كثيرة. يرجى الانتظار قبل المحاولة مرة أخرى." };
+    }
+
     const { adminAuth } = await import("@/lib/firebase-admin");
     const decodedToken = await adminAuth.verifyIdToken(idToken);
     
@@ -278,6 +325,18 @@ export async function verifyFirebaseTokenAction(email: string, idToken: string) 
 export async function forgotPasswordAction(prevState: any, formData: FormData) {
   try {
     const rawData = Object.fromEntries(formData);
+    const rawEmail = rawData.email as string;
+    const ip = await getClientIP();
+
+    const ipLimit = await checkRateLimit({ key: `forgot_ip:${ip}`, limit: 5, windowMs: 30 * 60 * 1000 });
+    if (!ipLimit.success) return { error: "لقد تجاوزت الحد المسموح. يرجى المحاولة بعد قليل." };
+
+    if (rawEmail) {
+      const rl = await checkRateLimit({ key: `forgot_email:${rawEmail}`, limit: 3, windowMs: 10 * 60 * 1000 });
+      if (!rl.success) {
+        return { error: "محاولات كثيرة. يرجى الانتظار قبل المحاولة مرة أخرى." };
+      }
+    }
     const { email } = await import("@/lib/validations").then(m => m.forgotPasswordSchema.parse(rawData));
 
     const user = await prisma.user.findUnique({ where: { email } });
@@ -286,7 +345,7 @@ export async function forgotPasswordAction(prevState: any, formData: FormData) {
       return { success: true, email };
     }
 
-    const otpCode = Math.floor(1000 + Math.random() * 9000).toString();
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
     const otpExpiry = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
 
     await prisma.user.update({
@@ -317,6 +376,12 @@ export async function resetPasswordAction(prevState: any, formData: FormData) {
   try {
     const rawData = Object.fromEntries(formData);
     const { email, otpCode, password } = await import("@/lib/validations").then(m => m.resetPasswordSchema.parse(rawData));
+
+    const ip = await getClientIP();
+    const rl = await checkRateLimit({ key: `reset_password:${email}_${ip}`, limit: 5, windowMs: 15 * 60 * 1000 });
+    if (!rl.success) {
+      return { error: "محاولات كثيرة. يرجى الانتظار قبل المحاولة مرة أخرى." };
+    }
 
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user || user.otpCode !== otpCode) {

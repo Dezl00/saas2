@@ -10,8 +10,13 @@ import { StoreHeader } from "@/components/store/StoreHeader";
 import { StoreWorkingHoursBadge } from "@/components/store/StoreWorkingHoursBadge";
 import { formatWhatsappNumber } from "@/lib/utils";
 import Image from "next/image";
-import { getStoreInfo, getStoreBanners } from "./data";
+import { getStoreInfo, getPlatformSettings } from "./data";
 import { PushNotificationPopup } from "@/components/store/PushNotificationPopup";
+
+function extractIframeSrc(html: string): string | null {
+  const match = html.match(/src=["'](https:\/\/(?:www\.google\.com\/maps|maps\.google\.com|www\.google\.[a-z.]+\/maps)[^"']*)["']/);
+  return match ? match[1] : null;
+}
 
 // SVG Icons for Brands
 const FacebookIcon = ({ className }: { className?: string }) => (
@@ -111,7 +116,7 @@ export default async function StoreLayout({
 }) {
   const params = await paramsPromise;
   const storePromise = getStoreInfo(params.subdomain);
-  const settingsPromise = prisma.platformSetting.findUnique({ where: { id: "1" } });
+  const settingsPromise = getPlatformSettings();
 
   const [store, settings] = await Promise.all([storePromise, settingsPromise]);
   const platformName = settings?.name || "Almenu";
@@ -120,7 +125,7 @@ export default async function StoreLayout({
     notFound();
   }
 
-  const banners = await getStoreBanners(store.id);
+
 
   if (store.status === "SUSPENDED") {
     return (
@@ -265,9 +270,22 @@ export default async function StoreLayout({
                       {branch.mapUrl && (
                         branch.mapUrl.includes('<iframe') ? (
                           <div className="mt-2 h-32 w-full rounded-xl overflow-hidden relative border border-surface-100 group bg-surface-100">
-                            <div className="w-full h-full pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity" dangerouslySetInnerHTML={{ __html: branch.mapUrl.replace(/width=".*?"/, 'width="100%"').replace(/height=".*?"/, 'height="100%"') }} />
+                            {(() => {
+                              const iframeSrc = extractIframeSrc(branch.mapUrl);
+                              return iframeSrc ? (
+                                <iframe
+                                  src={iframeSrc}
+                                  width="100%"
+                                  height="100%"
+                                  frameBorder="0"
+                                  style={{ border: 0 }}
+                                  allowFullScreen
+                                  className="w-full h-full pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity"
+                                />
+                              ) : null;
+                            })()}
                             <a 
-                              href={branch.mapUrl.match(/src="(.*?)"/)?.[1] || branch.mapUrl} 
+                              href={extractIframeSrc(branch.mapUrl) || branch.mapUrl} 
                               target="_blank" 
                               rel="noreferrer" 
                               className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity"

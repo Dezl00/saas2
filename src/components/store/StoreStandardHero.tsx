@@ -56,10 +56,16 @@ export function StoreStandardHero({ store }: { store: any }) {
       <div className="h-44 sm:h-52 w-full relative bg-surface-100 overflow-hidden rounded-[24px] sm:rounded-[32px]">
         {store.landingHeroImage || store.cover ? (
           <>
-            <div 
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${store.landingHeroImage || store.cover})` }}
-            />
+            <div className="absolute inset-0">
+              <Image 
+                src={store.landingHeroImage || store.cover} 
+                alt="Store Hero" 
+                fill 
+                className="object-cover" 
+                priority 
+                sizes="100vw" 
+              />
+            </div>
             <div 
               className="absolute inset-0 mix-blend-multiply"
               style={{ 

@@ -413,6 +413,10 @@ model Order {
   @@index([storeId, status])
   @@index([storeId, createdAt])
   @@index([storeId, paymentStatus])
+  @@unique([storeId, orderNumber])
+  // Query: Atomic order number generation uses MAX(orderNumber) WHERE storeId
+  // Benefit: Fast sequential scan for order number generation
+  @@index([storeId, orderNumber])
 }
 
 model OrderItem {
@@ -432,6 +436,13 @@ model OrderItem {
   menuItem   MenuItem? @relation(fields: [menuItemId], references: [id], onDelete: SetNull)
 
   createdAt DateTime @default(now())
+
+  // Query: Order include { items: true } — used in every order detail view and export
+  // Benefit: Prevents full table scan on OrderItem when loading order details
+  @@index([orderId])
+  // Query: Cascade delete when MenuItem is deleted + order history lookups
+  // Benefit: Prevents full table scan during MenuItem deletion
+  @@index([menuItemId])
 }
 
 model PlatformSetting {
@@ -502,6 +513,9 @@ model Subscription {
   updatedAt       DateTime @updatedAt
 
   @@index([storeId])
+  // Query: Plan-based subscription lookups in admin dashboard and billing pages
+  // Benefit: Faster plan filtering when admin views subscriptions by plan
+  @@index([planId])
 }
 
 model PlatformPaymentMethod {
@@ -544,6 +558,11 @@ model PaymentRequest {
   updatedAt       DateTime @updatedAt
 
   @@index([storeId])
+  // Query: Admin filters payment requests by plan, method, and status
+  // Benefit: Faster admin payment request filtering
+  @@index([planId])
+  @@index([methodId])
+  @@index([status])
 }
 
 model SubscriptionHistory {
@@ -572,6 +591,9 @@ model Notification {
   createdAt       DateTime @default(now())
 
   @@index([storeId])
+  // Query: Dashboard notification badge queries unread count per store
+  // Benefit: Fast unread notification count without full table scan
+  @@index([storeId, isRead])
 }
 
 model StoreBanner {

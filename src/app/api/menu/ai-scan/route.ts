@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
+import { checkRateLimit, getClientIP } from "@/lib/rate-limit";
 import { auth } from "@/lib/auth";
 
 export const maxDuration = 60; // Allow up to 60 seconds
@@ -13,6 +14,15 @@ export async function POST(req: Request) {
 
     if (session.user.role !== "ADMIN" && !session.user.storeId) {
       return NextResponse.json({ error: "غير مصرح لك بالقيام بهذه العملية" }, { status: 401 });
+    }
+
+    const ip = await getClientIP();
+    const rl = await checkRateLimit({ key: `ai_scan_${session.user.storeId || session.user.id}_${ip}`, limit: 5, windowMs: 60 * 60 * 1000 });
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: "تم تجاوز الحد المسموح من طلبات الذكاء الاصطناعي. يرجى المحاولة لاحقاً." },
+        { status: 429, headers: { 'Retry-After': Math.ceil(rl.resetIn / 1000).toString() } }
+      );
     }
 
     const formData = await req.formData();

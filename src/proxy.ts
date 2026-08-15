@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { auth } from "@/lib/auth";
 
-export default function proxy(req: NextRequest) {
+export default auth((req) => {
   const hostname = req.headers.get("host") || "";
   const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "almenu.pro";
 
@@ -35,8 +35,18 @@ export default function proxy(req: NextRequest) {
     hostname.endsWith(".hostingersite.com")
   ) {
     // Protect dashboard routes
-    if (pathname.startsWith("/dashboard") || pathname.startsWith("/admin")) {
-      // Auth check will be handled by the layout/page level
+    if (pathname.startsWith("/dashboard") || pathname.startsWith("/admin") || pathname.startsWith("/onboarding")) {
+      const isLoggedIn = !!req.auth;
+      const userRole = (req.auth?.user as any)?.role;
+
+      if (!isLoggedIn) {
+        return NextResponse.redirect(new URL('/login', req.url));
+      }
+
+      if (pathname.startsWith('/admin') && userRole !== 'ADMIN') {
+        return NextResponse.redirect(new URL('/login', req.url));
+      }
+      
       return NextResponse.next();
     }
     return NextResponse.next();
@@ -49,7 +59,7 @@ export default function proxy(req: NextRequest) {
   const response = NextResponse.rewrite(url);
   response.headers.set("x-subdomain", subdomain);
   return response;
-}
+});
 
 export const config = {
   matcher: [

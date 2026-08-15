@@ -43,10 +43,10 @@ export function StoreBannersCarousel({ banners }: Props) {
               <div key={`${banner.id}-${index}`} className="relative flex-[0_0_100%] min-w-0 h-full">
                 {banner.link ? (
                   <a href={banner.link} target="_blank" rel="noreferrer" className="block w-full h-full" draggable={false}>
-                    <Image src={banner.image} alt={banner.title || "عرض"} fill sizes="(max-width: 768px) 100vw, 100vw" className="object-cover" priority draggable={false} />
+                    <Image src={banner.image} alt={banner.title || "عرض"} fill sizes="(max-width: 768px) 100vw, 100vw" className="object-cover" priority={index === 0} draggable={false} />
                   </a>
                 ) : (
-                  <Image src={banner.image} alt={banner.title || "عرض"} fill sizes="(max-width: 768px) 100vw, 100vw" className="object-cover" priority draggable={false} />
+                  <Image src={banner.image} alt={banner.title || "عرض"} fill sizes="(max-width: 768px) 100vw, 100vw" className="object-cover" priority={index === 0} draggable={false} />
                 )}
               </div>
             ))}

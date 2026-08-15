@@ -71,6 +71,15 @@ export async function POST(req: Request) {
     const productsSheetName = wb.SheetNames.includes("Products") ? "Products" : (wb.SheetNames.includes("المنتجات") ? "المنتجات" : null);
     if (productsSheetName) {
       const { checkProductLimit } = await import("@/lib/limits");
+      const { allowed, limit, current } = await checkProductLimit(store.id);
+      let remainingCapacity = limit === -1 ? Infinity : limit - current;
+
+      // Pre-fetch all categories for this store
+      const storeCategories = await prisma.category.findMany({
+        where: { storeId: store.id },
+        select: { id: true }
+      });
+      const validCategoryIds = new Set(storeCategories.map(c => c.id));
       
       const wsProducts = wb.Sheets[productsSheetName];
       const productsData = xlsx.utils.sheet_to_json<any>(wsProducts);
@@ -80,19 +89,15 @@ export async function POST(req: Request) {
 
         // Check limits before creating a new product
         if (!row.ID) { // If it's a new product (doesn't have an ID)
-          const { allowed } = await checkProductLimit(store.id);
-          if (!allowed) {
+          if (remainingCapacity <= 0) {
             console.warn(`Reached product limit for store ${store.id}, stopping import`);
             break; // Stop importing more products
           }
+          remainingCapacity--;
         }
 
         // Verify category exists
-        const category = await prisma.category.findFirst({
-          where: { id: row.CategoryID, storeId: store.id }
-        });
-
-        if (!category) continue; // Skip if category is invalid
+        if (!validCategoryIds.has(row.CategoryID)) continue; // Skip if category is invalid
 
         // Parse Sizes
         const parsedSizes = [];
@@ -127,7 +132,7 @@ export async function POST(req: Request) {
             isAvailable: row.IsAvailable === "Yes",
             image: row.Image || null,
             sortOrder: parseInt(row.SortOrder) || 0,
-            categoryId: category.id,
+            categoryId: row.CategoryID,
             storeId: store.id,
             // Sizes and Addons update: first delete old, then create new
             sizes: { deleteMany: {}, create: parsedSizes },
@@ -141,7 +146,7 @@ export async function POST(req: Request) {
             isAvailable: row.IsAvailable === "Yes",
             image: row.Image || null,
             sortOrder: parseInt(row.SortOrder) || 0,
-            categoryId: category.id,
+            categoryId: row.CategoryID,
             storeId: store.id,
             sizes: { create: parsedSizes },
             addons: { create: parsedAddons }

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { uploadUrlToCloudinary } from "@/lib/upload";
+import { checkRateLimit, getClientIP } from "@/lib/rate-limit";
 
 export const maxDuration = 60; // Allow 60s for fetching and uploading
 
@@ -13,6 +14,15 @@ export async function POST(
     const session = await auth();
     if (!session?.user) {
       return NextResponse.json({ error: "غير مصرح لك" }, { status: 401 });
+    }
+
+    const ip = await getClientIP();
+    const rl = await checkRateLimit({ key: `ai_image_${session.user.storeId || session.user.id}_${ip}`, limit: 5, windowMs: 60 * 60 * 1000 });
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: "لقد تجاوزت الحد المسموح لتوليد الصور. يرجى المحاولة بعد ساعة." },
+        { status: 429, headers: { 'Retry-After': Math.ceil(rl.resetIn / 1000).toString() } }
+      );
     }
 
     const resolvedParams = await params;

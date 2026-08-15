@@ -1,10 +1,18 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { checkRateLimit, getClientIP } from "@/lib/rate-limit";
 
 export async function placeOrderAction(formData: FormData) {
   try {
     const storeId = formData.get("storeId") as string;
+    const ip = await getClientIP();
+    
+    // IP + Store limit to prevent spam orders
+    const rl = await checkRateLimit({ key: `order_ip_${storeId}_${ip}`, limit: 5, windowMs: 10 * 60 * 1000 });
+    if (!rl.success) {
+      return { error: "لقد أرسلت طلبات كثيرة. يرجى الانتظار 10 دقائق." };
+    }
     const deliveryType = formData.get("deliveryType") as "DELIVERY" | "PICKUP";
     const selectedArea = formData.get("selectedArea") as string;
     const selectedBranch = formData.get("selectedBranch") as string;
@@ -56,6 +64,10 @@ export async function placeOrderAction(formData: FormData) {
           { storeId },
           { storeId: "DEFAULT_STORE" }
         ]
+      },
+      include: {
+        sizes: true,
+        addons: true
       }
     });
 
@@ -63,34 +75,40 @@ export async function placeOrderAction(formData: FormData) {
 
     let calculatedSubtotal = 0;
     const verifiedItems = items.map((item: any) => {
-      const dbItem = dbMenuItemsMap.get(item.id.split('-')[0]);
+      const baseItemId = item.id.split('-')[0];
+      const dbItem = dbMenuItemsMap.get(baseItemId);
       if (!dbItem) throw new Error(`المنتج غير موجود: ${item.name}`);
       
-      // In a more complex app, we should also verify sizes and addons prices from JSON
-      // For now, we will trust the base price calculation if we don't have separate models for sizes/addons
-      // However, it's safer to re-calculate based on what's in the DB if they use sizes/addons
-      // Since this requires deep parsing, we'll allow the item.price but log a warning if it differs significantly
-      // Or better, let's enforce db price if there are no sizes/addons:
       let itemPrice = Number(dbItem.price);
       
-      // Basic check: if item price is vastly different, someone might be tampering.
-      // But sizes/addons can increase the price. We accept the cart price for now since sizes/addons are stored as JSON in menuItem and not strictly related.
-      // Wait, if we want to be fully secure, we MUST calculate it:
-      // We will skip full sizes/addons validation for now as it requires complex relational checks
-      // but we ensure the item.price is not suspiciously low.
-      // To prevent massive changes, we'll enforce that item.price >= dbItem.price (unless discount)
-      if (item.price < itemPrice) {
-         // Maybe it's a discount? In this simplified version, let's just use item.price but ensure it's not negative
-         if (item.price < 0) throw new Error("سعر غير صالح");
+      // Add selected size price if applicable
+      if (item.selectedSize && dbItem.sizes) {
+        const selectedSize = dbItem.sizes.find((s: any) => s.name === item.selectedSize?.name || s.id === item.selectedSize?.id);
+        if (selectedSize) {
+          itemPrice = Number(selectedSize.price);
+        }
       }
-
-      calculatedSubtotal += item.price * item.quantity;
+      
+      // Add selected addons prices
+      if (item.selectedAddons && Array.isArray(item.selectedAddons) && dbItem.addons) {
+        for (const addon of item.selectedAddons) {
+          const dbAddon = dbItem.addons.find((a: any) => a.name === addon.name || a.id === addon.id);
+          if (dbAddon) {
+            itemPrice += Number(dbAddon.price);
+          }
+        }
+      }
+      
+      calculatedSubtotal += itemPrice * item.quantity;
 
       return {
         menuItemId: dbItem.id,
         name: item.name,
         quantity: item.quantity,
-        price: item.price,
+        price: itemPrice,
+        notes: item.notes || null,
+        selectedSize: item.selectedSize ? JSON.stringify(item.selectedSize) : null,
+        selectedAddons: item.selectedAddons ? JSON.stringify(item.selectedAddons) : null,
       };
     });
 
@@ -109,33 +127,38 @@ export async function placeOrderAction(formData: FormData) {
       }
     }
 
-    // Generate a simple sequential order number
-    const lastOrder = await prisma.order.findFirst({
-      where: { storeId },
-      orderBy: { orderNumber: 'desc' }
-    });
-    const orderNumber = lastOrder ? lastOrder.orderNumber + 1 : 1000;
+    // Atomic order number generation + order creation in a transaction
+    const order = await prisma.$transaction(async (tx) => {
+      // Get next order number atomically with row-level lock
+      const result = await tx.$queryRaw<{ next_number: number }[]>`
+        SELECT COALESCE(MAX("orderNumber"), 999) + 1 as next_number
+        FROM "Order"
+        WHERE "storeId" = ${storeId}
+        FOR UPDATE
+      `;
+      const orderNumber = result[0]?.next_number ?? 1000;
 
-    const order = await prisma.order.create({
-      data: {
-        orderNumber,
-        storeId,
-        customerName,
-        customerPhone,
-        customerAddress: deliveryType === "DELIVERY" ? customerAddress : null,
-        notes,
-        deliveryType,
-        deliveryAreaId: deliveryType === "DELIVERY" && selectedArea ? selectedArea : null,
-        branchId: deliveryType === "PICKUP" && selectedBranch ? selectedBranch : null,
-        subtotal: calculatedSubtotal,
-        deliveryFee: finalDeliveryFee,
-        total: calculatedSubtotal + finalDeliveryFee,
-        status: "PENDING",
-        paymentMethod: "CASH",
-        items: {
-          create: verifiedItems
+      return tx.order.create({
+        data: {
+          orderNumber,
+          storeId,
+          customerName,
+          customerPhone,
+          customerAddress: deliveryType === "DELIVERY" ? customerAddress : null,
+          notes,
+          deliveryType,
+          deliveryAreaId: deliveryType === "DELIVERY" && selectedArea ? selectedArea : null,
+          branchId: deliveryType === "PICKUP" && selectedBranch ? selectedBranch : null,
+          subtotal: calculatedSubtotal,
+          deliveryFee: finalDeliveryFee,
+          total: calculatedSubtotal + finalDeliveryFee,
+          status: "PENDING",
+          paymentMethod: "CASH",
+          items: {
+            create: verifiedItems
+          }
         }
-      }
+      });
     });
 
     return { success: true, orderId: order.id };

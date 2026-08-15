@@ -50,10 +50,11 @@ export async function updateMenuItem(menuItemId: string, formData: FormData) {
   }
 
   try {
-    const item = await prisma.menuItem.findUnique({ where: { id: menuItemId } });
+    const [item, category] = await Promise.all([
+      prisma.menuItem.findUnique({ where: { id: menuItemId } }),
+      prisma.category.findUnique({ where: { id: categoryId } })
+    ]);
     if (item?.storeId !== storeIdToUse) return { error: "غير مصرح لك" };
-
-    const category = await prisma.category.findUnique({ where: { id: categoryId } });
     if (category?.storeId !== storeIdToUse) return { error: "القسم المحدد غير صحيح" };
 
     await prisma.menuItem.update({

@@ -1,15 +1,29 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { checkRateLimit, getClientIP } from "@/lib/rate-limit";
 import bcrypt from 'bcryptjs';
 
 export async function POST(request: Request) {
   try {
     // التحقق من مفتاح الـ API المرسل من N8N
     const authHeader = request.headers.get('authorization');
-    const n8nApiKey = process.env.N8N_API_KEY || 'my-super-secret-n8n-key-123';
+    const n8nApiKey = process.env.N8N_API_KEY;
+    if (!n8nApiKey) {
+      console.error('N8N_API_KEY environment variable is not set');
+      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+    }
     
     if (authHeader !== `Bearer ${n8nApiKey}`) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const ip = await getClientIP();
+    const rl = await checkRateLimit({ key: `n8n_ip:${ip}`, limit: 10, windowMs: 60 * 1000 });
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'Rate limit exceeded' },
+        { status: 429, headers: { 'Retry-After': Math.ceil(rl.resetIn / 1000).toString() } }
+      );
     }
 
     const body = await request.json();
@@ -106,7 +120,6 @@ export async function POST(request: Request) {
         data: {
             storeUrl: `https://${cleanSlug}.almenu.pro`, // رابط المنصة الحقيقي
             adminEmail: result.user.email,
-            adminPassword: phone_number, // كلمة المرور هي رقم هاتف العميل
             storeName: result.store.name,
             whatsappNumber: result.store.whatsappNumber
         }

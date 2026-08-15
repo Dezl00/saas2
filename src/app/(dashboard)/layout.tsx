@@ -26,24 +26,21 @@ export default async function DashboardLayout({
     redirect("/admin");
   }
 
-  if (session.user.role === "OWNER" && !isAdminImpersonating) {
-    const { prisma } = await import("@/lib/prisma");
-    const user = await prisma.user.findUnique({ where: { id: session.user.id } });
-    if (user && user.onboardingStep < 4) {
-      redirect("/onboarding");
-    }
+  const [userData, platformSettings] = await Promise.all([
+    session.user.role === "OWNER" && !isAdminImpersonating 
+      ? import("@/lib/prisma").then(m => m.prisma.user.findUnique({ where: { id: session.user.id }, select: { onboardingStep: true } }))
+      : Promise.resolve(null),
+    import("@/lib/prisma").then(m => m.prisma.platformSetting.findFirst().catch(e => {
+      console.error("Error fetching platform settings:", e);
+      return null;
+    }))
+  ]);
+
+  if (userData && userData.onboardingStep < 4) {
+    redirect("/onboarding");
   }
 
-  let platformSetting: any = { dashboardTheme: "blue", dashboardFont: "cairo", dashboardCustomColor: null };
-  try {
-    const { prisma } = await import("@/lib/prisma");
-    const settings = await prisma.platformSetting.findFirst();
-    if (settings) {
-      platformSetting = settings;
-    }
-  } catch (error) {
-    console.error("Error fetching platform settings:", error);
-  }
+  let platformSetting: any = platformSettings || { dashboardTheme: "blue", dashboardFont: "cairo", dashboardCustomColor: null };
 
   const customColorStyles = platformSetting.dashboardTheme === "custom" && platformSetting.dashboardCustomColor ? {
     "--color-primary-50": `color-mix(in srgb, ${platformSetting.dashboardCustomColor} 10%, white)`,

@@ -2,6 +2,9 @@
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { z } from "zod";
+
+const orderStatusSchema = z.enum(["PENDING", "CONFIRMED", "PREPARING", "READY", "DELIVERED", "CANCELLED"]);
 import { revalidatePath } from "next/cache";
 
 export async function updateOrderStatus(formData: FormData) {
@@ -9,7 +12,9 @@ export async function updateOrderStatus(formData: FormData) {
   if (!session?.user?.storeId) return { error: "غير مصرح" };
 
   const orderId = formData.get("orderId") as string;
-  const status = formData.get("status") as any;
+  const statusResult = orderStatusSchema.safeParse(formData.get("status"));
+  if (!statusResult.success) return { error: "حالة غير صالحة" };
+  const status = statusResult.data;
 
   const order = await prisma.order.findUnique({ where: { id: orderId } });
   

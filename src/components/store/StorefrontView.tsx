@@ -302,7 +302,7 @@ export function StorefrontView({
                 {/* Image (Left side in RTL) */}
                 <div className={`relative w-1/3 shrink-0 overflow-hidden border-s ${isDarkSolid ? 'border-[#333] bg-[#111]' : 'border-surface-100 bg-surface-100'}`}>
                   {item.image ? (
-                    <Image src={item.image} alt={item.name} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <Image src={item.image} alt={item.name} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-surface-400 bg-surface-50">
                       <ShoppingBag className="w-8 h-8 opacity-20" />
@@ -452,7 +452,7 @@ export function StorefrontView({
                           {/* Image (Top) */}
                           <div className="relative w-full aspect-[4/3] bg-surface-100 overflow-hidden">
                             {item.image ? (
-                              <Image src={item.image} alt={item.name} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
+                              <Image src={item.image} alt={item.name} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center text-surface-400">
                                 <ShoppingBag className="w-10 h-10 opacity-20" />

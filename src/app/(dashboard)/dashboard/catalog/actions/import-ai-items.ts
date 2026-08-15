@@ -34,20 +34,25 @@ export async function importAIMenuItems(parsedData: any, targetStoreId?: string)
   let addedItemsCount = 0;
 
   try {
+    const existingCategories = await prisma.category.findMany({
+      where: { storeId: storeId! },
+      select: { id: true, name: true }
+    });
+    const categoryMap = new Map(existingCategories.map(c => [c.name, c]));
+
     for (const categoryData of parsedData.categories) {
       if (!categoryData.name) continue;
 
-      let category = await prisma.category.findFirst({
-        where: { storeId, name: categoryData.name },
-      });
+      let category = categoryMap.get(categoryData.name) || null;
 
       if (!category) {
         category = await prisma.category.create({
           data: {
             name: categoryData.name,
-            storeId,
+            storeId: storeId!,
           },
         });
+        categoryMap.set(categoryData.name, category);
       }
 
       if (categoryData.items && Array.isArray(categoryData.items)) {

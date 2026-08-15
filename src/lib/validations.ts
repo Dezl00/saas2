@@ -17,7 +17,7 @@ export const forgotPasswordSchema = z.object({
 
 export const resetPasswordSchema = z.object({
   email: z.string().email("البريد الإلكتروني غير صحيح"),
-  otpCode: z.string().length(4, "كود التحقق يجب أن يكون 4 أرقام"),
+  otpCode: z.string().length(6, "كود التحقق يجب أن يكون 6 أرقام"),
   password: z.string().min(6, "كلمة المرور يجب أن تكون 6 أحرف على الأقل"),
 });
 
