@@ -1,11 +1,15 @@
 import { v2 as cloudinary } from 'cloudinary';
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+function configureCloudinary() {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+}
+
 export async function uploadImageToCloudinary(file: File): Promise<string> {
+  configureCloudinary();
   if (file.size > 5 * 1024 * 1024) throw new Error('حجم الملف يتجاوز الحد المسموح (5 ميجابايت)');
   const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'];
   if (!allowedTypes.includes(file.type)) throw new Error('نوع الملف غير مدعوم');
@@ -34,6 +38,7 @@ export async function uploadImageToCloudinary(file: File): Promise<string> {
 }
 
 export async function uploadUrlToCloudinary(url: string): Promise<string> {
+  configureCloudinary();
   try {
     // Fetch the image to our server first to avoid Cloudinary IP bans from free AI generators
     const response = await fetch(url, {
@@ -86,6 +91,7 @@ export async function uploadUrlToCloudinary(url: string): Promise<string> {
 }
 
 export async function deleteImageFromCloudinary(url: string): Promise<void> {
+  configureCloudinary();
   if (!url || !url.includes('cloudinary.com')) return;
   try {
     const parts = url.split('/');
