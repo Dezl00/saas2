@@ -7,7 +7,7 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate && node -e \"const fs = require('fs'); const p = 'node_modules/@opentelemetry/api/package.json'; if(fs.existsSync(p)){const c = JSON.parse(fs.readFileSync(p)); delete c.module; if(c.exports){ delete c.exports['.'].module; delete c.exports['./experimental'].module; } fs.writeFileSync(p, JSON.stringify(c, null, 2));}\""
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.2",
