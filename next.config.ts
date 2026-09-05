@@ -5,7 +5,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 })
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ['@opentelemetry/api'],
+  serverExternalPackages: ['@opentelemetry/api', 'pg', 'pg-cloudflare'],
   cacheComponents: true,
   experimental: {
     serverActions: {
